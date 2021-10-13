@@ -1,13 +1,16 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Enumerations.*;
 
 public class Category {
 
-	private Item[] items;
+	private List<Item> items = new ArrayList<Item>();
 	private Categories category;
 
-	public Item[] getItems() {
+	public List<Item> getItems() {
 		return this.items;
 	}
 

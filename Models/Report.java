@@ -1,8 +1,11 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Report {
 
-	private Order[] invoices;
+	private List<Order> invoices = new ArrayList<Order>();
 	private String date;
 
 	/**
@@ -19,7 +22,7 @@ public class Report {
 		throw new UnsupportedOperationException();
 	}
 
-	public Order[] getInvoices() {
+	public List<Order> getInvoices() {
 		return this.invoices;
 	}
 

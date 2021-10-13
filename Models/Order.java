@@ -1,8 +1,11 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Order {
 
-	private Item[] items;
+	private List<Item> items = new ArrayList<Item>();
 	private Staff placedBy;
 	private double total = 0.0;
 	private String timestamp;
@@ -23,7 +26,7 @@ public class Order {
 		throw new UnsupportedOperationException();
 	}
 
-	public Item[] getItems() {
+	public List<Item> getItems() {
 		return this.items;
 	}
 

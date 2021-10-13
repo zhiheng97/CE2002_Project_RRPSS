@@ -1,10 +1,13 @@
 package Controller;
 
-import Models.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import Models.Promotion;
 
 public class PromotionController {
 
-	private Promotion[] promotions;
+	private List<Promotion> promotionList = new ArrayList<Promotion>();
 
 	public PromotionController() {
 		// TODO - implement PromotionController.PromotionController

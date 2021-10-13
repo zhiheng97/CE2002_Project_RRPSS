@@ -1,10 +1,15 @@
 package Controller;
 
-import Models.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import Models.Item;
+import Models.Reservation;
+import Models.Table;
 
 public class TableController {
 
-	private Table[] tables;
+	private List<Table> tables = new ArrayList<Table>();
 
 	/**
 	 * 

@@ -1,10 +1,13 @@
 package Controller;
 
-import Models.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import Models.Report;
 
 public class ReportController {
 
-	private Report[] reports;
+	private List<Report> reports = new ArrayList<Report>();
 
 	public ReportController() {
 		// TODO - implement ReportController.ReportController

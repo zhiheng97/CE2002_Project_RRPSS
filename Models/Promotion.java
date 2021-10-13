@@ -1,8 +1,11 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Promotion {
 
-	private Item[] items;
+	private List<Item> items = new ArrayList<Item>();
 	private String description;
 	private double price;
 	private int id;
@@ -22,7 +25,7 @@ public class Promotion {
 		return this.id;
 	}
 
-	public Item[] getItems() {
+	public List<Item> getItems() {
 		return this.items;
 	}
 

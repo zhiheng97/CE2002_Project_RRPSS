@@ -1,10 +1,13 @@
 package Models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Table {
 
 	private int tableNo;
 	private boolean isOccupied;
-	private Reservation[] reservation;
+	private List<Reservation> reservation = new ArrayList<Reservation>();
 	private int seats = 2;
 	private Order invoice;
 
@@ -36,7 +39,7 @@ public class Table {
 		return this.isOccupied;
 	}
 
-	public Reservation[] getReservations() {
+	public List<Reservation> getReservations() {
 		// TODO - implement Table.getReservations
 		throw new UnsupportedOperationException();
 	}

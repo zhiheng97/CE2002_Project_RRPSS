@@ -1,11 +1,14 @@
 package Controller;
 
-import Models.*;
-import Enumerations.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import Enumerations.Categories;
+import Models.Category;
 
 public class CategoryController {
 
-	private Category[] categories;
+	private List<Category> categories = new ArrayList<Category>();
 
 	public CategoryController() {
 		// TODO - implement CategoryController.CategoryController
