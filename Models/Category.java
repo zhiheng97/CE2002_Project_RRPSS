@@ -24,14 +24,14 @@ public class Category {
 	 * @return True if item is added, false otherwise
 	 */
 	public boolean addItem(String[] itemParams) {
-		int itemId = Integer.parseInt(itemParams[1]);
+		int itemId = Integer.parseInt(itemParams[0]);
 		if(lookUp(itemParams) == null) {
 			items.add(new Item
 				(
 					itemId,
+					itemParams[1],
 					itemParams[2],
-					itemParams[3],
-					Double.parseDouble(itemParams[4])
+					Double.parseDouble(itemParams[3])
 				)
 			);
 			return true;
@@ -63,8 +63,8 @@ public class Category {
 	public Item lookUp(String[] itemParams) {
 		return items.stream()
 			.filter(
-				item -> item.getId() == Integer.parseInt(itemParams[1]) || 
-				item.getName().equals(itemParams[2])
+				item -> item.getId() == Integer.parseInt(itemParams[0]) || 
+				item.getName().equals(itemParams[1])
 			)
 			.findFirst()
 			.orElse(null);

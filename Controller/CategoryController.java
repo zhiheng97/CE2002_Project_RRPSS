@@ -1,5 +1,6 @@
 package Controller;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +11,15 @@ import Models.Item;
 public class CategoryController {
 
 	private List<Category> categories = new ArrayList<Category>();
+	private FileController fileController = new FileController();
+	private final static String PATH_TO_MENU_FILE = Path.of("./menu.txt").toString();
 
 	/**
 	 * Constructor of the CategoryController Class
 	 */
-	public CategoryController() {}
+	public CategoryController() {
+		initializeMenuItems();
+	}
 
 	/**
 	 * Adds a new category to the list of categories, does a search for any duplicate categories
@@ -53,6 +58,31 @@ public class CategoryController {
 			.filter(category -> category.getCategory().toString().equals(categoryType))
 			.findFirst()
 			.orElse(null);
+	}
+
+	/**
+	 * 
+	 */
+	private void initializeMenuItems() {
+		List<String> menuList = fileController.readFile(PATH_TO_MENU_FILE);
+		String[] itemParams = new String[4];
+		String prevCat = "", curCat = "";
+		for(int i = 0; i < menuList.size(); i += 5){
+			curCat = menuList.get(i + 4);
+			if(curCat.equals(Categories.MAINS.toString()) && !prevCat.equals(curCat))
+				addCategory(Categories.MAINS);
+			else if(curCat.equals(Categories.SIDES.toString()) && !prevCat.equals(curCat))
+				addCategory(Categories.SIDES);
+			else if(curCat.equals(Categories.DRINKS.toString()) && !prevCat.equals(curCat))
+				addCategory(Categories.DRINKS);
+			itemParams[0] = menuList.get(i); //id
+			itemParams[1] = menuList.get(i + 1); //name
+			itemParams[2] = menuList.get(i + 2); //description
+			itemParams[3] = menuList.get(i + 3); //price
+			Category category = findCatByType(curCat);
+			category.addItem(itemParams);
+			prevCat = curCat;
+		}
 	}
 
 	/**

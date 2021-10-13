@@ -6,13 +6,10 @@ public class RestaurantController {
 
 	private TableController tableController;
 	private ReportController reportController;
-	private CategoryController categoryController;
+	private CategoryController categoryController = new CategoryController();
 	private PromotionController promotionController;
 
-	public RestaurantController() {
-		// TODO - implement RestaurantController.RestaurantController
-		throw new UnsupportedOperationException();
-	}
+	public RestaurantController() {}
 
 	/**
 	 * 

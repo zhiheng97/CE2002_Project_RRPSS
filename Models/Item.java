@@ -15,7 +15,6 @@ public class Item {
 	 * @param itemPrice The price of the object to create
 	 */
 	public Item(int itemId, String itemName, String itemDesc, double itemPrice) {
-		// TODO - implement Item.Item
 		this.id = itemId;
 		this.name = itemName;
 		this.description = itemDesc;
@@ -90,7 +89,6 @@ public class Item {
 	 * Prints the information about the item
 	 */
 	public void print() {
-		// TODO - implement Item.print
 		System.out.println("Item Id:" + this.id);
 		System.out.println("Item Name: " + this.name);
 		System.out.println("Item Description: " + this.description);

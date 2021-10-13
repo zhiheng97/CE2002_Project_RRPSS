@@ -1,9 +1,12 @@
 package App;
 
-import Controller.*;
+import Controller.RestaurantController;
 
 public class RRPSSApp {
 
-	private RestaurantController restaurantController;
+	public static void main(String[] args) {
+		
+		RestaurantController restaurantController = new RestaurantController();
+	}
 
 }
