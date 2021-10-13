@@ -1,8 +1,6 @@
 package Controller;
 
-import java.util.function.IntBinaryOperator;
-
-import Models.*;
+import Models.Reservation;
 
 public class RestaurantController {
 
@@ -31,7 +29,7 @@ public class RestaurantController {
 	 * @param id
 	 * @param isPromo
 	 */
-	public boolean addItem(String[] itemParams, IntBinaryOperator id, boolean isPromo) {
+	public boolean addItem(String[] itemParams, int id, boolean isPromo) {
 		// TODO - implement RestaurantController.addItem
 		throw new UnsupportedOperationException();
 	}
