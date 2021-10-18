@@ -18,8 +18,10 @@ public class Table {
 	 * @param seatAvail
 	 */
 	public Table(int table, boolean occupied, int seatAvail) {
-		// TODO - implement Table.Table
-		throw new UnsupportedOperationException();
+		this.tableNo = table;
+		this.isOccupied = occupied;
+		this.reservation = new ArrayList<Reservation>(15);
+		this.seats = seatAvail;
 	}
 
 	/**
@@ -27,8 +29,7 @@ public class Table {
 	 * @param reserve
 	 */
 	public void addReservation(Reservation reserve) {
-		// TODO - implement Table.addReservation
-		throw new UnsupportedOperationException();
+		
 	}
 
 	public Order getInvoice() {
@@ -40,8 +41,7 @@ public class Table {
 	}
 
 	public List<Reservation> getReservations() {
-		// TODO - implement Table.getReservations
-		throw new UnsupportedOperationException();
+		return this.reservation;
 	}
 
 	public int getSeats() {

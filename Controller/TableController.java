@@ -11,13 +11,19 @@ public class TableController {
 
 	private List<Table> tables = new ArrayList<Table>();
 
+	private int noOfTables;
+
 	/**
 	 * 
 	 * @param noOfTables
 	 */
 	public TableController(int noOfTables) {
-		// TODO - implement TableController.TableController
-		throw new UnsupportedOperationException();
+		this.noOfTables = noOfTables;
+		this.tables = new ArrayList<Table>(noOfTables);
+	}
+
+	public int getNoOfTables() {
+		return this.noOfTables;
 	}
 
 	/**
@@ -34,8 +40,7 @@ public class TableController {
 	 * @param details
 	 */
 	public boolean clearReservation(Reservation details) {
-		// TODO - implement TableController.clearReservation
-		throw new UnsupportedOperationException();
+		return false;
 	}
 
 	/**
@@ -43,8 +48,10 @@ public class TableController {
 	 * @param tableNo
 	 */
 	public Table findTableByNo(int tableNo) {
-		// TODO - implement TableController.findTableByNo
-		throw new UnsupportedOperationException();
+		if (tableNo < 1 || tableNo > noOfTables) {
+			throw new UnsupportedOperationException("This table number is not in the restaurant.");
+		}
+		return this.tables.get(tableNo);
 	}
 
 	public void printAvailableTables() {

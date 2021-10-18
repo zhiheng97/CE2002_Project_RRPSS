@@ -18,8 +18,14 @@ public class Reservation {
 	 * @param pax
 	 */
 	public Reservation(int id, String custName, String resDate, String resTime, int contact, int pax) {
-		// TODO - implement Reservation.Reservation
-		throw new UnsupportedOperationException();
+		if (id < 0) {
+			throw new UnsupportedOperationException("Invalid customer ID.");
+		}
+		this.id = id;
+		this.customer = new Customer(id, custName, false, contact);
+		this.date = resDate;
+		this.time = resTime;
+		this.noPax = pax;
 	}
 
 	public Customer getCustomer() {
@@ -42,29 +48,24 @@ public class Reservation {
 		return this.time;
 	}
 
-	public Customer setCustomer() {
-		// TODO - implement Reservation.setCustomer
-		throw new UnsupportedOperationException();
+	public void setCustomer(Customer cust) {
+		this.customer = cust;
 	}
 
-	public String setDate() {
-		// TODO - implement Reservation.setDate
-		throw new UnsupportedOperationException();
+	public void setDate(String date) {
+		this.date = date;
 	}
 
-	public int setId() {
-		// TODO - implement Reservation.setId
-		throw new UnsupportedOperationException();
+	public void setId(int id) {
+		this.id = id;
 	}
 
-	public int setNoPax() {
-		// TODO - implement Reservation.setNoPax
-		throw new UnsupportedOperationException();
+	public void setNoPax(int noOfPax) {
+		this.noPax = noOfPax;
 	}
 
-	public String setTime() {
-		// TODO - implement Reservation.setTime
-		throw new UnsupportedOperationException();
+	public void setTime(String time) {
+		this.time = time;
 	}
 
 }
