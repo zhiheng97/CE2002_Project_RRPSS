@@ -17,8 +17,8 @@ public class Order {
 	 * @param dateTime
 	 */
 	public Order(Staff createdBy, String dateTime) {
-		// TODO - implement Order.Order
-		throw new UnsupportedOperationException();
+		this.timestamp = dateTime;
+		this.placedBy = createdBy;
 	}
 
 	public void print() {
@@ -31,18 +31,15 @@ public class Order {
 	}
 
 	public String getPlacedBy() {
-		// TODO - implement Order.getPlacedBy
-		throw new UnsupportedOperationException();
+		return this.placedBy.getName();
 	}
 
 	public String getTimeStamp() {
-		// TODO - implement Order.getTimeStamp
-		throw new UnsupportedOperationException();
+		return this.timestamp;
 	}
 
-	public int getTotal() {
-		// TODO - implement Order.getTotal
-		throw new UnsupportedOperationException();
+	public double getTotal() {
+		return this.total;
 	}
 
 }
