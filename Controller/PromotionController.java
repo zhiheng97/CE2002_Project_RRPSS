@@ -1,5 +1,6 @@
 package Controller;
 
+import.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,20 +8,43 @@ import Models.Promotion;
 
 public class PromotionController {
 
-	private List<Promotion> promotionList = new ArrayList<Promotion>();
+	private List<Promotion> promotions = new ArrayList<Promotion>();
+	private FileController fileController = new FileController();
+	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./promotion.txt").toString();
 
 	public PromotionController() {
 		// TODO - implement PromotionController.PromotionController
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+		List<String> promotionList = fileController.readFile(PATH_TO_MENU_FILE);
+		List<String> promoParams = new ArrayList<String>;
+		String prevCat = "", curCat = "";
+		int i = 0, j;
+		do{
+			promoParams[0] = promotionList.get(i); 		//id
+			promoParams[1] = promotionList.get(i+1); //name
+			promoParams[2] = promotionList.get(i+2); //description
+			promoParams[3] = promotionList.get(i+3); //price
+			j = 4;
+			do{
+				promoParams[j] = promotionList.get(i);
+				i++;
+				j++;
+			}while(!promotionList[i].equals("ENDLINE"))
+			this.addPromotion(promoParams);
+			i++;
+			k = 0;
+		}while(!promotionList[i].equals("ENDFILE"))
 	}
 
 	/**
-	 * 
+	 *
 	 * @param itemParams
 	 */
 	public boolean addItem(String[] itemParams) {
 		// TODO - implement PromotionController.addItem
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+
+		return true;
 	}
 
 	/**
@@ -30,11 +54,12 @@ public class PromotionController {
 	 */
 	public boolean addPromotion(String[] promoParams, String[] items) {
 		// TODO - implement PromotionController.addPromotion
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+
 	}
 
 	/**
-	 * 
+	 *
 	 * @param promoId
 	 */
 	public Promotion findPromotionById(int promoId) {
@@ -57,7 +82,7 @@ public class PromotionController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param id
 	 * @param itemId
 	 */
@@ -67,7 +92,7 @@ public class PromotionController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param itemParams
 	 */
 	public boolean updateItem(String[] itemParams) {

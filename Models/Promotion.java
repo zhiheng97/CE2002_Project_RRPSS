@@ -3,22 +3,24 @@ package Models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Promotion {
-
-	private List<Item> items = new ArrayList<Item>();
+public class Promotion extends Item{
+	private int id;
 	private String description;
 	private double price;
-	private int id;
-
+	private List<Item> items = new ArrayList<Item>();
 	/**
-	 * 
+
+	 *
 	 * @param desc
 	 * @param cost
 	 * @param itemsInc
 	 */
 	public Promotion(String desc, double cost, String[] itemsInc) {
 		// TODO - implement Promotion.Promotion
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		this.description = desc;
+		this.cost = price;
+		this.items = itemsInc;
 	}
 
 	public int getId() {
@@ -30,12 +32,17 @@ public class Promotion {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param itemId
 	 */
 	public Item getItem(int itemId) {
 		// TODO - implement Promotion.getItem
-		throw new UnsupportedOperationException();
+		//throw new UnsupportedOperationException();
+		int i;
+		for(i = 0; i < this.items.length; i++){
+			if(this.items[i] == itemId) return items[i];
+		}
+		return null;
 	}
 
 	public String getDescription() {
@@ -47,7 +54,7 @@ public class Promotion {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param itemId
 	 */
 	public Item lookUp(int itemId) {
@@ -61,7 +68,7 @@ public class Promotion {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param desc
 	 */
 	public void setDescription(String desc) {
@@ -69,7 +76,7 @@ public class Promotion {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param cost
 	 */
 	public void setPrice(double cost) {
