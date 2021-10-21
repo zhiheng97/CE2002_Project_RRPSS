@@ -1,4 +1,14 @@
-400,Fish & Chips & Chips,Fried fish fillets that is served with enough chips for your girlfriend who isn't hungry,11.00,100,302,302,ENDLINE
-401,Ah Kun Breakfast,Hearty Chicken Noodle Breakfast set with Singapore's favourite drink kopi o!,8.00,102,300,ENDLINE
-402,I'm on a Diet,For the people who need all the energy but none of the calories (vegan),10.00,201,301,ENDLINE
+400,Fish & Chips & Chips,Fried fish fillets that is served with enough chips for your girlfriend who isn't hungry,11.00,
+100,Fish & Chips,Fried fish fillets that is served with a side of chips,8.00,
+302,Soft Drinks,Carbonated drink,2.00,
+302,Soft Drinks,Carbonated drink,2.00,
+ENDLINE,
+401,Ah Kun Breakfast,Hearty Chicken Noodle Breakfast set with Singapore's favourite drink kopi o!,8.00,
+102,Chicken Noodle Soup,Noodles served in clear chicken broth with chicken slices,6.50,
+300,Coffee,Freshly ground arabica coffee,2.00,
+ENDLINE,
+402,I'm on a Diet,For the people who need all the energy but none of the calories (vegan),10.00,
+201,Garden Vegetables,Fresh vegetable,3.00,
+301,Tea,English breakfast tea,2.00,
+ENDLINE,
 ENDFILE

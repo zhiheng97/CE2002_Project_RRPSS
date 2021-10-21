@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Promotion extends Item{
-	private int id;
-	private String description;
-	private double price;
+	//private int id;
+	//private String description;
+	//private double price;
 	private List<Item> items = new ArrayList<Item>();
 	/**
 
@@ -15,16 +15,19 @@ public class Promotion extends Item{
 	 * @param cost
 	 * @param itemsInc
 	 */
-	public Promotion(String desc, double cost, String[] itemsInc) {
+	public Promotion(int id, String name, String desc, double cost, List<String> itemsInc) {
 		// TODO - implement Promotion.Promotion
 		//throw new UnsupportedOperationException();
-		this.description = desc;
-		this.cost = price;
-		this.items = itemsInc;
+		super(id, name, desc, cost);
+		int i = 0;
+		do{
+			items.add(new Item(Integer.parseInt(itemsInc.get(i)), itemsInc.get(i+1), itemsInc.get(i+2), Double.parseDouble(itemsInc.get(i+3))));
+			i += 4;
+		}while(!itemsInc.get(i).equals("ENDLINE"));
 	}
 
 	public int getId() {
-		return this.id;
+		return super.getId();
 	}
 
 	public List<Item> getItems() {
@@ -39,32 +42,42 @@ public class Promotion extends Item{
 		// TODO - implement Promotion.getItem
 		//throw new UnsupportedOperationException();
 		int i;
-		for(i = 0; i < this.items.length; i++){
-			if(this.items[i] == itemId) return items[i];
+		for(i = 0; i < this.items.size(); i++){
+			if(this.items.get(i).getId() == itemId) return items.get(i);
 		}
 		return null;
 	}
 
+	public boolean addItem(String[] itemParams){
+		items.add(new Item(Integer.parseInt(itemParams[0]), itemParams[1], itemParams[2], Double.parseDouble(itemParams[3])));
+		//this.items.add();
+		return true;
+	}
+
 	public String getDescription() {
-		return this.description;
+		return super.getDescription();
 	}
 
 	public double getPrice() {
-		return this.price;
+		return super.getPrice();
 	}
 
 	/**
 	 *
 	 * @param itemId
 	 */
-	public Item lookUp(int itemId) {
-		// TODO - implement Promotion.lookUp
-		throw new UnsupportedOperationException();
-	}
 
 	public void print() {
 		// TODO - implement Promotion.print
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+		int i;
+		System.out.println("Promotion Id:" + super.getId());
+		System.out.println("Promotion Name:" + super.getName());
+		System.out.println("Promotion Description:" + super.getDescription());
+		System.out.println("Promotion Price:" + super.getPrice());
+		for(i = 0; i < items.size(); i++){
+			items.get(i).print();
+		}
 	}
 
 	/**
@@ -72,7 +85,7 @@ public class Promotion extends Item{
 	 * @param desc
 	 */
 	public void setDescription(String desc) {
-		this.description = desc;
+		super.setDescription(desc);
 	}
 
 	/**
@@ -80,7 +93,7 @@ public class Promotion extends Item{
 	 * @param cost
 	 */
 	public void setPrice(double cost) {
-		this.price = cost;
+		super.setPrice(cost);
 	}
 
 }

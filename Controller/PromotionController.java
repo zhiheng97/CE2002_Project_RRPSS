@@ -1,6 +1,6 @@
 package Controller;
 
-import.nio.file.Path;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,25 +15,27 @@ public class PromotionController {
 	public PromotionController() {
 		// TODO - implement PromotionController.PromotionController
 		// throw new UnsupportedOperationException();
-		List<String> promotionList = fileController.readFile(PATH_TO_MENU_FILE);
-		List<String> promoParams = new ArrayList<String>;
+		List<String> tokens = fileController.readFile(PATH_TO_PROMOTIONS_FILE);
+		List<String> promoParams = new ArrayList<String>();
+		List<String> itemParams = new ArrayList<String>();
 		String prevCat = "", curCat = "";
-		int i = 0, j;
+		int i = 0;
 		do{
-			promoParams[0] = promotionList.get(i); 		//id
-			promoParams[1] = promotionList.get(i+1); //name
-			promoParams[2] = promotionList.get(i+2); //description
-			promoParams[3] = promotionList.get(i+3); //price
-			j = 4;
+			promoParams.add(tokens.get(i)); 		//id
+			promoParams.add(tokens.get(i+1)); //name
+			promoParams.add(tokens.get(i+2)); //description
+			promoParams.add(tokens.get(i+3)); //price
+			i += 4;
 			do{
-				promoParams[j] = promotionList.get(i);
+				itemParams.add(tokens.get(i));
 				i++;
-				j++;
-			}while(!promotionList[i].equals("ENDLINE"))
-			this.addPromotion(promoParams);
+			}while(!tokens.get(i).equals("ENDLINE"));
+			itemParams.add(tokens.get(i+1));
+			addPromotion(promoParams, itemParams);
+			promoParams.clear();
+			itemParams.clear();
 			i++;
-			k = 0;
-		}while(!promotionList[i].equals("ENDFILE"))
+		}while(!tokens.get(i).equals("ENDFILE"));
 	}
 
 	/**
@@ -52,10 +54,11 @@ public class PromotionController {
 	 * @param promoParams
 	 * @param items
 	 */
-	public boolean addPromotion(String[] promoParams, String[] items) {
+	public boolean addPromotion(List<String> promoParams, List<String> items) {
 		// TODO - implement PromotionController.addPromotion
 		// throw new UnsupportedOperationException();
-
+		promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
+		return true;
 	}
 
 	/**
@@ -97,7 +100,7 @@ public class PromotionController {
 	 */
 	public boolean updateItem(String[] itemParams) {
 		// TODO - implement PromotionController.updateItem
-		throw new UnsupportedOperationException();
+	  throw new UnsupportedOperationException();
 	}
 
 	/**
