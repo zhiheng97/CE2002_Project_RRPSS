@@ -123,7 +123,19 @@ public class PromotionController {
 	 */
 	public boolean updatePromotion(String[] promoParams) {
 		// TODO - implement PromotionController.updatePromotion
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+	  int i;
+		for(i = 0; i < promos.size(); i++){
+			if(promos.get(i).getId() == promoParams[0]){
+				promos.get(i).setId(promoParams[0]);
+				promos.get(i).setName(promoParams[0]);
+				promos.get(i).setDescription(promoParams[0]);
+				promos.get(i).setId(promoParams[0]);
+				// doesn't change items
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
