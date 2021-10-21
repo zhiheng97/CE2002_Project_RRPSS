@@ -3,3 +3,4 @@ tmp/*
 *.lck
 .vpprefdata/*
 untitled.vpp.*
+*.code-workspace
