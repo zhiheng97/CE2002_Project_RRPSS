@@ -30,23 +30,12 @@ public class PromotionController {
 				itemParams.add(tokens.get(i));
 				i++;
 			}while(!tokens.get(i).equals("ENDLINE"));
-			itemParams.add(tokens.get(i+1));
+			itemParams.add(tokens.get(i));
 			addPromotion(promoParams, itemParams);
 			promoParams.clear();
 			itemParams.clear();
 			i++;
 		}while(!tokens.get(i).equals("ENDFILE"));
-	}
-
-	/**
-	 *
-	 * @param itemParams
-	 */
-	public boolean addItem(String[] itemParams) {
-		// TODO - implement PromotionController.addItem
-		// throw new UnsupportedOperationException();
-
-		return true;
 	}
 
 	/**
@@ -67,12 +56,21 @@ public class PromotionController {
 	 */
 	public Promotion findPromotionById(int promoId) {
 		// TODO - implement PromotionController.findPromotionById
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+		int i;
+		for(i = 0; i < promotions.size(); i++){
+			if(promotions.get(i).getId() == promoId) return promotions.get(i);
+		}
+		return null;
 	}
 
 	public void print() {
 		// TODO - implement PromotionController.print
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+		int i;
+		for(i = 0; i < promotions.size(); i++){
+			promotions.get(i).print();
+		}
 	}
 
 	/**
@@ -81,7 +79,23 @@ public class PromotionController {
 	 */
 	public boolean removePromotion(int promoId) {
 		// TODO - implement PromotionController.removePromotion
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+		int i;
+		for(i = 0; i < promotions.size(); i++){
+			if(promotions.get(i).getId() == promoId) promotions.remove(i);
+		}
+		return true;
+	}
+
+	/**
+	 *
+	 * @param itemParams
+	 */
+	public boolean addItem(String[] itemParams) {
+		// TODO - implement PromotionController.addItem
+		// throw new UnsupportedOperationException();
+
+		return true;
 	}
 
 	/**

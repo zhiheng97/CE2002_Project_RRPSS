@@ -50,7 +50,14 @@ public class Promotion extends Item{
 
 	public boolean addItem(String[] itemParams){
 		items.add(new Item(Integer.parseInt(itemParams[0]), itemParams[1], itemParams[2], Double.parseDouble(itemParams[3])));
-		//this.items.add();
+		return true;
+	}
+
+	public boolean removeItem(int itemId){
+		int i;
+		for(i = 0; i < items.size(); i++){
+			if(items.get(i).getId() == itemId) items.remove(i);
+		}
 		return true;
 	}
 
