@@ -17,7 +17,7 @@ public class FileController {
      * Constructor for the FileController Class
      */
     public FileController() {}
-    
+
     public List<String> readFile(String path) {
         try{
             List<String> list = new ArrayList<String>();
@@ -36,5 +36,23 @@ public class FileController {
         }
         return null;
     }
-    
+
+    public List<String> writeFile(String path) {
+        try{
+            List<String> list = new ArrayList<String>();
+            BufferedWriter csvWriter = new BufferedWriter(new FileWriter(path));
+            while((row = csvWriter.readLine()) != null) {
+                for(String s : row.split(",")){
+                    list.add(s);
+                }
+            }
+            csvWriter.close();
+            return list;
+        } catch (IOException e) {
+            System.out.println("ERROR: Unable to access file");
+            System.out.println(e.getStackTrace());
+        }
+        return null;
+    }
+
 }
