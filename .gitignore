@@ -3,4 +3,7 @@ tmp/*
 *.lck
 .vpprefdata/*
 untitled.vpp.*
+*.class
+Controller/*.class
+Models/*.class
 *.code-workspace
