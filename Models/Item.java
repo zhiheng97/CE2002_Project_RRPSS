@@ -95,4 +95,12 @@ public class Item {
 		System.out.println("Item Price: " + this.price);
 	}
 
+	/**
+	 * Makes a copy of this object
+	 * @return Item that has been copied
+	 */
+	public Item copyOf(){
+		return new Item(this.id, this.name, this.description, this.price);
+	}
+
 }

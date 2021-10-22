@@ -24,12 +24,12 @@ public class Category {
 	 * @return True if item is added, false otherwise
 	 */
 	public boolean addItem(String[] itemParams) {
-		int itemId = Integer.parseInt(itemParams[0]);
-		if(lookUp(itemParams) == null) {
+		int itemId = Integer.parseInt(itemParams[1]);
+		if(lookUp(itemId) == null) {
 			items.add(new Item
 				(
 					itemId,
-					itemParams[1],
+					itemParams[0],
 					itemParams[2],
 					Double.parseDouble(itemParams[3])
 				)

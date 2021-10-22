@@ -47,9 +47,19 @@ public class CategoryController {
 		}
 		return false;
 	}
+
+	/**
+	 * Searches List<Item> which is nested in List<Category> for the item with the specified itemId.
+	 * @param id Is the itemId to be copied
+	 * @return Copy of the item that has been searched for
+	 */
+	public Item copyItem(int id) {
+		Item toCopy = searchForItem(id);
+		return toCopy.copyOf();
+	}
 	
 	/**
-	 * Searchs the list of categories for the provided categoryType
+	 * Searches the list of categories for the provided categoryType
 	 * @param categoryType Category to be searched for
 	 * @return Category that matches the provided parameter
 	 */
@@ -61,7 +71,7 @@ public class CategoryController {
 	}
 
 	/**
-	 * 
+	 * Method is called upon initialization of CategoryController.
 	 */
 	private void initializeMenuItems() {
 		List<String> menuList = fileController.readFile(PATH_TO_MENU_FILE);
@@ -75,8 +85,8 @@ public class CategoryController {
 				addCategory(Categories.SIDES);
 			else if(curCat.equals(Categories.DRINKS.toString()) && !prevCat.equals(curCat))
 				addCategory(Categories.DRINKS);
-			itemParams[0] = menuList.get(i); //id
-			itemParams[1] = menuList.get(i + 1); //name
+			itemParams[1] = menuList.get(i); //id
+			itemParams[0] = menuList.get(i + 1); //name
 			itemParams[2] = menuList.get(i + 2); //description
 			itemParams[3] = menuList.get(i + 3); //price
 			Category category = findCatByType(curCat);
@@ -100,13 +110,28 @@ public class CategoryController {
 	 * @param catType Category type for item to be removed from
 	 * @return True if item was removed, false otherwise
 	 */
-	public boolean removeItem(int itemId, Categories catType) {
-		Category toRemoveFrom = findCatByType(catType.toString());
+	public boolean removeItem(int itemId) {
+		Item toRemove = searchForItem(itemId);
+		Category toRemoveFrom = categories.stream()
+			.filter(category -> category.getItems().contains(toRemove)).findFirst().orElse(null);
 		if(toRemoveFrom != null) {
-			if(toRemoveFrom.removeItem(itemId))
-				return true;
+			toRemoveFrom.removeItem(itemId);
+			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Searches for the item specified in the menu
+	 * @param itemId ItemId to be searched for
+	 * @return Item object that matches the specified itemId, otherwise null
+	 */
+	private Item searchForItem(int itemId) {
+		return categories.stream()
+		.flatMap(category -> category.getItems().stream())
+		.filter(item -> item.getId() == itemId)
+		.findFirst()
+		.orElse(null);
 	}
 
 	/**
@@ -115,17 +140,15 @@ public class CategoryController {
 	 * @param catType Category type for item to be updated
 	 * @return True if item was updated, false otherwise
 	 */
-	public boolean updateItem(String[] itemParams, Categories catType) {
-		Category toUpdateIn = findCatByType(catType.toString());
-		if(toUpdateIn != null) {
-			int itemId = Integer.parseInt(itemParams[0]);
-			Item toUpdate = toUpdateIn.lookUp(itemId);
+	public boolean updateItem(String[] itemParams) {
+		Item toUpdate = searchForItem(Integer.parseInt(itemParams[0]));
+		if(toUpdate != null) {
 			if(toUpdate != null) {
-				if(!itemParams[1].equals(null))
+				if(!itemParams[1].equals(null) || !itemParams[1].equals(""))
 					toUpdate.setName(itemParams[1]);
-				if(!itemParams[2].equals(null))
+				if(!itemParams[2].equals(null) || !itemParams[2].equals(""))
 					toUpdate.setDescription(itemParams[2]);
-				if(!itemParams[3].equals(null))
+				if(!itemParams[3].equals(null) || !itemParams[3].equals(""))
 					toUpdate.setPrice(Double.parseDouble(itemParams[3]));
 				return true;
 			}

@@ -6,3 +6,4 @@ untitled.vpp.*
 *.class
 Controller/*.class
 Models/*.class
+*.code-workspace
