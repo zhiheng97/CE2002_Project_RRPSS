@@ -29,13 +29,13 @@ public class PromotionController {
 			do{
 				itemParams.add(tokens.get(i));
 				i++;
-			}while(!tokens.get(i).equals("ENDLINE"));
+			}while(i < tokens.size() && !tokens.get(i).equals("ENDLINE"));
 			itemParams.add(tokens.get(i));
 			addPromotion(promoParams, itemParams);
 			promoParams.clear();
 			itemParams.clear();
 			i++;
-		}while(!tokens.get(i).equals("ENDFILE"));
+		}while(i < tokens.size() && !tokens.get(i).equals("ENDFILE"));
 	}
 
 	/**
@@ -47,8 +47,14 @@ public class PromotionController {
 		// TODO - implement PromotionController.addPromotion
 		// throw new UnsupportedOperationException();
 		try{
-			promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
-			return true;
+			if(this.findPromotionById(Integer.parseInt(promoParams.get(0))) != null){
+				System.out.println("Promotion is already in the system!");
+				return false;
+			}
+			else{
+				promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
+				return true;
+			}
 		}
 		catch(Exception error){
 			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
