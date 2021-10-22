@@ -49,8 +49,15 @@ public class Promotion extends Item{
 	}
 
 	public boolean addItem(String[] itemParams){
-		items.add(new Item(Integer.parseInt(itemParams[0]), itemParams[1], itemParams[2], Double.parseDouble(itemParams[3])));
-		return true;
+		try{
+			items.add(new Item(Integer.parseInt(itemParams[0]), itemParams[1], itemParams[2], Double.parseDouble(itemParams[3])));
+			return true;
+		}
+		catch(Exception error){
+			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
+			System.out.println(error);
+			return false;
+		}
 	}
 
 	public boolean removeItem(int itemId){

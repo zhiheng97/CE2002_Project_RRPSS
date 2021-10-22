@@ -46,8 +46,15 @@ public class PromotionController {
 	public boolean addPromotion(List<String> promoParams, List<String> items) {
 		// TODO - implement PromotionController.addPromotion
 		// throw new UnsupportedOperationException();
-		promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
-		return true;
+		try{
+			promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
+			return true;
+		}
+		catch(Exception error){
+			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
+			System.out.println(error);
+			return false;
+		}
 	}
 
 	/**
@@ -80,22 +87,39 @@ public class PromotionController {
 	public boolean removePromotion(int promoId) {
 		// TODO - implement PromotionController.removePromotion
 		// throw new UnsupportedOperationException();
-		int i;
-		for(i = 0; i < promotions.size(); i++){
-			if(promotions.get(i).getId() == promoId) promotions.remove(i);
+		try{
+			int i;
+			for(i = 0; i < promotions.size(); i++){
+				if(promotions.get(i).getId() == promoId){
+					promotions.remove(i);
+					return true;
+				}
+			}
+			System.out.println("Promotion " + promoId + " does not exist!");
+			return false;
 		}
-		return true;
+		catch(Exception error){
+			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
+			System.out.println(error);
+			return false;
+		}
 	}
 
 	/**
 	 *
 	 * @param itemParams
 	 */
-	public boolean addItem(String[] itemParams) {
+	public boolean addItem(int promoId, String[] itemParams) {
 		// TODO - implement PromotionController.addItem
 		// throw new UnsupportedOperationException();
-
-		return true;
+		try{
+			this.findPromotionById(promoId).addItem(itemParams);
+			return true;
+		}
+		catch(Exception error){
+			System.out.println("Promotion " + promoId + " does not exist!");
+			return false;
+		}
 	}
 
 	/**
@@ -103,18 +127,51 @@ public class PromotionController {
 	 * @param id
 	 * @param itemId
 	 */
-	public boolean removeItem(int id, int itemId) {
+	public boolean removeItem(int promoId, int itemId) {
 		// TODO - implement PromotionController.removeItem
-		throw new UnsupportedOperationException();
+		// throw new UnsupportedOperationException();
+		int i;
+		try{
+			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
+				if(this.findPromotionById(promoId).getItems().get(i).getId() == itemId){
+					this.findPromotionById(promoId).getItems().remove(i);
+					return true;
+				}
+			}
+			System.out.println("Item " + itemId + " does not exist!");
+			return false;
+		}
+		catch(Exception error){
+			System.out.println("Promotion " + promoId + " does not exist!");
+			return false;
+		}
 	}
 
 	/**
 	 *
 	 * @param itemParams
 	 */
-	public boolean updateItem(String[] itemParams) {
+	public boolean updateItem(int promoId, String[] itemParams) {
 		// TODO - implement PromotionController.updateItem
-	  throw new UnsupportedOperationException();
+	  // throw new UnsupportedOperationException();
+		int i;
+		try{
+			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
+				if(this.findPromotionById(promoId).getItems().get(i).getId() == Integer.parseInt(itemParams[0])){
+					this.findPromotionById(promoId).getItems().get(i).setId(Integer.parseInt(itemParams[0]));
+					this.findPromotionById(promoId).getItems().get(i).setName(itemParams[1]);
+					this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams[2]);
+					this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams[3]));
+					return true;
+				}
+			}
+			System.out.println("Item " + itemParams[0] + " does not exist!");
+			return false;
+		}
+		catch(Exception error){
+			System.out.println("Promotion " + promoId + " does not exist!");
+			return false;
+		}
 	}
 
 	/**
@@ -124,18 +181,26 @@ public class PromotionController {
 	public boolean updatePromotion(String[] promoParams) {
 		// TODO - implement PromotionController.updatePromotion
 		// throw new UnsupportedOperationException();
-	  int i;
-		for(i = 0; i < promos.size(); i++){
-			if(promos.get(i).getId() == promoParams[0]){
-				promos.get(i).setId(promoParams[0]);
-				promos.get(i).setName(promoParams[0]);
-				promos.get(i).setDescription(promoParams[0]);
-				promos.get(i).setId(promoParams[0]);
-				// doesn't change items
-				return true;
+		try{
+			int i;
+			for(i = 0; i < promotions.size(); i++){
+				if(promotions.get(i).getId() == Integer.parseInt(promoParams[0])){
+					promotions.get(i).setId(Integer.parseInt(promoParams[0]));
+					promotions.get(i).setName(promoParams[0]);
+					promotions.get(i).setDescription(promoParams[0]);
+					promotions.get(i).setPrice(Double.parseDouble(promoParams[0]));
+					// doesn't change items
+					return true;
+				}
 			}
+			System.out.println("Promotion " + promoParams[0] + " does not exist!");
+			return false;
 		}
-		return false;
+		catch(Exception error){
+			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
+			System.out.println(error);
+			return false;
+		}
 	}
 
 }
