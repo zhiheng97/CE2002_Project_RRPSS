@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Models.Promotion;
+import Models.Item;
 
 public class PromotionController {
 
@@ -38,6 +39,28 @@ public class PromotionController {
 		}while(i < tokens.size() && !tokens.get(i).equals("ENDFILE"));
 	}
 
+	private boolean updatePromotionFile() {
+		boolean res = false;
+		List<String> records = new ArrayList<String>();
+		for(Promotion promotion : promotions){
+			records.add(String.valueOf(promotion.getId()));
+			records.add(promotion.getName());
+			records.add(promotion.getDescription());
+			records.add(String.valueOf(promotion.getPrice()));
+			for(Item item : promotion.getItems()){
+				records.add(String.valueOf(item.getId()));
+				records.add(item.getName());
+				records.add(item.getDescription());
+				records.add(String.valueOf(item.getPrice()));
+			}
+			records.add("ENDLINE");
+		}
+		records.add("ENDFILE");
+		if(fileController.writeFile(records.toArray(new String[records.size()]), PATH_TO_PROMOTIONS_FILE))
+			res = true;
+		return res;
+	}
+
 	/**
 	 * Initializes a new promotion object and adds it to promotions[]
 	 * @param promoParams
@@ -53,6 +76,7 @@ public class PromotionController {
 			}
 			else{
 				promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
+				this.updatePromotionFile();
 				return true;
 			}
 		}
@@ -98,6 +122,7 @@ public class PromotionController {
 			for(i = 0; i < promotions.size(); i++){
 				if(promotions.get(i).getId() == promoId){
 					promotions.remove(i);
+					this.updatePromotionFile();
 					return true;
 				}
 			}
@@ -120,6 +145,7 @@ public class PromotionController {
 		// throw new UnsupportedOperationException();
 		try{
 			this.findPromotionById(promoId).addItem(itemParams);
+			this.updatePromotionFile();
 			return true;
 		}
 		catch(Exception error){
@@ -141,6 +167,7 @@ public class PromotionController {
 			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
 				if(this.findPromotionById(promoId).getItems().get(i).getId() == itemId){
 					this.findPromotionById(promoId).getItems().remove(i);
+					this.updatePromotionFile();
 					return true;
 				}
 			}
@@ -168,6 +195,7 @@ public class PromotionController {
 					this.findPromotionById(promoId).getItems().get(i).setName(itemParams[1]);
 					this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams[2]);
 					this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams[3]));
+					this.updatePromotionFile();
 					return true;
 				}
 			}
@@ -195,6 +223,7 @@ public class PromotionController {
 					promotions.get(i).setName(promoParams[0]);
 					promotions.get(i).setDescription(promoParams[0]);
 					promotions.get(i).setPrice(Double.parseDouble(promoParams[0]));
+					this.updatePromotionFile();
 					// doesn't change items
 					return true;
 				}
