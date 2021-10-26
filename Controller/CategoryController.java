@@ -14,6 +14,8 @@ public class CategoryController {
 	private List<Category> categories = new ArrayList<Category>();
 	private FileController fileController = new FileController();
 	private final static String PATH_TO_MENU_FILE = Path.of("./menu.txt").toString();
+	private final static String ESCAPE_STRING_1 = "\\";
+	private final static String ESCAPE_STRING_2 = "-1.0";
 
 	/**
 	 * Constructor of the CategoryController Class
@@ -125,6 +127,7 @@ public class CategoryController {
 			.filter(category -> category.getItems().contains(toRemove)).findFirst().orElse(null);
 		if(toRemoveFrom != null) {
 			toRemoveFrom.removeItem(itemId);
+			updateMenuFile();
 			return true;
 		}
 		return false;
@@ -170,15 +173,16 @@ public class CategoryController {
 	 * @return True if item was updated, false otherwise
 	 */
 	public boolean updateItem(String[] itemParams) {
-		Item toUpdate = searchForItem(Integer.parseInt(itemParams[0]));
+		Item toUpdate = searchForItem(Integer.parseInt(itemParams[1]));
 		if(toUpdate != null) {
 			if(toUpdate != null) {
-				if(!itemParams[1].equals(null) || !itemParams[1].equals(""))
-					toUpdate.setName(itemParams[1]);
-				if(!itemParams[2].equals(null) || !itemParams[2].equals(""))
+				if(!itemParams[0].equals(ESCAPE_STRING_1))
+					toUpdate.setName(itemParams[0]);
+				if(!itemParams[2].equals(ESCAPE_STRING_1))
 					toUpdate.setDescription(itemParams[2]);
-				if(!itemParams[3].equals(null) || !itemParams[3].equals(""))
+				if(!itemParams[3].equals(ESCAPE_STRING_2))
 					toUpdate.setPrice(Double.parseDouble(itemParams[3]));
+				updateMenuFile();
 				return true;
 			}
 		}
