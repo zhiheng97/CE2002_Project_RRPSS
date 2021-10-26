@@ -26,24 +26,24 @@ public class RRPSSApp {
 						switch (option) {
 							case 1:
 								System.out.print("Enter the category id to add to [0 - Mains, 1 - Sides, 2 - Drinks]: ");
-								itemParams[0] = String.valueOf(sc.nextInt());
+								itemParams[4] = String.valueOf(sc.nextInt());
 								System.out.print("Enter the item id: ");
 								itemParams[1] = String.valueOf(sc.nextInt());
 								System.out.print("Enter the item name: ");
-								itemParams[2] = sc.nextLine();
+								itemParams[0] = sc.next();
 								System.out.print("Enter the item description: ");
-								itemParams[3] = sc.nextLine();
+								itemParams[2] = sc.next();
 								System.out.print("Enter the price of the item: ");
-								itemParams[4] = String.valueOf(sc.nextDouble());
+								itemParams[3] = String.valueOf(sc.nextDouble());
 								restaurantController.addItem(itemParams, false);
 								break;
 							case 2:
 								System.out.print("Enter the item id: ");
 								itemParams[0] = String.valueOf(sc.nextInt());
 								System.out.print("Enter the item name [Press enter if you do not intend to modify]: ");
-								itemParams[1] = sc.nextLine();
+								itemParams[1] = sc.next();
 								System.out.print("Enter the item description [Press enter if you do not intend to modify]: ");
-								itemParams[2] = sc.nextLine();
+								itemParams[2] = sc.next();
 								System.out.print("Enter the price of the item [Press enter if you do not intend to modify]: ");
 								itemParams[3] = String.valueOf(sc.nextDouble());
 								restaurantController.updateItem(itemParams, false);

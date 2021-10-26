@@ -2,6 +2,7 @@ package Controller;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import Enumerations.Categories;
@@ -40,10 +41,18 @@ public class CategoryController {
 	 * @return True if item is added, false otherwise
 	 */
 	public boolean addItem(String[] itemParams) {
-		Category toAddto = findCatByType(itemParams[0]);
+		Category toAddto;
+		if(itemParams[4].equals("0"))
+			toAddto = findCatByType("MAINS");
+		else if(itemParams[4].equals("1"))
+			toAddto = findCatByType("SIDES");
+		else
+			toAddto = findCatByType("DRINKS");
 		if(toAddto != null) {
-			if(toAddto.addItem(itemParams))
+			if(toAddto.addItem(Arrays.copyOfRange(itemParams, 0, itemParams.length-1))) {
+				updateMenuFile();
 				return true;
+			}
 		}
 		return false;
 	}
@@ -132,6 +141,26 @@ public class CategoryController {
 		.filter(item -> item.getId() == itemId)
 		.findFirst()
 		.orElse(null);
+	}
+
+	/**
+	 * A function called upon modifying an item in the menu.
+	 * @return True if file was modified, false otherwise
+	 */
+	private boolean updateMenuFile() {
+		boolean res = false;
+		List<String> records = new ArrayList<String>();
+		for(Category category : categories)
+			for(Item item : category.getItems()){
+				records.add(String.valueOf(item.getId()));
+				records.add(item.getName());
+				records.add(item.getDescription());
+				records.add(String.valueOf(item.getPrice()));
+				records.add(category.getCategory().toString());
+			}
+		if(fileController.writeFile(records.toArray(new String[records.size()]), PATH_TO_MENU_FILE))
+			res = true;
+		return res;
 	}
 
 	/**
