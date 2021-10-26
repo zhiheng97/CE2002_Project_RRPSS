@@ -1,12 +1,15 @@
 package App;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 import Controller.RestaurantController;
 
 public class RRPSSApp {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		RestaurantController restaurantController = new RestaurantController();
 		Scanner sc = new Scanner(System.in);
@@ -20,6 +23,7 @@ public class RRPSSApp {
 				case 1:
 					String[] itemParams = new String[5];
 					do {
+						BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 						System.out.print("1. Add item to menu\n2. Update item in menu\n" +
 						"3. Remove item from menu\n4. View Menu\n5. Return\nEnter your choice: ");
 						option = sc.nextInt();
@@ -30,21 +34,21 @@ public class RRPSSApp {
 								System.out.print("Enter the item id: ");
 								itemParams[1] = String.valueOf(sc.nextInt());
 								System.out.print("Enter the item name: ");
-								itemParams[0] = sc.next();
+								itemParams[0] = reader.readLine();
 								System.out.print("Enter the item description: ");
-								itemParams[2] = sc.next();
+								itemParams[2] = reader.readLine();
 								System.out.print("Enter the price of the item: ");
 								itemParams[3] = String.valueOf(sc.nextDouble());
 								restaurantController.addItem(itemParams, false);
 								break;
 							case 2:
 								System.out.print("Enter the item id: ");
-								itemParams[0] = String.valueOf(sc.nextInt());
-								System.out.print("Enter the item name [Press enter if you do not intend to modify]: ");
-								itemParams[1] = sc.next();
-								System.out.print("Enter the item description [Press enter if you do not intend to modify]: ");
-								itemParams[2] = sc.next();
-								System.out.print("Enter the price of the item [Press enter if you do not intend to modify]: ");
+								itemParams[1] = String.valueOf(sc.nextInt());
+								System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
+								itemParams[0] = reader.readLine();
+								System.out.print("Enter the item description [Enter \\ if you do not intend to modify]: ");
+								itemParams[2] = reader.readLine();
+								System.out.print("Enter the price of the item [Enter -1 if you do not intend to modify]: ");
 								itemParams[3] = String.valueOf(sc.nextDouble());
 								restaurantController.updateItem(itemParams, false);
 								break;
