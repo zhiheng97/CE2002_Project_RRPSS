@@ -147,7 +147,7 @@ public class RestaurantController {
 	 * @param itemId
 	 * @param isPromo
 	 */
-	public boolean removeFromOrder(int tableNo, int quantity, int catId, int itemId, boolean isPromo) {
+	public boolean removeFromOrder(int tableNo, int quantity, int itemId, boolean isPromo) {
 		// TODO - implement RestaurantController.removeFromOrder
 		throw new UnsupportedOperationException();
 	}
