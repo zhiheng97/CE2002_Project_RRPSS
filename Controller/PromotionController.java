@@ -87,6 +87,24 @@ public class PromotionController {
 		}
 	}
 
+	public Promotion copyPromotion(int promoId){
+		int i, j;
+		List<String> items = new ArrayList<String>();;
+		Promotion copy;
+		for(i = 0; i < promotions.size(); i++){
+			if(promotions.get(i).getId() == promoId) break;
+		}
+		for(j = 0; j < promotions.get(i).getItems().size(); j++){
+			items.add(Integer.toString(promotions.get(i).getItems().get(j).getId()));
+			items.add(promotions.get(i).getItems().get(j).getName());
+			items.add(promotions.get(i).getItems().get(j).getDescription());
+			items.add(Double.toString(promotions.get(i).getItems().get(j).getPrice()));
+		}
+		items.add("ENDLINE");
+		copy = new Promotion(promotions.get(i).getId(), promotions.get(i).getName(), promotions.get(i).getDescription(), promotions.get(i).getPrice(), items);
+		return copy;
+	}
+
 	/**
 	 *
 	 * @param promoId
