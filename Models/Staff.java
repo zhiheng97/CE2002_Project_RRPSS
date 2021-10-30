@@ -13,8 +13,9 @@ public class Staff {
 	 * @param staffPosition
 	 */
 	public Staff(int staffId, String staffName, String staffPosition) {
-		// TODO - implement Staff.Staff
-		throw new UnsupportedOperationException();
+		this.id = staffId;
+		this.name = staffName;
+		this.position = staffPosition;
 	}
 
 	public int getId() {
