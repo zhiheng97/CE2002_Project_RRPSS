@@ -37,7 +37,7 @@ public class FileController {
         }
         return null;
     }
-
+  
     /**
      * CSV file writer. Writes to the file path specified.
      * @param params Content to be written to the file
@@ -60,5 +60,4 @@ public class FileController {
         }
         return res;
     }
-    
 }
