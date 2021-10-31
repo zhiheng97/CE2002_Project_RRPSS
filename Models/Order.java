@@ -8,15 +8,18 @@ public class Order {
 	private Staff placedBy;
 	private String timestamp;
 	private List<Item> items = new ArrayList<Item>();
-	private Promotion[] promotion;
+	private List<Promotion> promotion;
 	private double total = 0.0;
 
 	/**
 	 * 
 	 * @param createdBy
 	 * @param dateTime
+	 * @param items
+	 * @param promotion
+	 * @param total
 	 */
-	public Order(Staff createdBy, String dateTime, List<Item> items, Promotion[] promotion, double total) {
+	public Order(Staff createdBy, String dateTime, List<Item> items, List<Promotion> promotion, double total) {
 		this.timestamp = dateTime;
 		this.placedBy = createdBy;
 		this.items = items;
