@@ -1,15 +1,11 @@
 package Controller;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class FileController {
 
@@ -17,7 +13,12 @@ public class FileController {
      * Constructor for the FileController Class
      */
     public FileController() {}
-
+    
+    /**
+     * CSV File reader. Reads the contents of a file and returns the contents as a List<String> object
+     * @param path Path to file
+     * @return List<String> if the file is valid and has contents, null otherwise
+     */
     public List<String> readFile(String path) {
         try{
             List<String> list = new ArrayList<String>();
@@ -32,27 +33,31 @@ public class FileController {
             return list;
         } catch (IOException e) {
             System.out.println("ERROR: Unable to access file");
-            System.out.println(e.getStackTrace());
+            e.printStackTrace();
         }
         return null;
     }
-
-    public List<String> writeFile(String path) {
+  
+    /**
+     * CSV file writer. Writes to the file path specified.
+     * @param params Content to be written to the file
+     * @param path Path to file
+     * @return True if modification to the file was made, false otherwise
+     */
+    public boolean writeFile(String[] params, String path) {
+        boolean res = false;
         try{
-            List<String> list = new ArrayList<String>();
-            BufferedWriter csvWriter = new BufferedWriter(new FileWriter(path));
-            while((row = csvWriter.readLine()) != null) {
-                for(String s : row.split(",")){
-                    list.add(s);
-                }
+            FileWriter fw = new FileWriter(path, false);
+            for(String item : params) {
+                fw.write(item + ",");
             }
-            csvWriter.close();
-            return list;
-        } catch (IOException e) {
-            System.out.println("ERROR: Unable to access file");
-            System.out.println(e.getStackTrace());
+            fw.flush();
+            fw.close();
+            res = true;
+        }catch (IOException e) {
+            System.out.println("ERROR: Unable to write file");
+            e.printStackTrace();
         }
-        return null;
+        return res;
     }
-
 }

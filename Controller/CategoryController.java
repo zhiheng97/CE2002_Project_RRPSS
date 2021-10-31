@@ -2,6 +2,7 @@ package Controller;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import Enumerations.Categories;
@@ -13,6 +14,8 @@ public class CategoryController {
 	private List<Category> categories = new ArrayList<Category>();
 	private FileController fileController = new FileController();
 	private final static String PATH_TO_MENU_FILE = Path.of("./menu.txt").toString();
+	private final static String ESCAPE_STRING_1 = "\\";
+	private final static String ESCAPE_STRING_2 = "-1.0";
 
 	/**
 	 * Constructor of the CategoryController Class
@@ -40,10 +43,18 @@ public class CategoryController {
 	 * @return True if item is added, false otherwise
 	 */
 	public boolean addItem(String[] itemParams) {
-		Category toAddto = findCatByType(itemParams[0]);
+		Category toAddto;
+		if(itemParams[4].equals("0"))
+			toAddto = findCatByType("MAINS");
+		else if(itemParams[4].equals("1"))
+			toAddto = findCatByType("SIDES");
+		else
+			toAddto = findCatByType("DRINKS");
 		if(toAddto != null) {
-			if(toAddto.addItem(itemParams))
+			if(toAddto.addItem(Arrays.copyOfRange(itemParams, 0, itemParams.length-1))) {
+				updateMenuFile();
 				return true;
+			}
 		}
 		return false;
 	}
@@ -116,6 +127,7 @@ public class CategoryController {
 			.filter(category -> category.getItems().contains(toRemove)).findFirst().orElse(null);
 		if(toRemoveFrom != null) {
 			toRemoveFrom.removeItem(itemId);
+			updateMenuFile();
 			return true;
 		}
 		return false;
@@ -135,21 +147,42 @@ public class CategoryController {
 	}
 
 	/**
+	 * A function called upon modifying an item in the menu.
+	 * @return True if file was modified, false otherwise
+	 */
+	private boolean updateMenuFile() {
+		boolean res = false;
+		List<String> records = new ArrayList<String>();
+		for(Category category : categories)
+			for(Item item : category.getItems()){
+				records.add(String.valueOf(item.getId()));
+				records.add(item.getName());
+				records.add(item.getDescription());
+				records.add(String.valueOf(item.getPrice()));
+				records.add(category.getCategory().toString());
+			}
+		if(fileController.writeFile(records.toArray(new String[records.size()]), PATH_TO_MENU_FILE))
+			res = true;
+		return res;
+	}
+
+	/**
 	 * Updates an item from the category, based on the parameter catType given
 	 * @param itemParams New parameters for the item
 	 * @param catType Category type for item to be updated
 	 * @return True if item was updated, false otherwise
 	 */
 	public boolean updateItem(String[] itemParams) {
-		Item toUpdate = searchForItem(Integer.parseInt(itemParams[0]));
+		Item toUpdate = searchForItem(Integer.parseInt(itemParams[1]));
 		if(toUpdate != null) {
 			if(toUpdate != null) {
-				if(!itemParams[1].equals(null) || !itemParams[1].equals(""))
-					toUpdate.setName(itemParams[1]);
-				if(!itemParams[2].equals(null) || !itemParams[2].equals(""))
+				if(!itemParams[0].equals(ESCAPE_STRING_1))
+					toUpdate.setName(itemParams[0]);
+				if(!itemParams[2].equals(ESCAPE_STRING_1))
 					toUpdate.setDescription(itemParams[2]);
-				if(!itemParams[3].equals(null) || !itemParams[3].equals(""))
+				if(!itemParams[3].equals(ESCAPE_STRING_2))
 					toUpdate.setPrice(Double.parseDouble(itemParams[3]));
+				updateMenuFile();
 				return true;
 			}
 		}

@@ -10,6 +10,9 @@ public class RestaurantController {
 	private CategoryController categoryController = new CategoryController();
 	private PromotionController PromotionController;
 
+	/**
+	 * Constructor for RestaurantController
+	 */
 	public RestaurantController() {}
 
 	/**
@@ -51,8 +54,10 @@ public class RestaurantController {
 		 * copied is a copy of the item from category to add into Order
 		 */
 		if(isPromo) {
+
+		} else {
+			Item copied = categoryController.copyItem(itemId); 
 		}
-		Item copied = categoryController.copyItem(itemId); 
 		return true;
 	}
 
@@ -75,6 +80,9 @@ public class RestaurantController {
 		throw new UnsupportedOperationException();
 	}
 
+	/**
+	 * 
+	 */
 	public void printAvailableTables() {
 		// TODO - implement RestaurantController.printAvailableTables
 		throw new UnsupportedOperationException();
@@ -147,7 +155,7 @@ public class RestaurantController {
 	 * @param itemId
 	 * @param isPromo
 	 */
-	public boolean removeFromOrder(int tableNo, int quantity, int catId, int itemId, boolean isPromo) {
+	public boolean removeFromOrder(int tableNo, int quantity, int itemId, boolean isPromo) {
 		// TODO - implement RestaurantController.removeFromOrder
 		throw new UnsupportedOperationException();
 	}

@@ -57,7 +57,7 @@ public class Category {
 
 	/**
 	 * Method call to search for an Item in the category using the item's id or name
-	 * @param itemId - The item to search for in the category
+	 * @param itemParams - The item to search for in the category
 	 * @return Item that matches either the id or name
 	 */
 	public Item lookUp(String[] itemParams) {

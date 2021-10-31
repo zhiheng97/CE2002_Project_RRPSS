@@ -5,20 +5,23 @@ import java.util.List;
 
 public class Order {
 
-	private List<Item> items = new ArrayList<Item>();
 	private Staff placedBy;
-	private double total = 0.0;
 	private String timestamp;
+	private List<Item> items = new ArrayList<Item>();
 	private Promotion[] promotion;
+	private double total = 0.0;
 
 	/**
 	 * 
 	 * @param createdBy
 	 * @param dateTime
 	 */
-	public Order(Staff createdBy, String dateTime) {
+	public Order(Staff createdBy, String dateTime, List<Item> items, Promotion[] promotion, double total) {
 		this.timestamp = dateTime;
 		this.placedBy = createdBy;
+		this.items = items;
+		this.promotion = promotion;
+		this.total = total;
 	}
 
 	public void print() {
