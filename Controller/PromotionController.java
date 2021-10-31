@@ -13,9 +13,12 @@ public class PromotionController {
 	private FileController fileController = new FileController();
 	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./promotion.txt").toString();
 
+	/**
+	 * Constructor of the PromotionController Class
+	 * It will read the previously created promotions which have been saved to promotion.txt
+	 * then instantiate the promotions and their respective items ony by one
+	 */
 	public PromotionController() {
-		// TODO - implement PromotionController.PromotionController
-		// throw new UnsupportedOperationException();
 		List<String> tokens = fileController.readFile(PATH_TO_PROMOTIONS_FILE);
 		List<String> promoParams = new ArrayList<String>();
 		List<String> itemParams = new ArrayList<String>();
@@ -39,6 +42,10 @@ public class PromotionController {
 		}while(i < tokens.size() && !tokens.get(i).equals("ENDFILE"));
 	}
 
+	/**
+	* Convert all promotions into a string and overwrite promotion.txt
+	* @return true or false based on success/error
+	*/
 	private boolean updatePromotionFile() {
 		boolean res = false;
 		List<String> records = new ArrayList<String>();
@@ -62,13 +69,12 @@ public class PromotionController {
 	}
 
 	/**
-	 * Initializes a new promotion object and adds it to promotions[]
-	 * @param promoParams
-	 * @param items
+	 * Adds a new promotion to promotions[]
+	 * @param promoParams, the promotion id; name; description and price in string list
+	 * @param items, the items' parameters in the order, id; name; description and price in string list
+	 * @return true or false based on success/error
 	 */
 	public boolean addPromotion(List<String> promoParams, List<String> items) {
-		// TODO - implement PromotionController.addPromotion
-		// throw new UnsupportedOperationException();
 		try{
 			if(this.findPromotionById(Integer.parseInt(promoParams.get(0))) != null){
 				System.out.println("Promotion is already in the system!");
@@ -86,6 +92,12 @@ public class PromotionController {
 			return false;
 		}
 	}
+
+	/**
+	* Returns a copy of promotion (different hash identity)
+	* @promoId, the promotion id which is used to search for a specific promotion
+	* @return copy, copy of the promotion that is being requested
+	*/
 
 	public Promotion copyPromotion(int promoId){
 		int i, j;
@@ -106,12 +118,11 @@ public class PromotionController {
 	}
 
 	/**
-	 *
-	 * @param promoId
+	 * Returns the actual promotion (same hash identity)
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @return the actual promotion that is being requested
 	 */
 	public Promotion findPromotionById(int promoId) {
-		// TODO - implement PromotionController.findPromotionById
-		// throw new UnsupportedOperationException();
 		int i;
 		for(i = 0; i < promotions.size(); i++){
 			if(promotions.get(i).getId() == promoId) return promotions.get(i);
@@ -119,9 +130,10 @@ public class PromotionController {
 		return null;
 	}
 
+	/**
+	* Prints the attributes of all the promotions and their respective items
+	*/
 	public void print() {
-		// TODO - implement PromotionController.print
-		// throw new UnsupportedOperationException();
 		int i;
 		for(i = 0; i < promotions.size(); i++){
 			promotions.get(i).print();
@@ -129,12 +141,11 @@ public class PromotionController {
 	}
 
 	/**
-	 * Calls lookUp and removes promotion from promotions[]
-	 * @param promoId
+	 * Removes a specific promotion from promotions[]
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @return true or false based on success/error
 	 */
 	public boolean removePromotion(int promoId) {
-		// TODO - implement PromotionController.removePromotion
-		// throw new UnsupportedOperationException();
 		try{
 			int i;
 			for(i = 0; i < promotions.size(); i++){
@@ -155,12 +166,12 @@ public class PromotionController {
 	}
 
 	/**
-	 *
-	 * @param itemParams
+	 * Adds an item to an existing promotion
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
+	 * @return true or false based on success/error
 	 */
 	public boolean addItem(int promoId, String[] itemParams) {
-		// TODO - implement PromotionController.addItem
-		// throw new UnsupportedOperationException();
 		try{
 			this.findPromotionById(promoId).addItem(itemParams);
 			this.updatePromotionFile();
@@ -173,13 +184,12 @@ public class PromotionController {
 	}
 
 	/**
-	 *
-	 * @param id
-	 * @param itemId
+	 * Removes an item from an existing promotion
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @param itemId, the item id which is used to search for a specific item in the promotion
+	 * @return true or false based on success/error
 	 */
 	public boolean removeItem(int promoId, int itemId) {
-		// TODO - implement PromotionController.removeItem
-		// throw new UnsupportedOperationException();
 		int i;
 		try{
 			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
@@ -199,12 +209,11 @@ public class PromotionController {
 	}
 
 	/**
-	 *
-	 * @param itemParams
+	 * Updates the attributes of items in a promotion that have the same itemId
+	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
+	 * @return true or false based on success/error
 	 */
 	public boolean updateItem(int promoId, String[] itemParams) {
-		// TODO - implement PromotionController.updateItem
-	  // throw new UnsupportedOperationException();
 		int i;
 		try{
 			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
@@ -216,7 +225,7 @@ public class PromotionController {
 					this.updatePromotionFile();
 					return true;
 				}
-			}
+			}getItem
 			System.out.println("Item " + itemParams[0] + " does not exist!");
 			return false;
 		}
@@ -227,12 +236,11 @@ public class PromotionController {
 	}
 
 	/**
-	 * Calls lookUp to search for promotion, then uses setters to update promotion. If updating item, call getItem then proceed.
-	 * @param promoParams
+	 * Updates the promotion's attributes, id; name; description and price
+	 * @param promoParams, the promotion's parameters in the order, id; name; description and price in string array
+	 * @return true or false based on success/error
 	 */
 	public boolean updatePromotion(String[] promoParams) {
-		// TODO - implement PromotionController.updatePromotion
-		// throw new UnsupportedOperationException();
 		try{
 			int i;
 			for(i = 0; i < promotions.size(); i++){
