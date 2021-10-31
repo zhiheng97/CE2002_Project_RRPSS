@@ -29,7 +29,13 @@ public class Report {
 	 * 
 	 * @param invoice // Invoice to be added to report list
 	 */
-	public void addInvoice(Order invoice) {
+	public int addInvoice(Order invoice) {
+
+		if (!invoice.getTimeStamp().split(" ")[0].equals(this.date)) {
+			System.out.println("Date of invoice does match current report date. Error.");
+			return 0; // Date does not match
+		}
+
 		invoices.add(invoice);
 		this.salesRevenue += invoice.getTotal(); // Update sales revenue
 
@@ -44,6 +50,9 @@ public class Report {
 			count = item_map.containsKey(item_name) ? item_map.get(item_name) : 0;
 			item_map.put(item_name, count + 1);
 		}
+
+		System.out.println("Invoice successfully added to report");
+		return 1;
 
 	}
 
