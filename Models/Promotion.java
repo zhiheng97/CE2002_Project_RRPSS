@@ -102,10 +102,10 @@ public class Promotion extends Item{
 	*/
 	public void print() {
 		int i;
-		System.out.println("Promotion Id:" + super.getId());
-		System.out.println("Promotion Name:" + super.getName());
-		System.out.println("Promotion Description:" + super.getDescription());
-		System.out.println("Promotion Price:" + super.getPrice());
+		System.out.println("Promotion Id: " + super.getId());
+		System.out.println("Promotion Name: " + super.getName());
+		System.out.println("Promotion Description: " + super.getDescription());
+		System.out.println("Promotion Price: " + super.getPrice());
 		for(i = 0; i < items.size(); i++){
 			items.get(i).print();
 		}

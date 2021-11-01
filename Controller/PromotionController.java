@@ -13,7 +13,7 @@ public class PromotionController {
 	private FileController fileController = new FileController();
 	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./promotion.txt").toString();
 	private final static String ESCAPE_STRING_1 = "\\";
-	private final static String ESCAPE_STRING_2 = "-1.0";
+	private final static String ESCAPE_STRING_2 = "-1";
 
 	/**
 	 * Constructor of the PromotionController Class
@@ -250,7 +250,7 @@ public class PromotionController {
 				if(promotions.get(i).getId() == Integer.parseInt(promoParams.get(0))){
 					if(!promoParams.get(1).equals(ESCAPE_STRING_1)) promotions.get(i).setName(promoParams.get(1));
 					if(!promoParams.get(2).equals(ESCAPE_STRING_1)) promotions.get(i).setDescription(promoParams.get(2));
-					if(!promoParams.get(3).equals(ESCAPE_STRING_1)) promotions.get(i).setPrice(Double.parseDouble(promoParams.get(3)));
+					if(!promoParams.get(3).equals(ESCAPE_STRING_2)) promotions.get(i).setPrice(Double.parseDouble(promoParams.get(3)));
 					this.updatePromotionFile();
 					// doesn't change items
 					return true;

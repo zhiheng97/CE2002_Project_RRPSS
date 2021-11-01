@@ -81,7 +81,7 @@ public class Item {
 	 * Prints the information about the item
 	 */
 	public void print() {
-		System.out.println("Item Id:" + this.id);
+		System.out.println("Item Id: " + this.id);
 		System.out.println("Item Name: " + this.name);
 		System.out.println("Item Description: " + this.description);
 		System.out.println("Item Price: " + this.price);
