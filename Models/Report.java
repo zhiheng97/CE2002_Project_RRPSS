@@ -2,7 +2,6 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,11 +10,8 @@ public class Report {
 	private List<Order> invoices = new ArrayList<Order>();
 	private String date;
 	private int salesRevenue = 0;
-
-	// TODO: Look into initializing all items/promos names into a hashtable, so we
-	// do not have to repeatedly initialize the dictionary for each order
-	// We can there proceed to increment quantity of relevant orders
 	private LinkedHashMap<String, Integer> item_map = new LinkedHashMap<String, Integer>();
+	private LinkedHashMap<String, Integer> promo_map = new LinkedHashMap<String, Integer>();
 
 	/**
 	 * 
@@ -51,6 +47,17 @@ public class Report {
 			item_map.put(item_name, count + 1);
 		}
 
+		List<Promotion> promo_items = invoice.getPromo();
+		int promo_size = promo_items.size();
+		String promo_name;
+
+		// Increments promo in array
+		for (int i = 0; i < promo_size; i++) {
+			promo_name = promo_items.get(i).getName();
+			count = promo_map.containsKey(promo_name) ? promo_map.get(promo_name) : 0;
+			promo_map.put(promo_name, count + 1);
+		}
+
 		System.out.println("Invoice successfully added to report");
 		return 1;
 
@@ -59,13 +66,24 @@ public class Report {
 	// Prints daily information regarding, individual sales item (ala carte/promo) &
 	// total revenue
 	public void print() {
-		System.out.printf("Date: %s\nDaily Sales revenue %d\n", date, salesRevenue);
+		System.out.printf("\nDate: %s\nDaily Sales revenue $%d\n", date, salesRevenue);
 		for (Map.Entry<String, Integer> e : item_map.entrySet())
 			System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
+
+		for (Map.Entry<String, Integer> e : promo_map.entrySet())
+			System.out.println("Promo: " + e.getKey() + " Quantity: " + e.getValue());
 	}
 
 	public List<Order> getInvoices() {
 		return this.invoices;
+	}
+
+	public LinkedHashMap<String, Integer> getItemMap() {
+		return this.item_map;
+	}
+
+	public LinkedHashMap<String, Integer> getPromoMap() {
+		return this.promo_map;
 	}
 
 	public String getDate() {
