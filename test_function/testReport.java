@@ -3,6 +3,8 @@ package test_function;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import Models.Report;
 import Models.Order;
@@ -39,6 +41,8 @@ public class testReport {
                     reports.add(currentReport); // Adds previous report to list only if its not NIL which is start
                                                 // report
 
+                // System.out.println("Printing old report information");
+                // currentReport.print();
                 System.out.println("\nNew report created with date: " + dateOnly + "\n");
                 currentReport = new Report(dateOnly); // Create new report for new date
             }
@@ -119,5 +123,52 @@ public class testReport {
         } while (i < tokens.size() && !tokens.get(i).equals("ENDFILE"));
         System.out.println("All orders scanned, exiting file");
         System.out.println("Orders scanned: " + ordersScanned + " / Reports generated: " + reports.size());
+
+        for (int j = 0; j < reports.size(); j++)
+            reports.get(j).print();
+
+        LinkedHashMap<String, Integer> item_map = new LinkedHashMap<String, Integer>();
+        LinkedHashMap<String, Integer> promo_map = new LinkedHashMap<String, Integer>();
+        // Get last 30 reports
+        int reports_size = reports.size();
+        Report tmpReport;
+
+        double salesRevenue = 0;
+        if (reports_size < 30) {
+            String start_date = reports.get(0).getDate();
+            String end_date = reports.get(reports_size - 1).getDate();
+
+            for (int j = 0; j < reports_size; j++) {
+                tmpReport = reports.get(j);
+                salesRevenue += tmpReport.getSalesRevenue(); // Update sales revenue
+                int count;
+                String item_name;
+                LinkedHashMap<String, Integer> tmpReportItems = tmpReport.getItemMap();
+                for (Map.Entry<String, Integer> e : tmpReportItems.entrySet()) {
+                    item_name = e.getKey();
+                    count = item_map.containsKey(item_name) ? item_map.get(item_name) : 0;
+                    item_map.put(item_name, count + e.getValue());
+                }
+
+                String promo_name;
+                LinkedHashMap<String, Integer> tmpReportPromos = tmpReport.getPromoMap();
+                for (Map.Entry<String, Integer> e : tmpReportPromos.entrySet()) {
+                    promo_name = e.getKey();
+                    count = promo_map.containsKey(promo_name) ? promo_map.get(promo_name) : 0;
+                    promo_map.put(promo_name, count + e.getValue());
+                }
+
+            }
+            System.out.println("\n\n(Monthly Report) Start: " + start_date + " / End: " + end_date);
+            System.out.println("Monthly Sales: " + salesRevenue);
+
+            System.out.println("\nItems:");
+            for (Map.Entry<String, Integer> e : item_map.entrySet())
+                System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
+
+            System.out.println("\nPromos:");
+            for (Map.Entry<String, Integer> e : promo_map.entrySet())
+                System.out.println("Promo: " + e.getKey() + " Quantity: " + e.getValue());
+        }
     }
 }
