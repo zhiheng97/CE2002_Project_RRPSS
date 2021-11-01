@@ -131,7 +131,7 @@ public class ReportController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param byMonth
 	 */
 	public void print(boolean byMonth) {
@@ -145,7 +145,7 @@ public class ReportController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param byMonth
 	 */
 	private int tabulateSales(boolean byMonth) {

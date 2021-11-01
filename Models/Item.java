@@ -30,14 +30,6 @@ public class Item {
 	}
 
 	/**
-	 * Sets the id of the item.
-	 * @param id Id to be assigned
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
 	 * Gets the name of the item
 	 * @return Name of the item
 	 */
@@ -89,7 +81,7 @@ public class Item {
 	 * Prints the information about the item
 	 */
 	public void print() {
-		System.out.println("Item Id:" + this.id);
+		System.out.println("Item Id: " + this.id);
 		System.out.println("Item Name: " + this.name);
 		System.out.println("Item Description: " + this.description);
 		System.out.println("Item Price: " + this.price);
