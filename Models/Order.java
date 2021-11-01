@@ -36,6 +36,10 @@ public class Order {
 		return this.items;
 	}
 
+	public List<Promotion> getPromo() {
+		return this.promotion;
+	}
+
 	public String getPlacedBy() {
 		return this.placedBy.getName();
 	}
