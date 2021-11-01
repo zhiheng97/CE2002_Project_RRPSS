@@ -135,7 +135,7 @@ public class ReportController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param byMonth
 	 */
 	public void print(boolean byMonth) {
@@ -183,7 +183,6 @@ public class ReportController {
 				}
 				System.out.println("\n\n(Monthly Report) Start: " + start_date + " / End: " + end_date);
 				System.out.println("Monthly Sales: " + salesRevenue);
-
 				System.out.println("\nItems:");
 				for (Map.Entry<String, Integer> e : item_map.entrySet())
 					System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());

@@ -8,11 +8,11 @@ public class Order {
 	private Staff placedBy;
 	private String timestamp;
 	private List<Item> items = new ArrayList<Item>();
-	private List<Promotion> promotion;
+	private List<Promotion> promotion = new ArrayList<Promotion>();
 	private double total = 0.0;
 
 	/**
-	 * 
+	 *
 	 * @param createdBy
 	 * @param dateTime
 	 * @param items

@@ -4,13 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 import Controller.RestaurantController;
 
 public class RRPSSApp {
 
 	public static void main(String[] args) throws IOException {
-		
+
 		RestaurantController restaurantController = new RestaurantController();
 		Scanner sc = new Scanner(System.in);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -39,7 +41,7 @@ public class RRPSSApp {
 								itemParams[2] = reader.readLine();
 								System.out.print("Enter the price of the item: ");
 								itemParams[3] = String.valueOf(sc.nextDouble());
-								restaurantController.addItem(itemParams, false);
+								restaurantController.addItem(itemParams);
 								break;
 							case 2:
 								System.out.print("Enter the item id: ");
@@ -50,11 +52,11 @@ public class RRPSSApp {
 								itemParams[2] = reader.readLine();
 								System.out.print("Enter the price of the item [Enter -1 if you do not intend to modify]: ");
 								itemParams[3] = String.valueOf(sc.nextDouble());
-								restaurantController.updateItem(itemParams, false);
+								restaurantController.updateItem(itemParams);
 								break;
 							case 3:
 								System.out.print("Enter the item id that you wish to remove: ");
-								restaurantController.removeItem(sc.nextInt(), false);
+								restaurantController.removeItem(sc.nextInt());
 								break;
 							case 4:
 								restaurantController.printMenu();
@@ -63,13 +65,112 @@ public class RRPSSApp {
 								System.out.println("Returning....");
 								break;
 							default:
-								System.out.println("Option not found");
+								System.out.println("Invalid option");
 								break;
 						}
 					} while (option != 5);
 					break;
 				case 2:
 					//TODO - Write Options for Promotions
+					List<String> promoParams = new ArrayList<String>();
+					List<String> itemsParams = new ArrayList<String>();
+					do{
+						System.out.println("Promotions Sub-menu");
+						System.out.println("1. View promotions\n2. Add a new promotion\n3. Update promotion\n4. Remove promotion\n5. Add item to promotion");
+						System.out.print("6. Update item in promotion\n7. Remove item from promotion\n8. Return\nEnter your choice: ");
+						option = sc.nextInt();
+						switch(option){
+							case 1:
+								restaurantController.printPromotion();
+								break;
+							case 2:
+								System.out.println("Enter the promotion id: ");
+								promoParams.add(reader.readLine());
+								System.out.println("Enter the promotion name: ");
+								promoParams.add(reader.readLine());
+								System.out.println("Enter the promotion description: ");
+								promoParams.add(reader.readLine());
+								System.out.println("Enter the promotion price: ");
+								promoParams.add(reader.readLine());
+								System.out.println("Enter the number of items in the promotions: ");
+								option = sc.nextInt();
+								while(option < 0){
+									System.out.println("Please enter a valid number (more than 0): ");
+									option = sc.nextInt();
+								}
+								for(int i = 0; i < option; i++){
+									System.out.print("Enter the item id: ");
+									itemsParams.add(reader.readLine());
+									System.out.print("Enter the item name: ");
+									itemsParams.add(reader.readLine());
+									System.out.print("Enter the item description: ");
+									itemsParams.add(reader.readLine());
+									System.out.print("Enter the item price: ");
+									itemsParams.add(reader.readLine());
+								}
+								restaurantController.addPromotion(promoParams, itemsParams);
+								promoParams.clear();
+								itemsParams.clear();
+								break;
+							case 3:
+								System.out.print("Enter the promotion id: ");
+								promoParams.add(reader.readLine());
+								System.out.print("Enter the new promotion name [Enter \\ if you do not intend to modify]: ");
+								promoParams.add(reader.readLine());
+								System.out.print("Enter the new promotion description [Enter \\ if you do not intend to modify]: ");
+								promoParams.add(reader.readLine());
+								System.out.print("Enter the new price of the promotion [Enter -1 if you do not intend to modify]: ");
+								promoParams.add(reader.readLine());
+								restaurantController.updatePromotion(promoParams);
+								promoParams.clear();
+								break;
+							case 4:
+								System.out.print("Enter the promotion id that you wish to remove: ");
+								option = sc.nextInt();
+								restaurantController.removePromotion(option);
+								break;
+							case 5:
+								System.out.print("Enter the promotion id that you wish to add an item to: ");
+								option = sc.nextInt();
+								System.out.print("Enter the item id: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item name: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item description: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item price: ");
+								itemsParams.add(reader.readLine());
+								restaurantController.addItem(option, itemsParams);
+								itemsParams.clear();
+								break;
+							case 6:
+								System.out.print("Enter the promotion id that you wish to update the item in: ");
+								option = sc.nextInt();
+								System.out.print("Enter the item id: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item description [Enter \\ if you do not intend to modify]: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the price of the item [Enter -1 if you do not intend to modify]: ");
+								itemsParams.add(reader.readLine());
+								restaurantController.updateItem(option, itemsParams);
+								itemsParams.clear();
+								break;
+							case 7:
+								System.out.print("Enter the promotion id that you wish to remove the item from: ");
+								option = sc.nextInt();
+								System.out.print("Enter the item id that you wish to remove: ");
+								restaurantController.removeItem(option, sc.nextInt());
+								break;
+							case 8:
+							  System.out.println("Returning....");
+								break;
+							default:
+								System.out.println("Invalid option");
+								break;
+						}
+					}while(option != 8);
 					break;
 				case 3:
 					//TODO - Write Options for Order
