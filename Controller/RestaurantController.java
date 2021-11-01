@@ -2,13 +2,14 @@ package Controller;
 
 import Models.Item;
 import Models.Reservation;
+import java.util.List;
 
 public class RestaurantController {
 
 	private TableController tableController;
 	private ReportController reportController;
 	private CategoryController categoryController = new CategoryController();
-	private PromotionController PromotionController;
+	private PromotionController promotionController = new PromotionController();
 
 	/**
 	 * Constructor for RestaurantController
@@ -16,33 +17,38 @@ public class RestaurantController {
 	public RestaurantController() {}
 
 	/**
-	 * Adds item to either the menu or to a promotion
+	 * Adds item to the menu
 	 * @param itemParams Details of the item to be added
-	 * @param isPromo Flag to check if item is to be added into promotion
 	 * @return Returns true if added successfully, otherwise false
 	 */
-	public boolean addItem(String[] itemParams, boolean isPromo) {
+	public boolean addItem(String[] itemParams) {
 		boolean res = false;
-		if(isPromo){
-			//TODO - implement RestaurantController.addItem
-		} else {
-			res = categoryController.addItem(itemParams);
-		}
+		res = categoryController.addItem(itemParams);
 		return res;
 	}
 
 	/**
-	 * 
-	 * @param promoParams
-	 * @param items
+	 * Adds item to either the promotion
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
+	 * @return Returns true if added successfully, otherwise false
 	 */
-	public boolean addPromotion(String[] promoParams, String[] items) {
-		// TODO - implement RestaurantController.addPromotion
-		throw new UnsupportedOperationException();
+	public boolean addItem(int promoId, String[] itemParams) {
+		return promotionController.addItem(promoId, itemParams);
 	}
 
 	/**
-	 * 
+	 * Adds a new promotion
+	 * @param promoParams, the promotion id; name; description and price in string list
+	 * @param items, the items' parameters in the order, id; name; description and price in string list
+	 * @return true or false based on success/error
+	 */
+	public boolean addPromotion(List<String> promoParams, List<String> items) {
+		return promotionController.addPromotion(promoParams, items);
+	}
+
+	/**
+	 *
 	 * @param tableNo
 	 * @param quantity
 	 * @param itemId
@@ -56,13 +62,13 @@ public class RestaurantController {
 		if(isPromo) {
 
 		} else {
-			Item copied = categoryController.copyItem(itemId); 
+			Item copied = categoryController.copyItem(itemId);
 		}
 		return true;
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tableNo
 	 * @param details
 	 */
@@ -72,7 +78,7 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param details
 	 */
 	public boolean createReservation(Reservation details) {
@@ -81,7 +87,7 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void printAvailableTables() {
 		// TODO - implement RestaurantController.printAvailableTables
@@ -89,7 +95,7 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tableNo
 	 */
 	public void printInvoice(int tableNo) {
@@ -101,11 +107,12 @@ public class RestaurantController {
 	 * Prints the menu
 	 */
 	public void printMenu() {
+		promotionController.print();
 		categoryController.print();
 	}
 
 	/**
-	 * 
+	 *
 	 * @param byMonth
 	 */
 	public void printSalesReport(boolean byMonth) {
@@ -114,12 +121,12 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
-	 * @param promoId
+	 * Removes a specific promotion
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @return true or false based on success/error
 	 */
 	public boolean removePromotion(int promoId) {
-		// TODO - implement RestaurantController.removePromotion
-		throw new UnsupportedOperationException();
+		return promotionController.removePromotion(promoId);
 	}
 
 	/**
@@ -139,7 +146,17 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
+	 * Removes an item from an existing promotion
+	 * @param promoId, the promotion id which is used to search for a specific promotion
+	 * @param itemId, the item id which is used to search for a specific item in the promotion
+	 * @return true or false based on success/error
+	 */
+	public boolean removeItem(int promoId, int itemId) {
+		return promotionController.removeItem(promoId, itemId);
+	}
+
+	/**
+	 *
 	 * @param details
 	 */
 	public boolean reserveTable(String[] details) {
@@ -148,7 +165,7 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tableNo
 	 * @param quantity
 	 * @param catId
@@ -161,28 +178,31 @@ public class RestaurantController {
 	}
 
 	/**
-	 * 
-	 * @param promoId
-	 * @param promoParams
+	 * Updates the promotion's attributes, id; name; description and price
+	 * @param promoParams, the promotion's parameters in the order, id; name; description and price in string array
+	 * @return true or false based on success/error
 	 */
-	public boolean updatePromotion(int promoId, String[] promoParams) {
-		// TODO - implement RestaurantController.updatePromotion
-		throw new UnsupportedOperationException();
+	public boolean updatePromotion(String[] promoParams) {
+		return promotionController.updatePromotion(promoParams);
 	}
 
 	/**
-	 * Updates item in either menu or promotion
+	 * Updates item in either menu
 	 * @param itemParams Details of item to be updated
 	 * @param isPromo Flag to check if item to be updated is from Promotion
 	 */
-	public boolean updateItem(String[] itemParams, boolean isPromo) {
+	public boolean updateItem(String[] itemParams) {
 		boolean res = false;
-		if(isPromo) {
-			// TODO - implement RestaurantController.updateItem
-		} else {
-			categoryController.updateItem(itemParams);
-		}
+		categoryController.updateItem(itemParams);
 		return res;
 	}
 
+	/**
+	 * Updates the attributes of items in a promotion that have the same itemId
+	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
+	 * @return true or false based on success/error
+	 */
+	public boolean updateItem(int promoId, String[] itemParams) {
+		return promotionController.updateItem(promoId, itemParams);
+	}
 }

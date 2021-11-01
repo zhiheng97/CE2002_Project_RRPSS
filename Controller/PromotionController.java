@@ -225,7 +225,7 @@ public class PromotionController {
 					this.updatePromotionFile();
 					return true;
 				}
-			}getItem
+			}
 			System.out.println("Item " + itemParams[0] + " does not exist!");
 			return false;
 		}
