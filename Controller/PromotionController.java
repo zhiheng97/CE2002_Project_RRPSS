@@ -12,6 +12,8 @@ public class PromotionController {
 	private List<Promotion> promotions = new ArrayList<Promotion>();
 	private FileController fileController = new FileController();
 	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./promotion.txt").toString();
+	private final static String ESCAPE_STRING_1 = "\\";
+	private final static String ESCAPE_STRING_2 = "-1.0";
 
 	/**
 	 * Constructor of the PromotionController Class
@@ -135,9 +137,11 @@ public class PromotionController {
 	*/
 	public void print() {
 		int i;
+		System.out.print("\n");
 		for(i = 0; i < promotions.size(); i++){
 			promotions.get(i).print();
 		}
+		System.out.print("\n");
 	}
 
 	/**
@@ -171,7 +175,7 @@ public class PromotionController {
 	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
 	 * @return true or false based on success/error
 	 */
-	public boolean addItem(int promoId, String[] itemParams) {
+	public boolean addItem(int promoId, List<String> itemParams) {
 		try{
 			this.findPromotionById(promoId).addItem(itemParams);
 			this.updatePromotionFile();
@@ -213,20 +217,19 @@ public class PromotionController {
 	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
 	 * @return true or false based on success/error
 	 */
-	public boolean updateItem(int promoId, String[] itemParams) {
+	public boolean updateItem(int promoId, List<String> itemParams) {
 		int i;
 		try{
 			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
-				if(this.findPromotionById(promoId).getItems().get(i).getId() == Integer.parseInt(itemParams[0])){
-					this.findPromotionById(promoId).getItems().get(i).setId(Integer.parseInt(itemParams[0]));
-					this.findPromotionById(promoId).getItems().get(i).setName(itemParams[1]);
-					this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams[2]);
-					this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams[3]));
+				if(this.findPromotionById(promoId).getItems().get(i).getId() == Integer.parseInt(itemParams.get(0))){
+					if(!itemParams.get(1).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setName(itemParams.get(1));
+					if(!itemParams.get(2).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams.get(2));
+					if(!itemParams.get(3).equals(ESCAPE_STRING_2)) this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams.get(3)));
 					this.updatePromotionFile();
 					return true;
 				}
 			}
-			System.out.println("Item " + itemParams[0] + " does not exist!");
+			System.out.println("Item " + itemParams.get(0) + " does not exist!");
 			return false;
 		}
 		catch(Exception error){
@@ -240,21 +243,20 @@ public class PromotionController {
 	 * @param promoParams, the promotion's parameters in the order, id; name; description and price in string array
 	 * @return true or false based on success/error
 	 */
-	public boolean updatePromotion(String[] promoParams) {
+	public boolean updatePromotion(List<String> promoParams) {
 		try{
 			int i;
 			for(i = 0; i < promotions.size(); i++){
-				if(promotions.get(i).getId() == Integer.parseInt(promoParams[0])){
-					promotions.get(i).setId(Integer.parseInt(promoParams[0]));
-					promotions.get(i).setName(promoParams[0]);
-					promotions.get(i).setDescription(promoParams[0]);
-					promotions.get(i).setPrice(Double.parseDouble(promoParams[0]));
+				if(promotions.get(i).getId() == Integer.parseInt(promoParams.get(0))){
+					if(!promoParams.get(1).equals(ESCAPE_STRING_1)) promotions.get(i).setName(promoParams.get(1));
+					if(!promoParams.get(2).equals(ESCAPE_STRING_1)) promotions.get(i).setDescription(promoParams.get(2));
+					if(!promoParams.get(3).equals(ESCAPE_STRING_1)) promotions.get(i).setPrice(Double.parseDouble(promoParams.get(3)));
 					this.updatePromotionFile();
 					// doesn't change items
 					return true;
 				}
 			}
-			System.out.println("Promotion " + promoParams[0] + " does not exist!");
+			System.out.println("Promotion " + promoParams.get(0) + " does not exist!");
 			return false;
 		}
 		catch(Exception error){

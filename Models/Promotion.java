@@ -56,9 +56,9 @@ public class Promotion extends Item{
 	* Adds an item to this promotion
 	* @param itemParams, the items' parameters in the order, id; name; description and price in string list
 	*/
-	public boolean addItem(String[] itemParams){
+	public boolean addItem(List<String> itemParams){
 		try{
-			items.add(new Item(Integer.parseInt(itemParams[0]), itemParams[1], itemParams[2], Double.parseDouble(itemParams[3])));
+			items.add(new Item(Integer.parseInt(itemParams.get(0)), itemParams.get(1), itemParams.get(2), Double.parseDouble(itemParams.get(3))));
 			return true;
 		}
 		catch(Exception error){

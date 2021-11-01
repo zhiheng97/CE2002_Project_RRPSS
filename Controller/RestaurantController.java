@@ -33,7 +33,7 @@ public class RestaurantController {
 	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
 	 * @return Returns true if added successfully, otherwise false
 	 */
-	public boolean addItem(int promoId, String[] itemParams) {
+	public boolean addItem(int promoId, List<String> itemParams) {
 		return promotionController.addItem(promoId, itemParams);
 	}
 
@@ -107,8 +107,14 @@ public class RestaurantController {
 	 * Prints the menu
 	 */
 	public void printMenu() {
-		promotionController.print();
 		categoryController.print();
+	}
+
+	/**
+	 * prints the Promotions
+	 */
+	public void printPromotion(){
+		promotionController.print();
 	}
 
 	/**
@@ -135,13 +141,9 @@ public class RestaurantController {
 	 * @param isPromo Flag to check if item to remove is from promotions
 	 * @return True if item is removed successfully, otherwise false
 	 */
-	public boolean removeItem(int itemId, boolean isPromo) {
+	public boolean removeItem(int itemId) {
 		boolean res = false;
-		if(isPromo) {
-			// TODO - implement RestaurantController.removeItem
-		} else {
-			categoryController.removeItem(itemId);
-		}
+		res = categoryController.removeItem(itemId);
 		return res;
 	}
 
@@ -182,7 +184,7 @@ public class RestaurantController {
 	 * @param promoParams, the promotion's parameters in the order, id; name; description and price in string array
 	 * @return true or false based on success/error
 	 */
-	public boolean updatePromotion(String[] promoParams) {
+	public boolean updatePromotion(List<String> promoParams) {
 		return promotionController.updatePromotion(promoParams);
 	}
 
@@ -193,7 +195,7 @@ public class RestaurantController {
 	 */
 	public boolean updateItem(String[] itemParams) {
 		boolean res = false;
-		categoryController.updateItem(itemParams);
+		res = categoryController.updateItem(itemParams);
 		return res;
 	}
 
@@ -202,7 +204,7 @@ public class RestaurantController {
 	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
 	 * @return true or false based on success/error
 	 */
-	public boolean updateItem(int promoId, String[] itemParams) {
+	public boolean updateItem(int promoId, List<String> itemParams) {
 		return promotionController.updateItem(promoId, itemParams);
 	}
 }

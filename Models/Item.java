@@ -30,14 +30,6 @@ public class Item {
 	}
 
 	/**
-	 * Sets the id of the item.
-	 * @param id Id to be assigned
-	 */
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	/**
 	 * Gets the name of the item
 	 * @return Name of the item
 	 */
