@@ -9,7 +9,7 @@ public class Report {
 
 	private List<Order> invoices = new ArrayList<Order>();
 	private String date;
-	private int salesRevenue = 0;
+	private double salesRevenue = 0;
 	private LinkedHashMap<String, Integer> item_map = new LinkedHashMap<String, Integer>();
 	private LinkedHashMap<String, Integer> promo_map = new LinkedHashMap<String, Integer>();
 
@@ -66,7 +66,7 @@ public class Report {
 	// Prints daily information regarding, individual sales item (ala carte/promo) &
 	// total revenue
 	public void print() {
-		System.out.printf("\nDate: %s\nDaily Sales revenue $%d\n", date, salesRevenue);
+		System.out.printf("\nDate: %s\nDaily Sales revenue $%.2f\n", date, salesRevenue);
 		for (Map.Entry<String, Integer> e : item_map.entrySet())
 			System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
 
@@ -88,6 +88,10 @@ public class Report {
 
 	public String getDate() {
 		return this.date;
+	}
+
+	public double getSalesRevenue() {
+		return this.salesRevenue;
 	}
 
 }
