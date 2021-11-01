@@ -22,9 +22,8 @@ public class ReportController {
 	public ReportController() {
 
 		List<String> tokens = fileController.readFile(PATH_TO_ORDERS_FILE);
-		String prevCat = "", curCat = "";
-		int report_index = 0;
 		int i = 0;
+		int ordersScanned = 0;
 		Report currentReport = new Report("NIL");
 
 		do {
@@ -114,12 +113,14 @@ public class ReportController {
 
 				System.out.println("Total value of order being added: " + orderTotal);
 				Order tmpOrder = new Order(tmpStaff, dateOnly, items, tmpPromoList, orderTotal);
+				ordersScanned++;
 				currentReport.addInvoice(tmpOrder);
 				System.out.println("No more promo found, checking for next order next\n");
 				i++; // Increment past ENDORDER
 			}
 		} while (i < tokens.size() && !tokens.get(i).equals("ENDFILE"));
 		System.out.println("All orders scanned, exiting file");
+		System.out.println("Orders scanned: " + ordersScanned + " / Reports generated: " + reports.size());
 	}
 
 	/**

@@ -15,6 +15,9 @@ public class Order {
 	 *
 	 * @param createdBy
 	 * @param dateTime
+	 * @param items
+	 * @param promotion
+	 * @param total
 	 */
 	public Order(Staff createdBy, String dateTime, List<Item> items, List<Promotion> promotion, double total) {
 		this.timestamp = dateTime;
@@ -31,6 +34,10 @@ public class Order {
 
 	public List<Item> getItems() {
 		return this.items;
+	}
+
+	public List<Promotion> getPromo() {
+		return this.promotion;
 	}
 
 	public String getPlacedBy() {
