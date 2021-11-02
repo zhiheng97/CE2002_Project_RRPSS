@@ -22,7 +22,7 @@ public class TableController {
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./reservation.txt").toString();
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
 	private FileController fileController = new FileController();
-	private static final int EXPIRE_BUFFER = 5;
+	private static final int EXPIRE_BUFFER_MILLISECOND = 300000;
 
 	private int noOfTables;
 
@@ -65,7 +65,7 @@ public class TableController {
 		do{
 			Reservation expired = tables.stream()
 				.flatMap(t -> t.getReservations().stream())
-				.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER) - date.getTime() <= 0)
+				.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER_MILLISECOND) - date.getTime() <= 0)
 				.findFirst()
 				.orElse(null);
 			if(expired == null)
