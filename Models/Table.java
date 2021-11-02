@@ -7,7 +7,7 @@ public class Table {
 
 	private int tableNo;
 	private boolean isOccupied;
-	private List<Reservation> reservation = new ArrayList<Reservation>();
+	private List<Reservation> reservations;
 	private int seats = 2;
 	private Order invoice;
 
@@ -20,7 +20,7 @@ public class Table {
 	public Table(int tableNo, boolean occupied, int seatAvail) {
 		this.tableNo = tableNo;
 		this.isOccupied = occupied;
-		this.reservation = new ArrayList<Reservation>(15);
+		this.reservations = new ArrayList<Reservation>(15);
 		this.seats = seatAvail;
 		this.invoice = new Order(null, null, new ArrayList<Item>(), null, 0);
 	}
@@ -29,15 +29,27 @@ public class Table {
 		this.invoice.addToOrder(item, quantity);
 	}
 
+	public void addToOrder(Promotion promotion, int quantity) {
+		this.invoice.addToOrder(promotion, quantity);
+	}
+
 	public boolean removeFromOrder(Item item) {
 		return this.invoice.removeFromOrder(item);
 	}
+
+	public boolean removeFromOrder(Promotion promotion) {
+		return this.invoice.removeFromOrder(promotion);
+	}
+
 	/**
 	 * 
 	 * @param reserve
+	 * @return 
 	 */
-	public void addReservation(Reservation reserve) {
+	public boolean addReservation(Reservation reserve) {
 		
+		this.reservations.add(reserve);
+		return true;
 	}
 
 	public Order getInvoice() {
@@ -49,16 +61,20 @@ public class Table {
 	}
 
 	public List<Reservation> getReservations() {
-		return this.reservation;
+		return this.reservations;
 	}
 
 	public int getSeats() {
 		return this.seats;
 	}
 
+	public int getTableNo() {
+		return this.tableNo;
+	}
+
 	public void print() {
-		// TODO - implement Table.print
-		throw new UnsupportedOperationException();
+		System.out.println("Invoice for table: " + this.tableNo);
+		this.invoice.print();
 	}
 
 	/**

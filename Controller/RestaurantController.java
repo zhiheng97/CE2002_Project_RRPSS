@@ -1,8 +1,11 @@
 package Controller;
 
-import Models.Item;
-import Models.Reservation;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+
+import Models.Item;
+import Models.Promotion;
 
 public class RestaurantController {
 
@@ -27,9 +30,7 @@ public class RestaurantController {
 	 * @return Returns true if added successfully, otherwise false
 	 */
 	public boolean addItem(String[] itemParams) {
-		boolean res = false;
-		res = categoryController.addItem(itemParams);
-		return res;
+		return categoryController.addItem(itemParams);
 	}
 
 	/**
@@ -59,20 +60,31 @@ public class RestaurantController {
 	 * @param itemId
 	 * @param isPromo
 	 */
-	public void addToOrder(int tableNo, int itemId, int quantity, boolean isPromo) {
-		if(isPromo) {
+	public void addToOrder(int tableNo, int itemId, int quantity) {
+		Promotion promoToAdd = promotionController.findPromotionById(itemId);
+		Item itemToAdd = categoryController.searchForItem(itemId);
+		if(promoToAdd != null) {
+			Promotion copied = promotionController.copyPromotion(itemId);
+			this.tableController.addToOrder(tableNo, copied, quantity);
+		} else if(itemToAdd != null) {
+			Item copied = categoryController.copyItem(itemId); 
+			this.tableController.addToOrder(tableNo, copied, quantity);
 		}
-		Item copied = categoryController.copyItem(itemId); 
-		this.tableController.addToOrder(tableNo, copied, quantity);
-		// return true;
 	}
 
-	public boolean removeFromOrder(int tableNo, int itemId, boolean isPromo) {
-		if(isPromo) {
+	public void expireReservations(Date date) {
+		tableController.expireReservations(date);
+	}
+
+	public boolean removeFromOrder(int tableNo, int itemId) {
+		Promotion promoToAdd = promotionController.findPromotionById(itemId);
+		if(promoToAdd != null) {
+			Promotion copied = promotionController.copyPromotion(itemId);
+			return this.tableController.removeFromOrder(tableNo, copied);
+		} else {
+			Item copied = categoryController.copyItem(itemId); 
+			return this.tableController.removeFromOrder(tableNo, copied);
 		}
-		Item copied = categoryController.copyItem(itemId); 
-		this.tableController.removeFromOrder(tableNo, copied);
-		return true;
 	}
 	
 	public void viewOrder(int tableNo) {
@@ -85,26 +97,15 @@ public class RestaurantController {
 	 * @param tableNo
 	 * @param details
 	 */
-	public boolean clearReservation(int tableNo, Reservation details) {
-		// TODO - implement RestaurantController.clearReservation
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 *
-	 * @param details
-	 */
-	public boolean createReservation(Reservation details) {
-		// TODO - implement RestaurantController.createReservation
-		throw new UnsupportedOperationException();
+	public boolean clearReservation(int tableNo) {
+		return tableController.clearReservation(tableNo);
 	}
 
 	/**
 	 *
 	 */
 	public void printAvailableTables() {
-		// TODO - implement RestaurantController.printAvailableTables
-		throw new UnsupportedOperationException();
+		tableController.printAvailableTables();
 	}
 
 	/**
@@ -128,6 +129,10 @@ public class RestaurantController {
 	 */
 	public void printPromotion(){
 		promotionController.print();
+	}
+
+	public void printReservations(int tableNo) {
+		tableController.printReservations(tableNo);
 	}
 
 	/**
@@ -155,9 +160,7 @@ public class RestaurantController {
 	 * @return True if item is removed successfully, otherwise false
 	 */
 	public boolean removeItem(int itemId) {
-		boolean res = false;
-		res = categoryController.removeItem(itemId);
-		return res;
+		return categoryController.removeItem(itemId);
 	}
 
 	/**
@@ -175,21 +178,7 @@ public class RestaurantController {
 	 * @param details
 	 */
 	public boolean reserveTable(String[] details) {
-		// TODO - implement RestaurantController.reserveTable
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 *
-	 * @param tableNo
-	 * @param quantity
-	 * @param catId
-	 * @param itemId
-	 * @param isPromo
-	 */
-	public boolean removeFromOrder(int tableNo, int quantity, int itemId, boolean isPromo) {
-		// TODO - implement RestaurantController.removeFromOrder
-		throw new UnsupportedOperationException();
+		return tableController.reserveTable(details);
 	}
 
 	/**
@@ -207,9 +196,7 @@ public class RestaurantController {
 	 * @param isPromo Flag to check if item to be updated is from Promotion
 	 */
 	public boolean updateItem(String[] itemParams) {
-		boolean res = false;
-		res = categoryController.updateItem(itemParams);
-		return res;
+		return categoryController.updateItem(itemParams);
 	}
 
 	/**
@@ -220,4 +207,5 @@ public class RestaurantController {
 	public boolean updateItem(int promoId, List<String> itemParams) {
 		return promotionController.updateItem(promoId, itemParams);
 	}
+
 }

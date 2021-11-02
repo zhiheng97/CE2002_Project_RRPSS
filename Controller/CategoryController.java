@@ -52,8 +52,7 @@ public class CategoryController {
 			toAddto = findCatByType("DRINKS");
 		if(toAddto != null) {
 			if(toAddto.addItem(Arrays.copyOfRange(itemParams, 0, itemParams.length-1))) {
-				updateMenuFile();
-				return true;
+				return updateMenuFile();
 			}
 		}
 		return false;
@@ -127,8 +126,7 @@ public class CategoryController {
 			.filter(category -> category.getItems().contains(toRemove)).findFirst().orElse(null);
 		if(toRemoveFrom != null) {
 			toRemoveFrom.removeItem(itemId);
-			updateMenuFile();
-			return true;
+			return updateMenuFile();
 		}
 		return false;
 	}
@@ -138,7 +136,7 @@ public class CategoryController {
 	 * @param itemId ItemId to be searched for
 	 * @return Item object that matches the specified itemId, otherwise null
 	 */
-	private Item searchForItem(int itemId) {
+	public Item searchForItem(int itemId) {
 		return categories.stream()
 		.flatMap(category -> category.getItems().stream())
 		.filter(item -> item.getId() == itemId)
@@ -182,8 +180,7 @@ public class CategoryController {
 					toUpdate.setDescription(itemParams[2]);
 				if(!itemParams[3].equals(ESCAPE_STRING_2))
 					toUpdate.setPrice(Double.parseDouble(itemParams[3]));
-				updateMenuFile();
-				return true;
+				return updateMenuFile();
 			}
 		}
 		return false;

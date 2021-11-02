@@ -11,7 +11,7 @@ public class Order {
 	private String timestamp;
 	private List<Item> items = new ArrayList<Item>();
 	private Map<Integer, Integer> itemId2quantity;
-	private List<Promotion> promotion = new ArrayList<Promotion>();
+	private List<Promotion> promotions = new ArrayList<Promotion>();
 	private double total = 0.0;
 
 	/**
@@ -27,7 +27,7 @@ public class Order {
 		this.placedBy = createdBy;
 		this.items = items; //(items == null)? items : new ArrayList<Item>();
 		this.itemId2quantity = new HashMap<Integer, Integer>();
-		this.promotion = promotion;
+		//this.promotions = promotion;
 		this.total = total;
 	}
 
@@ -49,6 +49,20 @@ public class Order {
 		}
 	}
 
+	public void addToOrder(Promotion promotion, int quantity) {
+		// update price
+		this.total += promotion.getPrice() * quantity;
+
+		// update invoice items
+		int id = promotion.getId();
+		if (this.itemId2quantity.containsKey(id)) 
+			this.itemId2quantity.put(id, this.itemId2quantity.get(id) + quantity);
+		else {
+			this.promotions.add(promotion);
+			this.itemId2quantity.put(id, quantity);
+		}
+	}
+
 	public boolean removeFromOrder(Item item) {
 		// update price
 		this.total -= item.getPrice();
@@ -56,7 +70,21 @@ public class Order {
 		// update invoice items
 		int id = item.getId();
 		if (!this.itemId2quantity.containsKey(id)) return false;
+		items.remove(items.stream().filter(i -> i.getId() == id).findAny().orElse(null));
+		int curQuantity = this.itemId2quantity.get(id);
+		if (curQuantity == 1) this.itemId2quantity.remove(id);
+		else this.itemId2quantity.replace(id, curQuantity, curQuantity - 1);
+		return true;
+	}
 
+	public boolean removeFromOrder(Promotion promotion) {
+		// update price
+		this.total -= promotion.getPrice();
+
+		// update invoice items
+		int id = promotion.getId();
+		if (!this.itemId2quantity.containsKey(id)) return false;
+		promotions.remove(promotions.stream().filter(p -> p.getId() == id).findAny().orElse(null));
 		int curQuantity = this.itemId2quantity.get(id);
 		if (curQuantity == 1) this.itemId2quantity.remove(id);
 		else this.itemId2quantity.replace(id, curQuantity, curQuantity - 1);
@@ -76,7 +104,7 @@ public class Order {
 	}
 
 	public List<Promotion> getPromo() {
-		return this.promotion;
+		return this.promotions;
 	}
 
 	public String getPlacedBy() {
