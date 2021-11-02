@@ -17,13 +17,21 @@ public class Table {
 	 * @param occupied
 	 * @param seatAvail
 	 */
-	public Table(int table, boolean occupied, int seatAvail) {
-		this.tableNo = table;
+	public Table(int tableNo, boolean occupied, int seatAvail) {
+		this.tableNo = tableNo;
 		this.isOccupied = occupied;
 		this.reservation = new ArrayList<Reservation>(15);
 		this.seats = seatAvail;
+		this.invoice = new Order(null, null, new ArrayList<Item>(), null, 0);
 	}
 
+	public void addToOrder(Item item, int quantity) {
+		this.invoice.addToOrder(item, quantity);
+	}
+
+	public boolean removeFromOrder(Item item) {
+		return this.invoice.removeFromOrder(item);
+	}
 	/**
 	 * 
 	 * @param reserve

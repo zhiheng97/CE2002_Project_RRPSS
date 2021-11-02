@@ -8,13 +8,18 @@ public class RestaurantController {
 
 	private TableController tableController;
 	private ReportController reportController;
-	private CategoryController categoryController = new CategoryController();
-	private PromotionController promotionController = new PromotionController();
+	private CategoryController categoryController;
+	private PromotionController promotionController;
 
 	/**
 	 * Constructor for RestaurantController
 	 */
-	public RestaurantController() {}
+	public RestaurantController() {
+		this.tableController =  new TableController(12);
+		// this.reportController = new ReportController();
+		this.categoryController = new CategoryController();
+		this.promotionController = new PromotionController();
+	}
 
 	/**
 	 * Adds item to the menu
@@ -54,18 +59,26 @@ public class RestaurantController {
 	 * @param itemId
 	 * @param isPromo
 	 */
-	public boolean addToOrder(int tableNo, int quantity, int itemId, boolean isPromo) {
-		// TODO - implement RestaurantController.addToOrder
-		/**
-		 * copied is a copy of the item from category to add into Order
-		 */
+	public void addToOrder(int tableNo, int itemId, int quantity, boolean isPromo) {
 		if(isPromo) {
-
-		} else {
-			Item copied = categoryController.copyItem(itemId);
 		}
+		Item copied = categoryController.copyItem(itemId); 
+		this.tableController.addToOrder(tableNo, copied, quantity);
+		// return true;
+	}
+
+	public boolean removeFromOrder(int tableNo, int itemId, boolean isPromo) {
+		if(isPromo) {
+		}
+		Item copied = categoryController.copyItem(itemId); 
+		this.tableController.removeFromOrder(tableNo, copied);
 		return true;
 	}
+	
+	public void viewOrder(int tableNo) {
+		this.tableController.viewOrder(tableNo);
+	}
+
 
 	/**
 	 *

@@ -2,10 +2,12 @@ package Controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import Models.Item;
 import Models.Reservation;
 import Models.Table;
+import Models.Order;
 
 public class TableController {
 
@@ -20,19 +22,33 @@ public class TableController {
 	public TableController(int noOfTables) {
 		this.noOfTables = noOfTables;
 		this.tables = new ArrayList<Table>(noOfTables);
+
+		// fake list to test the order operations
+		for (int i=0; i<noOfTables; i++) {
+			tables.add(new Table(i+1, false, 2));
+		}
 	}
 
 	public int getNoOfTables() {
 		return this.noOfTables;
 	}
 
-	/**
-	 * 
-	 * @param items
-	 */
-	public boolean addToOrder(Item[] items) {
-		// TODO - implement TableController.addToOrder
-		throw new UnsupportedOperationException();
+	public void addToOrder(int tableNo, Item item, int quantity) {
+		this.findTableByNo(tableNo).addToOrder(item, quantity);
+	}
+
+	public boolean removeFromOrder(int tableNo, Item item) {
+		return this.findTableByNo(tableNo).removeFromOrder(item);
+	}
+
+	public void viewOrder(int tableNo) {
+		Order invoice = this.findTableByNo(tableNo).getInvoice();
+		List<Item> items = invoice.getItems();
+		Map<Integer, Integer> item2quant = invoice.getOrderItems();
+
+		System.out.println("Your current order is:");
+		for (Item item : items) System.out.println(item.getName() + ": " + item2quant.get(item.getId()));
+		System.out.printf("--> The current cost for this order is: %.2f\n\n", invoice.getTotal());
 	}
 
 	/**
@@ -63,16 +79,7 @@ public class TableController {
 		// TODO - implement TableController.printInvoice
 		throw new UnsupportedOperationException();
 	}
-
-	/**
-	 * 
-	 * @param items
-	 */
-	public boolean removeFromOrder(Item[] items) {
-		// TODO - implement TableController.removeFromOrder
-		throw new UnsupportedOperationException();
-	}
-
+	
 	/**
 	 * 
 	 * @param details

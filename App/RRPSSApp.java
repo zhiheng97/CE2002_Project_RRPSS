@@ -23,6 +23,7 @@ public class RRPSSApp {
 				"5. Print sales report\n6. Exit\nEnter your choice: ");
 			option = sc.nextInt();
 			switch (option) {
+				/////////////////// MENU ///////////////////
 				case 1:
 					String[] itemParams = new String[5];
 					do {
@@ -70,6 +71,8 @@ public class RRPSSApp {
 						}
 					} while (option != 5);
 					break;
+				
+				/////////////////// PROMOTIONS ///////////////////
 				case 2:
 					//TODO - Write Options for Promotions
 					List<String> promoParams = new ArrayList<String>();
@@ -169,11 +172,56 @@ public class RRPSSApp {
 							default:
 								System.out.println("Invalid option");
 								break;
+							}
+						}while(option != 8);
+						break;
+
+					/////////////////// ORDER ///////////////////
+					case 3:
+					System.out.print("\nEnter your table number: ");
+					int tableNo = sc.nextInt();
+					do {
+						System.out.println("1. Add item to your order");
+						System.out.println("2. Remove item from your order");
+						System.out.println("3. View your order");
+						System.out.println("4. Return");
+						System.out.print("Enter your choice: ");
+						option = sc.nextInt();
+
+						switch (option) {
+							case 1:
+								System.out.print("Enter the item id: ");
+								int itemIdToAdd = sc.nextInt();
+								System.out.print("Enter the quantity you want: ");
+								int quantityToAdd = sc.nextInt();
+								// boolean isPromo = 
+								restaurantController.addToOrder(tableNo, itemIdToAdd, quantityToAdd, false);
+								// System.out.printf("Successfully added %d numbers of item")
+								System.out.println();
+								break;
+							case 2:
+								System.out.print("Enter the item id: ");
+								int itemIdToRemove = sc.nextInt();
+								// boolean isPromo = 
+								boolean isValid = restaurantController.removeFromOrder(tableNo, itemIdToRemove, false);
+								if (isValid) System.out.println("Successfully removed the item");
+								else System.out.println("Unsuccessfully removed the item because it is not in your order\n");
+								System.out.println();
+								break;
+							case 3:
+								System.out.println();
+								restaurantController.viewOrder(tableNo);
+								break;	
+							case 4:
+								System.out.println("Returning....\n");
+								System.out.println();
+								break;
+							default:
+								System.out.println("Option not found");
+								System.out.println();
+								break;
 						}
-					}while(option != 8);
-					break;
-				case 3:
-					//TODO - Write Options for Order
+					} while (option != 4);
 					break;
 				case 4:
 					//TODO - Write Options for Reservations

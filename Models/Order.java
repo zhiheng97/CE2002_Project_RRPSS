@@ -2,12 +2,15 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Order {
 
 	private Staff placedBy;
 	private String timestamp;
 	private List<Item> items = new ArrayList<Item>();
+	private Map<Integer, Integer> itemId2quantity;
 	private List<Promotion> promotion = new ArrayList<Promotion>();
 	private double total = 0.0;
 
@@ -22,7 +25,8 @@ public class Order {
 	public Order(Staff createdBy, String dateTime, List<Item> items, List<Promotion> promotion, double total) {
 		this.timestamp = dateTime;
 		this.placedBy = createdBy;
-		this.items = items;
+		this.items = items; //(items == null)? items : new ArrayList<Item>();
+		this.itemId2quantity = new HashMap<Integer, Integer>();
 		this.promotion = promotion;
 		this.total = total;
 	}
@@ -30,6 +34,41 @@ public class Order {
 	public void print() {
 		// TODO - implement Order.print
 		throw new UnsupportedOperationException();
+	}
+
+	public void addToOrder(Item item, int quantity) {
+		// update price
+		this.total += item.getPrice() * quantity;
+
+		// update invoice items
+		int id = item.getId();
+		if (this.itemId2quantity.containsKey(id)) this.itemId2quantity.put(id, this.itemId2quantity.get(id) + quantity);
+		else {
+			this.items.add(item);
+			this.itemId2quantity.put(id, quantity);
+		}
+	}
+
+	public boolean removeFromOrder(Item item) {
+		// update price
+		this.total -= item.getPrice();
+
+		// update invoice items
+		int id = item.getId();
+		if (!this.itemId2quantity.containsKey(id)) return false;
+
+		int curQuantity = this.itemId2quantity.get(id);
+		if (curQuantity == 1) this.itemId2quantity.remove(id);
+		else this.itemId2quantity.replace(id, curQuantity, curQuantity - 1);
+		return true;
+	}
+
+	public Map<Integer, Integer> getOrderItems() {
+		return this.itemId2quantity;
+	}
+
+	public void setItems(List<Item> items) {
+		this.items = items;
 	}
 
 	public List<Item> getItems() {
