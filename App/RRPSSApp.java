@@ -51,7 +51,6 @@ public class RRPSSApp {
 						catch(Exception e){
 							System.out.println("Invalid input, returning to previous menu.");
 							System.out.println();
-							option = 0;
 							break;
 						}
 						if (Arrays.asList(itemParams).contains(ESCAPE_STRING)) break;
@@ -196,7 +195,6 @@ public class RRPSSApp {
 						catch(Exception e){
 							System.out.println("Invalid input, returning to previous menu.");
 							System.out.println();
-							option = 0;
 							break;
 						}
 						restaurantController.removePromotion(option);
@@ -239,6 +237,7 @@ public class RRPSSApp {
 							break;
 						}
 						System.out.print("Enter the item id: ");
+							option = 0;
 						itemsParams.add(reader.readLine());
 						System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
 						itemsParams.add(reader.readLine());
@@ -301,18 +300,22 @@ public class RRPSSApp {
 
 					switch (option) {
 					case 1:
+						System.out.println("(type -9 to return to previous menu)");
 						System.out.print("Enter the item id: ");
 						int itemIdToAdd = sc.nextInt();
 						System.out.print("Enter the quantity you want: ");
 						int quantityToAdd = sc.nextInt();
+						if(itemIdToAdd == -9 || quantityToAdd == -9) break;
 						// boolean isPromo =
 						restaurantController.addToOrder(tableNo, itemIdToAdd, quantityToAdd);
 						// System.out.printf("Successfully added %d numbers of item")
 						System.out.println();
 						break;
 					case 2:
+						System.out.println("(type -9 to return to previous menu)");
 						System.out.print("Enter the item id: ");
 						int itemIdToRemove = sc.nextInt();
+						if(itemIdToRemove == -9) break;
 						// boolean isPromo =
 						boolean isValid = restaurantController.removeFromOrder(tableNo, itemIdToRemove);
 						if (isValid)
@@ -331,10 +334,6 @@ public class RRPSSApp {
 						System.out.println("Returning....\n");
 						System.out.println();
 						break;
-					// case 5:
-					// System.out.println("Returning....\n");
-					// System.out.println();
-					// break;
 					default:
 						System.out.println("Option not found");
 						System.out.println();
@@ -357,19 +356,28 @@ public class RRPSSApp {
 					switch (option) {
 					case 1:
 						String[] resParams = new String[8];
-						System.out.print("Enter the customer id: ");
-						resParams[0] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the customer name: ");
-						resParams[2] = reader.readLine();
-						System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
-						resParams[4] = reader.readLine();
-						System.out.print("Enter the time of reservation: ");
-						resParams[5] = reader.readLine();
-						System.out.print("Enter the contact number: ");
-						resParams[3] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the number of guest: ");
-						resParams[6] = String.valueOf(sc.nextInt());
-						if (restaurantController.reserveTable(resParams))
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the customer id: ");
+							resParams[0] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the customer name: ");
+							resParams[2] = reader.readLine();
+							System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
+							resParams[4] = reader.readLine();
+							System.out.print("Enter the time of reservation: ");
+							resParams[5] = reader.readLine();
+							System.out.print("Enter the contact number: ");
+							resParams[3] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the number of guest: ");
+							resParams[6] = String.valueOf(sc.nextInt());
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
+						if (Arrays.asList(resParams).contains(ESCAPE_STRING)) break;
+						else if (restaurantController.reserveTable(resParams))
 							System.out.println("Reservation has been made successfully!");
 						else
 							System.out.println("Reservation was not made!");
