@@ -12,7 +12,7 @@ import java.util.Scanner;
 import Controller.RestaurantController;
 
 public class RRPSSApp {
-	private static final String ESCAPE_STRING = "EXIT";
+	private static final String ESCAPE_STRING = "-9"; // use an integer, if we use a string, we cannot use try catch
 	public static void main(String[] args) throws IOException {
 
 		RestaurantController restaurantController = new RestaurantController();
@@ -20,7 +20,6 @@ public class RRPSSApp {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		int option = 0;
 		do {
-			restaurantController.expireReservations(new Date());
 			System.out.println("Restaurant Reservation and Point of Sale System");
 			System.out.print("1. Menu\n2. Promotion\n3. Order\n4. Reservation\n"
 					+ "5. Print sales report\n6. Exit\nEnter your choice: ");
@@ -37,7 +36,7 @@ public class RRPSSApp {
 					case 1:
 						restaurantController.printMenu();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the category id to add to [0 - Mains, 1 - Sides, 2 - Drinks]: ");
 							itemParams[4] = String.valueOf(sc.nextInt());
 							System.out.print("Enter the item id: ");
@@ -65,7 +64,7 @@ public class RRPSSApp {
 					case 2:
 						restaurantController.printMenu();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the item id: ");
 							itemParams[1] = String.valueOf(sc.nextInt());
 							System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
@@ -90,7 +89,7 @@ public class RRPSSApp {
 					case 3:
 						restaurantController.printMenu();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the item id that you wish to remove: ");
 							if (restaurantController.removeItem(sc.nextInt()))
 								System.out.println("Item removed successfully!");
@@ -134,7 +133,7 @@ public class RRPSSApp {
 					case 1:
 						restaurantController.printPromotion();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id: ");
 							promoParams.add(reader.readLine());
 							System.out.print("Enter the promotion name: ");
@@ -172,7 +171,7 @@ public class RRPSSApp {
 						break;
 					case 2:
 						restaurantController.printPromotion();
-						System.out.println("(type EXIT to return to previous menu)");
+						System.out.println("(type -9 to return to previous menu)");
 						System.out.print("Enter the promotion id: ");
 						promoParams.add(reader.readLine());
 						System.out.print("Enter the new promotion name [Enter \\ if you do not intend to modify]: ");
@@ -190,7 +189,7 @@ public class RRPSSApp {
 					case 3:
 						restaurantController.printPromotion();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to remove: ");
 							option = sc.nextInt();
 						}
@@ -206,7 +205,7 @@ public class RRPSSApp {
 					case 4:
 						restaurantController.printPromotion();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to add an item to: ");
 							option = sc.nextInt();
 						}
@@ -230,7 +229,7 @@ public class RRPSSApp {
 					case 5:
 						restaurantController.printPromotion();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to update the item in: ");
 							option = sc.nextInt();
 						}
@@ -254,7 +253,7 @@ public class RRPSSApp {
 					case 6:
 						restaurantController.printPromotion();
 						try{
-							System.out.println("(type EXIT to return to previous menu)");
+							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to remove the item from: ");
 							option = sc.nextInt();
 							System.out.print("Enter the item id that you wish to remove: ");
@@ -345,6 +344,7 @@ public class RRPSSApp {
 				break;
 			/////////////////// RESERVATIONS ///////////////////
 			case 4:
+				restaurantController.expireReservations(new Date());
 				do {
 					System.out.println("1. Add reservation");
 					System.out.println("2. Remove reservation");
