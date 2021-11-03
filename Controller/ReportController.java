@@ -12,9 +12,6 @@ import Models.Report;
 public class ReportController {
 
 	private List<Report> reports = new ArrayList<Report>();
-	private Report currentReport = new Report("NIL");
-	private FileController fileController = new FileController();
-	private final static String PATH_TO_ORDERS_FILE = Path.of("./Data/orders.txt").toString();
 
 	/**
 	 * Constructor for the ReportController Class
@@ -32,18 +29,34 @@ public class ReportController {
 		// sequentially for date?
 		// Solution: Might want to consider creating a linkedhashmap with date as key?
 		// Is it relevant though? Will a restaurant be taking orders around midnight?
+		Report currentReport;
+		String orderDate = invoice.getTimeStamp().split(" ")[0]; // Get new date from order
+		int report_size = reports.size();
 
-		// Checks whether order matches the current date of report
-		if (currentReport.addInvoice(invoice)) {
-			System.out.println("Order of timestamp " + invoice.getTimeStamp() + "added successfully");
-		} else {
-			String newDate = invoice.getTimeStamp().split(" ")[0]; // Get new date from report
-
-			if (currentReport.getDate() != "NIL")
-				reports.add(currentReport); // Adds old report to report list
-
-			currentReport = new Report(newDate); // Create new report for new date
+		// Case 1: If no reports we create new report and add directly
+		if (report_size == 0) {
+			currentReport = new Report(orderDate); // Create new report for date
 			currentReport.addInvoice(invoice); // Adds order to newly created report fitting the date
+			this.reports.add(currentReport); // Adds to report list
+		}
+		// Case 2: Checks whether order matches the date of latest report
+		else if (reports.get(report_size - 1).addInvoice(invoice)) {
+			System.out
+					.println("(Match Latest Date) Order of timestamp " + invoice.getTimeStamp() + "added successfully");
+		}
+		// Case 3: Order date does not match.
+		else {
+
+			// Case 3a: Order exists in reports and is a day before due to order created
+			// near midnight
+			if (report_size >= 2 && reports.get(report_size - 2).addInvoice(invoice))
+				System.out.println("Non-sequential order detected");
+			else {
+				// Case 3b: Order does not exist in reports
+				currentReport = new Report(orderDate); // Create new report for date
+				currentReport.addInvoice(invoice); // Adds order to newly created report fitting the date
+				this.reports.add(currentReport); // Adds to report list
+			}
 		}
 	}
 
