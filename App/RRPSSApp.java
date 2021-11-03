@@ -35,6 +35,7 @@ public class RRPSSApp {
 					option = sc.nextInt();
 					switch (option) {
 					case 1:
+						restaurantController.printMenu();
 						System.out.print("Enter the category id to add to [0 - Mains, 1 - Sides, 2 - Drinks]: ");
 						itemParams[4] = String.valueOf(sc.nextInt());
 						System.out.print("Enter the item id: ");
@@ -52,6 +53,7 @@ public class RRPSSApp {
 						System.out.println();
 						break;
 					case 2:
+						restaurantController.printMenu();
 						System.out.print("Enter the item id: ");
 						itemParams[1] = String.valueOf(sc.nextInt());
 						System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
@@ -67,6 +69,7 @@ public class RRPSSApp {
 						System.out.println();
 						break;
 					case 3:
+						restaurantController.printMenu();
 						System.out.print("Enter the item id that you wish to remove: ");
 						if (restaurantController.removeItem(sc.nextInt()))
 							System.out.println("Item removed successfully!");
@@ -97,17 +100,12 @@ public class RRPSSApp {
 				List<String> itemsParams = new ArrayList<String>();
 				do {
 					System.out.println("Promotions Sub-menu");
-					System.out.println(
-							"1. View promotions\n2. Add a new promotion\n3. Update promotion\n4. Remove promotion\n5. Add item to promotion");
-					System.out.print(
-							"6. Update item in promotion\n7. Remove item from promotion\n8. Return\nEnter your choice: ");
+					System.out.println("1. Add a new promotion\n2. Update promotion\n3. Remove promotion\n4. Add item to promotion");
+					System.out.print("5. Update item in promotion\n6. Remove item from promotion \n7. View promotions\n8. Return\nEnter your choice: ");
 					option = sc.nextInt();
 					switch (option) {
 					case 1:
 						restaurantController.printPromotion();
-						System.out.println();
-						break;
-					case 2:
 						System.out.println("Enter the promotion id: ");
 						promoParams.add(reader.readLine());
 						System.out.println("Enter the promotion name: ");
@@ -137,7 +135,8 @@ public class RRPSSApp {
 						itemsParams.clear();
 						System.out.println();
 						break;
-					case 3:
+					case 2:
+						restaurantController.printPromotion();
 						System.out.print("Enter the promotion id: ");
 						promoParams.add(reader.readLine());
 						System.out.print("Enter the new promotion name [Enter \\ if you do not intend to modify]: ");
@@ -152,13 +151,15 @@ public class RRPSSApp {
 						promoParams.clear();
 						System.out.println();
 						break;
-					case 4:
+					case 3:
+						restaurantController.printPromotion();
 						System.out.print("Enter the promotion id that you wish to remove: ");
 						option = sc.nextInt();
 						restaurantController.removePromotion(option);
 						System.out.println();
 						break;
-					case 5:
+					case 4:
+						restaurantController.printPromotion();
 						System.out.print("Enter the promotion id that you wish to add an item to: ");
 						option = sc.nextInt();
 						System.out.print("Enter the item id: ");
@@ -173,7 +174,8 @@ public class RRPSSApp {
 						itemsParams.clear();
 						System.out.println();
 						break;
-					case 6:
+					case 5:
+						restaurantController.printPromotion();
 						System.out.print("Enter the promotion id that you wish to update the item in: ");
 						option = sc.nextInt();
 						System.out.print("Enter the item id: ");
@@ -188,11 +190,16 @@ public class RRPSSApp {
 						itemsParams.clear();
 						System.out.println();
 						break;
-					case 7:
+					case 6:
+						restaurantController.printPromotion();
 						System.out.print("Enter the promotion id that you wish to remove the item from: ");
 						option = sc.nextInt();
 						System.out.print("Enter the item id that you wish to remove: ");
 						restaurantController.removeItem(option, sc.nextInt());
+						System.out.println();
+						break;
+					case 7:
+						restaurantController.printPromotion();
 						System.out.println();
 						break;
 					case 8:
