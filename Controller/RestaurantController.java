@@ -1,11 +1,12 @@
 package Controller;
 
+import java.nio.file.Path;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import Models.Item;
-import Models.Promotion;
+import Models.*;
 
 public class RestaurantController {
 
@@ -13,6 +14,10 @@ public class RestaurantController {
 	private ReportController reportController;
 	private CategoryController categoryController;
 	private PromotionController promotionController;
+	private FileController fileController;
+
+	private List<Staff> staffList;
+	private static final String PATH_TO_STAFFS_FILE = Path.of("./table.txt").toString();
 
 	/**
 	 * Constructor for RestaurantController
@@ -22,6 +27,19 @@ public class RestaurantController {
 		// this.reportController = new ReportController();
 		this.categoryController = new CategoryController();
 		this.promotionController = new PromotionController();
+		this.fileController = new FileController();
+
+		this.staffList = new ArrayList<Staff>();
+		List<String> staffParams = fileController.readFile(PATH_TO_STAFFS_FILE);
+		for(int i = 0; i < staffParams.size(); i+=3) {
+			this.staffList.add(
+				new Staff(
+					Integer.parseInt(staffParams.get(i)),
+					staffParams.get(i + 1),
+					staffParams.get(i + 2)
+				)
+			);
+		}
 	}
 
 	/**
@@ -60,6 +78,15 @@ public class RestaurantController {
 	 * @param itemId
 	 * @param isPromo
 	 */
+
+	public void createOrder(int tableNo, int staffID, String date) {
+		Staff staff = this.staffList.get(staffID);
+		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
+		this.tableController.findTableByNo(tableNo).setInvoice(
+			new Order(staff, date, 0.0)
+		);
+	}
+
 	public void addToOrder(int tableNo, int itemId, int quantity) {
 		Promotion promoToAdd = promotionController.findPromotionById(itemId);
 		Item itemToAdd = categoryController.searchForItem(itemId);
@@ -113,8 +140,11 @@ public class RestaurantController {
 	 * @param tableNo
 	 */
 	public void printInvoice(int tableNo) {
-		// TODO - implement RestaurantController.printInvoice
-		throw new UnsupportedOperationException();
+		this.tableController.printInvoice(tableNo);
+
+		//TODO: add the report
+		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
+		Report report = new Report(invoice.getTimeStamp());
 	}
 
 	/**

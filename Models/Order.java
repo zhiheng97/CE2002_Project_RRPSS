@@ -9,10 +9,11 @@ public class Order {
 
 	private Staff placedBy;
 	private String timestamp;
-	private List<Item> items = new ArrayList<Item>();
-	private Map<Integer, Integer> itemId2quantity;
-	private List<Promotion> promotions = new ArrayList<Promotion>();
-	private double total = 0.0;
+	private List<Item> items;
+	private List<Promotion> promotions;
+	private Map<Integer, Integer> item2quantity;
+	private Map<Integer, Integer> promo2quantity;
+	private double total;
 
 	/**
 	 *
@@ -22,18 +23,36 @@ public class Order {
 	 * @param promotion
 	 * @param total
 	 */
-	public Order(Staff createdBy, String dateTime, List<Item> items, List<Promotion> promotion, double total) {
+	public Order(Staff createdBy, String dateTime, double total) {
 		this.timestamp = dateTime;
 		this.placedBy = createdBy;
-		this.items = items; //(items == null)? items : new ArrayList<Item>();
-		this.itemId2quantity = new HashMap<Integer, Integer>();
-		//this.promotions = promotion;
+		this.items = new ArrayList<Item>();
+		this.promotions = new ArrayList<Promotion>();
+		this.item2quantity = new HashMap<Integer, Integer>();
+		this.promo2quantity = new HashMap<Integer, Integer>();
 		this.total = total;
 	}
 
 	public void print() {
-		// TODO - implement Order.print
-		throw new UnsupportedOperationException();
+		int quantity;
+		System.out.println("--------------------------");
+		System.out.println("Items:");
+		for (Item item : this.items) {
+			quantity = this.item2quantity.get(item.getId());
+			System.out.printf(quantity + " x " + item.getName() + "\t %f\n", item.getPrice() * quantity);
+		}
+
+		System.out.println("--------------------------");
+		System.out.println("Promotions:");
+		for (Promotion promo : this.promotions) {
+			quantity = this.promo2quantity.get(promo.getId());
+			System.out.printf(quantity + " x " + promo.getName() + "\t %f\n", promo.getPrice() * quantity);
+		}
+
+		System.out.println("--------------------------");
+		System.out.println("TOTAL AMOUNT: " + this.getTotal());
+		System.out.println("Date: " + this.timestamp);
+		System.out.println("Created by: " + this.getPlacedBy());
 	}
 
 	public void addToOrder(Item item, int quantity) {
@@ -42,10 +61,11 @@ public class Order {
 
 		// update invoice items
 		int id = item.getId();
-		if (this.itemId2quantity.containsKey(id)) this.itemId2quantity.put(id, this.itemId2quantity.get(id) + quantity);
+		if (this.item2quantity.containsKey(id)) 
+			this.item2quantity.put(id, this.item2quantity.get(id) + quantity);
 		else {
 			this.items.add(item);
-			this.itemId2quantity.put(id, quantity);
+			this.item2quantity.put(id, quantity);
 		}
 	}
 
@@ -55,48 +75,50 @@ public class Order {
 
 		// update invoice items
 		int id = promotion.getId();
-		if (this.itemId2quantity.containsKey(id)) 
-			this.itemId2quantity.put(id, this.itemId2quantity.get(id) + quantity);
+		if (this.promo2quantity.containsKey(id)) 
+			this.promo2quantity.put(id, this.promo2quantity.get(id) + quantity);
 		else {
 			this.promotions.add(promotion);
-			this.itemId2quantity.put(id, quantity);
+			this.promo2quantity.put(id, quantity);
 		}
 	}
 
 	public boolean removeFromOrder(Item item) {
-		// update price
-		this.total -= item.getPrice();
-
 		// update invoice items
 		int id = item.getId();
-		if (!this.itemId2quantity.containsKey(id)) return false;
-		items.remove(items.stream().filter(i -> i.getId() == id).findAny().orElse(null));
-		int curQuantity = this.itemId2quantity.get(id);
-		if (curQuantity == 1) this.itemId2quantity.remove(id);
-		else this.itemId2quantity.replace(id, curQuantity, curQuantity - 1);
+		if (!this.item2quantity.containsKey(id)) return false;
+		
+		this.items.remove(items.stream().filter(i -> i.getId() == id).findAny().orElse(null));
+		int curQuantity = this.item2quantity.get(id);
+		if (curQuantity == 1) this.item2quantity.remove(id);
+		else this.item2quantity.replace(id, curQuantity, curQuantity - 1);
+		
+		// update price
+		this.total -= item.getPrice();
 		return true;
 	}
 
 	public boolean removeFromOrder(Promotion promotion) {
-		// update price
-		this.total -= promotion.getPrice();
-
 		// update invoice items
 		int id = promotion.getId();
-		if (!this.itemId2quantity.containsKey(id)) return false;
-		promotions.remove(promotions.stream().filter(p -> p.getId() == id).findAny().orElse(null));
-		int curQuantity = this.itemId2quantity.get(id);
-		if (curQuantity == 1) this.itemId2quantity.remove(id);
-		else this.itemId2quantity.replace(id, curQuantity, curQuantity - 1);
+		if (!this.promo2quantity.containsKey(id)) return false;
+
+		this.promotions.remove(promotions.stream().filter(p -> p.getId() == id).findAny().orElse(null));
+		int curQuantity = this.promo2quantity.get(id);
+		if (curQuantity == 1) this.promo2quantity.remove(id);
+		else this.promo2quantity.replace(id, curQuantity, curQuantity - 1);
+		
+		// update price
+		this.total -= promotion.getPrice();
 		return true;
 	}
 
 	public Map<Integer, Integer> getOrderItems() {
-		return this.itemId2quantity;
+		return this.item2quantity;
 	}
 
-	public void setItems(List<Item> items) {
-		this.items = items;
+	public Map<Integer, Integer> getOrderPromos() {
+		return this.promo2quantity;
 	}
 
 	public List<Item> getItems() {

@@ -116,9 +116,9 @@ public class ReportController {
 				} while (i < tokens.size() && !tokens.get(i).equals("ENDORDER"));
 
 				System.out.println("Total value of order being added: " + orderTotal);
-				Order tmpOrder = new Order(tmpStaff, dateOnly, items, tmpPromoList, orderTotal);
-				ordersScanned++;
-				currentReport.addInvoice(tmpOrder);
+				// Order tmpOrder = new Order(tmpStaff, dateOnly, items, tmpPromoList, orderTotal);
+				// ordersScanned++;
+				// currentReport.addInvoice(tmpOrder);
 				System.out.println("No more promo found, checking for next order next\n");
 				i++; // Increment past ENDORDER
 			}
@@ -133,6 +133,7 @@ public class ReportController {
 	public void addReport(Report report) {
 		reports.add(report);
 	}
+
 
 	/**
 	 *

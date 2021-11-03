@@ -22,7 +22,7 @@ public class Table {
 		this.isOccupied = occupied;
 		this.reservations = new ArrayList<Reservation>(15);
 		this.seats = seatAvail;
-		this.invoice = new Order(null, null, new ArrayList<Item>(), null, 0);
+		this.invoice = new Order(null, null, 0);
 	}
 
 	public void addToOrder(Item item, int quantity) {
@@ -73,7 +73,7 @@ public class Table {
 	}
 
 	public void print() {
-		System.out.println("Invoice for table: " + this.tableNo);
+		System.out.println("The bill of table number: " + this.tableNo);
 		this.invoice.print();
 	}
 

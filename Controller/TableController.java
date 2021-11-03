@@ -9,11 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import Models.Item;
-import Models.Order;
-import Models.Promotion;
-import Models.Reservation;
-import Models.Table;
+import Models.*;
 
 public class TableController {
 
@@ -26,10 +22,6 @@ public class TableController {
 
 	private int noOfTables;
 
-	/**
-	 * 
-	 * @param noOfTables
-	 */
 	public TableController(int noOfTables) {
 		this.noOfTables = noOfTables;
 		this.tables = new ArrayList<Table>(noOfTables);
@@ -109,7 +101,7 @@ public class TableController {
 	}
 
 	public void printAvailableTables() {
-		for(Table t: tables){
+		for(Table t : tables){
 			if(!t.getIsOccupied()){
 				System.out.println(t.getTableNo());
 			}
@@ -117,8 +109,10 @@ public class TableController {
 	}
 
 	public void printInvoice(int tableNo) {
-		this.findTableByNo(tableNo).setIsOccupied(false);
-		this.findTableByNo(tableNo).print();
+		Table table = this.findTableByNo(tableNo);
+		table.print();
+		table.setIsOccupied(false);
+		table.setInvoice(new Order(null, null, 0.0));
 	}
 
 	public void printReservations(int tableNo){
@@ -186,10 +180,11 @@ public class TableController {
 		List<Item> items = invoice.getItems();
 		List<Promotion> promotions = invoice.getPromo();
 		Map<Integer, Integer> item2quant = invoice.getOrderItems();
+		Map<Integer, Integer> promo2quant = invoice.getOrderPromos();
 
 		System.out.println("Your current order is:");
-		for(Promotion promotion : promotions) System.out.println(promotion.getName() + ": " + item2quant.get(promotion.getId()));
-		for (Item item : items) System.out.println(item.getName() + ": " + item2quant.get(item.getId()));
+		for(Promotion promotion : promotions) System.out.println("[PROMO]" + promotion.getName() + ": " + promo2quant.get(promotion.getId()));
+		for (Item item : items) System.out.println("[ITEM]" + item.getName() + ": " + item2quant.get(item.getId()));
 		System.out.printf("--> The current cost for this order is: %.2f\n\n", invoice.getTotal());
 	}
 

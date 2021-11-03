@@ -21,6 +21,7 @@ public class Report {
 		this.date = calDate;
 	}
 
+	
 	/**
 	 * 
 	 * @param invoice // Invoice to be added to report list

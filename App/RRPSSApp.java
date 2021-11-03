@@ -205,13 +205,18 @@ public class RRPSSApp {
 
 					/////////////////// ORDER ///////////////////
 					case 3:
-					System.out.print("\nEnter your table number: ");
+					System.out.print("\nEnter the table number: ");
 					int tableNo = sc.nextInt();
+					System.out.print("Enter your staff ID: ");
+					int staffID = sc.nextInt();
+					System.out.print("Enter the date today: ");
+					String date = reader.readLine();
+					restaurantController.createOrder(tableNo, staffID, date);
 					do {
 						System.out.println("1. Add item to your order");
 						System.out.println("2. Remove item from your order");
-						System.out.println("3. View your order");
-						System.out.println("4. Return");
+						System.out.println("3. View your current order");
+						System.out.println("4. Checkout and return");
 						System.out.print("Enter your choice: ");
 						option = sc.nextInt();
 
@@ -240,10 +245,15 @@ public class RRPSSApp {
 								restaurantController.viewOrder(tableNo);
 								System.out.println();
 								break;	
-							case 4:
+							case 4: 
+								restaurantController.printInvoice(tableNo);
 								System.out.println("Returning....\n");
 								System.out.println();
 								break;
+							// case 5:
+							// 	System.out.println("Returning....\n");
+							// 	System.out.println();
+							// 	break;
 							default:
 								System.out.println("Option not found");
 								System.out.println();
@@ -314,6 +324,7 @@ public class RRPSSApp {
 						}
 					} while (option != 5);
 					break;
+				/////////////////// REPORT ///////////////////
 				case 5:
 					//TODO - Write Options for printing Report
 					break;
