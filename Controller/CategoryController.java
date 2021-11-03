@@ -112,6 +112,7 @@ public class CategoryController {
 		for(Category category : categories){
 			category.print();
 		}
+		System.out.println();
 	}
 
 	/**
