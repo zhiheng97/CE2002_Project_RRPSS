@@ -3,6 +3,7 @@ package App;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Scanner;
 import Controller.RestaurantController;
 
 public class RRPSSApp {
-
+	private static final String ESCAPE_STRING = "-9"; // use an integer, if we use a string, we cannot use try catch
 	public static void main(String[] args) throws IOException {
 
 		RestaurantController restaurantController = new RestaurantController();
@@ -19,7 +20,6 @@ public class RRPSSApp {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		int option = 0;
 		do {
-			restaurantController.expireReservations(new Date());
 			System.out.println("Restaurant Reservation and Point of Sale System");
 			System.out.print("1. Menu\n2. Promotion\n3. Order\n4. Reservation\n"
 					+ "5. Print sales report\n6. Exit\nEnter your choice: ");
@@ -35,17 +35,26 @@ public class RRPSSApp {
 					switch (option) {
 					case 1:
 						restaurantController.printMenu();
-						System.out.print("Enter the category id to add to [0 - Mains, 1 - Sides, 2 - Drinks]: ");
-						itemParams[4] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the item id: ");
-						itemParams[1] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the item name: ");
-						itemParams[0] = reader.readLine();
-						System.out.print("Enter the item description: ");
-						itemParams[2] = reader.readLine();
-						System.out.print("Enter the price of the item: ");
-						itemParams[3] = String.valueOf(sc.nextDouble());
-						if (restaurantController.addItem(itemParams))
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the category id to add to [0 - Mains, 1 - Sides, 2 - Drinks]: ");
+							itemParams[4] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the item id: ");
+							itemParams[1] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the item name: ");
+							itemParams[0] = reader.readLine();
+							System.out.print("Enter the item description: ");
+							itemParams[2] = reader.readLine();
+							System.out.print("Enter the price of the item: ");
+							itemParams[3] = String.valueOf(sc.nextDouble());
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
+						if (Arrays.asList(itemParams).contains(ESCAPE_STRING)) break;
+						else if (restaurantController.addItem(itemParams))
 							System.out.println("Item added successfully!");
 						else
 							System.out.println("Item not added successfully! Possible duplicate item Id!");
@@ -53,15 +62,24 @@ public class RRPSSApp {
 						break;
 					case 2:
 						restaurantController.printMenu();
-						System.out.print("Enter the item id: ");
-						itemParams[1] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
-						itemParams[0] = reader.readLine();
-						System.out.print("Enter the item description [Enter \\ if you do not intend to modify]: ");
-						itemParams[2] = reader.readLine();
-						System.out.print("Enter the price of the item [Enter -1 if you do not intend to modify]: ");
-						itemParams[3] = String.valueOf(sc.nextDouble());
-						if (restaurantController.updateItem(itemParams))
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the item id: ");
+							itemParams[1] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
+							itemParams[0] = reader.readLine();
+							System.out.print("Enter the item description [Enter \\ if you do not intend to modify]: ");
+							itemParams[2] = reader.readLine();
+							System.out.print("Enter the price of the item [Enter -1 if you do not intend to modify]: ");
+							itemParams[3] = String.valueOf(sc.nextDouble());
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
+						if (Arrays.asList(itemParams).contains(ESCAPE_STRING)) break;
+						else if (restaurantController.updateItem(itemParams))
 							System.out.println("Item updated successfully!");
 						else
 							System.out.println("Item wasn't updated! Check if you entered a valid item Id!");
@@ -69,16 +87,23 @@ public class RRPSSApp {
 						break;
 					case 3:
 						restaurantController.printMenu();
-						System.out.print("Enter the item id that you wish to remove: ");
-						if (restaurantController.removeItem(sc.nextInt()))
-							System.out.println("Item removed successfully!");
-						else
-							System.out.println("Item wasn't removed! Check if you entered a valid item Id!");
-						System.out.println();
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the item id that you wish to remove: ");
+							if (restaurantController.removeItem(sc.nextInt()))
+								System.out.println("Item removed successfully!");
+							else
+								System.out.println("Item wasn't removed! Check if you entered a valid item Id!");
+							System.out.println();
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
 						break;
 					case 4:
 						restaurantController.printMenu();
-						System.out.println();
 						break;
 					case 5:
 						System.out.println("Returning....");
@@ -97,6 +122,8 @@ public class RRPSSApp {
 				List<String> promoParams = new ArrayList<String>();
 				List<String> itemsParams = new ArrayList<String>();
 				do {
+					promoParams.clear();
+					itemsParams.clear();
 					System.out.println("Promotions Sub-menu");
 					System.out.println("1. Add a new promotion\n2. Update promotion\n3. Remove promotion\n4. Add item to promotion");
 					System.out.print("5. Update item in promotion\n6. Remove item from promotion \n7. View promotions\n8. Return\nEnter your choice: ");
@@ -104,37 +131,46 @@ public class RRPSSApp {
 					switch (option) {
 					case 1:
 						restaurantController.printPromotion();
-						System.out.println("Enter the promotion id: ");
-						promoParams.add(reader.readLine());
-						System.out.println("Enter the promotion name: ");
-						promoParams.add(reader.readLine());
-						System.out.println("Enter the promotion description: ");
-						promoParams.add(reader.readLine());
-						System.out.println("Enter the promotion price: ");
-						promoParams.add(reader.readLine());
-						System.out.println("Enter the number of items in the promotions: ");
-						option = sc.nextInt();
-						while (option < 0) {
-							System.out.println("Please enter a valid number (more than 0): ");
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the promotion id: ");
+							promoParams.add(reader.readLine());
+							System.out.print("Enter the promotion name: ");
+							promoParams.add(reader.readLine());
+							System.out.print("Enter the promotion description: ");
+							promoParams.add(reader.readLine());
+							System.out.print("Enter the promotion price: ");
+							promoParams.add(reader.readLine());
+							if(promoParams.contains(ESCAPE_STRING)) break;
+							System.out.print("Enter the number of items in the promotions: ");
 							option = sc.nextInt();
+							while (option < 0) {
+								System.out.print("Please enter a valid number (more than 0): ");
+								option = sc.nextInt();
+							}
+							for (int i = 0; i < option; i++) {
+								System.out.print("Enter the item id: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item name: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item description: ");
+								itemsParams.add(reader.readLine());
+								System.out.print("Enter the item price: ");
+								itemsParams.add(reader.readLine());
+							}
 						}
-						for (int i = 0; i < option; i++) {
-							System.out.print("Enter the item id: ");
-							itemsParams.add(reader.readLine());
-							System.out.print("Enter the item name: ");
-							itemsParams.add(reader.readLine());
-							System.out.print("Enter the item description: ");
-							itemsParams.add(reader.readLine());
-							System.out.print("Enter the item price: ");
-							itemsParams.add(reader.readLine());
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
 						}
+						if (itemsParams.contains(ESCAPE_STRING)) break;
 						restaurantController.addPromotion(promoParams, itemsParams);
-						promoParams.clear();
-						itemsParams.clear();
 						System.out.println();
 						break;
 					case 2:
 						restaurantController.printPromotion();
+						System.out.println("(type -9 to return to previous menu)");
 						System.out.print("Enter the promotion id: ");
 						promoParams.add(reader.readLine());
 						System.out.print("Enter the new promotion name [Enter \\ if you do not intend to modify]: ");
@@ -145,21 +181,37 @@ public class RRPSSApp {
 						System.out.print(
 								"Enter the new price of the promotion [Enter -1 if you do not intend to modify]: ");
 						promoParams.add(reader.readLine());
+						if (promoParams.contains(ESCAPE_STRING)) break;
 						restaurantController.updatePromotion(promoParams);
-						promoParams.clear();
 						System.out.println();
 						break;
 					case 3:
 						restaurantController.printPromotion();
-						System.out.print("Enter the promotion id that you wish to remove: ");
-						option = sc.nextInt();
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the promotion id that you wish to remove: ");
+							option = sc.nextInt();
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
 						restaurantController.removePromotion(option);
 						System.out.println();
 						break;
 					case 4:
 						restaurantController.printPromotion();
-						System.out.print("Enter the promotion id that you wish to add an item to: ");
-						option = sc.nextInt();
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the promotion id that you wish to add an item to: ");
+							option = sc.nextInt();
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
 						System.out.print("Enter the item id: ");
 						itemsParams.add(reader.readLine());
 						System.out.print("Enter the item name: ");
@@ -168,15 +220,24 @@ public class RRPSSApp {
 						itemsParams.add(reader.readLine());
 						System.out.print("Enter the item price: ");
 						itemsParams.add(reader.readLine());
+						if (itemsParams.contains(ESCAPE_STRING)) break;
 						restaurantController.addItem(option, itemsParams);
-						itemsParams.clear();
 						System.out.println();
 						break;
 					case 5:
 						restaurantController.printPromotion();
-						System.out.print("Enter the promotion id that you wish to update the item in: ");
-						option = sc.nextInt();
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the promotion id that you wish to update the item in: ");
+							option = sc.nextInt();
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
 						System.out.print("Enter the item id: ");
+							option = 0;
 						itemsParams.add(reader.readLine());
 						System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
 						itemsParams.add(reader.readLine());
@@ -184,17 +245,25 @@ public class RRPSSApp {
 						itemsParams.add(reader.readLine());
 						System.out.print("Enter the price of the item [Enter -1 if you do not intend to modify]: ");
 						itemsParams.add(reader.readLine());
+						if (itemsParams.contains(ESCAPE_STRING)) break;
 						restaurantController.updateItem(option, itemsParams);
-						itemsParams.clear();
 						System.out.println();
 						break;
 					case 6:
 						restaurantController.printPromotion();
-						System.out.print("Enter the promotion id that you wish to remove the item from: ");
-						option = sc.nextInt();
-						System.out.print("Enter the item id that you wish to remove: ");
-						restaurantController.removeItem(option, sc.nextInt());
-						System.out.println();
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the promotion id that you wish to remove the item from: ");
+							option = sc.nextInt();
+							System.out.print("Enter the item id that you wish to remove: ");
+							restaurantController.removeItem(option, sc.nextInt());
+							System.out.println();
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
 						break;
 					case 7:
 						restaurantController.printPromotion();
@@ -231,18 +300,22 @@ public class RRPSSApp {
 
 					switch (option) {
 					case 1:
+						System.out.println("(type -9 to return to previous menu)");
 						System.out.print("Enter the item id: ");
 						int itemIdToAdd = sc.nextInt();
 						System.out.print("Enter the quantity you want: ");
 						int quantityToAdd = sc.nextInt();
+						if(itemIdToAdd == -9 || quantityToAdd == -9) break;
 						// boolean isPromo =
 						restaurantController.addToOrder(tableNo, itemIdToAdd, quantityToAdd);
 						// System.out.printf("Successfully added %d numbers of item")
 						System.out.println();
 						break;
 					case 2:
+						System.out.println("(type -9 to return to previous menu)");
 						System.out.print("Enter the item id: ");
 						int itemIdToRemove = sc.nextInt();
+						if(itemIdToRemove == -9) break;
 						// boolean isPromo =
 						boolean isValid = restaurantController.removeFromOrder(tableNo, itemIdToRemove);
 						if (isValid)
@@ -261,10 +334,6 @@ public class RRPSSApp {
 						System.out.println("Returning....\n");
 						System.out.println();
 						break;
-					// case 5:
-					// System.out.println("Returning....\n");
-					// System.out.println();
-					// break;
 					default:
 						System.out.println("Option not found");
 						System.out.println();
@@ -274,6 +343,7 @@ public class RRPSSApp {
 				break;
 			/////////////////// RESERVATIONS ///////////////////
 			case 4:
+				restaurantController.expireReservations(new Date());
 				do {
 					System.out.println("1. Add reservation");
 					System.out.println("2. Remove reservation");
@@ -286,19 +356,28 @@ public class RRPSSApp {
 					switch (option) {
 					case 1:
 						String[] resParams = new String[8];
-						System.out.print("Enter the customer id: ");
-						resParams[0] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the customer name: ");
-						resParams[2] = reader.readLine();
-						System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
-						resParams[4] = reader.readLine();
-						System.out.print("Enter the time of reservation: ");
-						resParams[5] = reader.readLine();
-						System.out.print("Enter the contact number: ");
-						resParams[3] = String.valueOf(sc.nextInt());
-						System.out.print("Enter the number of guest: ");
-						resParams[6] = String.valueOf(sc.nextInt());
-						if (restaurantController.reserveTable(resParams))
+						try{
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the customer id: ");
+							resParams[0] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the customer name: ");
+							resParams[2] = reader.readLine();
+							System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
+							resParams[4] = reader.readLine();
+							System.out.print("Enter the time of reservation: ");
+							resParams[5] = reader.readLine();
+							System.out.print("Enter the contact number: ");
+							resParams[3] = String.valueOf(sc.nextInt());
+							System.out.print("Enter the number of guest: ");
+							resParams[6] = String.valueOf(sc.nextInt());
+						}
+						catch(Exception e){
+							System.out.println("Invalid input, returning to previous menu.");
+							System.out.println();
+							break;
+						}
+						if (Arrays.asList(resParams).contains(ESCAPE_STRING)) break;
+						else if (restaurantController.reserveTable(resParams))
 							System.out.println("Reservation has been made successfully!");
 						else
 							System.out.println("Reservation was not made!");
