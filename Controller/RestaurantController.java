@@ -141,9 +141,8 @@ public class RestaurantController {
 	public void printInvoice(int tableNo) {
 		this.tableController.printInvoice(tableNo);
 
-		// TODO: add the report
 		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
-		Report report = new Report(invoice.getTimeStamp());
+		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
 	}
 
 	/**
