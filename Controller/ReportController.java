@@ -17,7 +17,7 @@ public class ReportController {
 	private List<Report> reports = new ArrayList<Report>();
 	private Report currentReport = new Report("NIL");
 	private FileController fileController = new FileController();
-	private final static String PATH_TO_ORDERS_FILE = Path.of("./orders.txt").toString();
+	private final static String PATH_TO_ORDERS_FILE = Path.of("./Data/orders.txt").toString();
 
 	/**
 	 * Constructor for the ReportController Class
@@ -27,7 +27,7 @@ public class ReportController {
 
 	/**
 	 * Adds an order to the relevant report
-	 * 
+	 *
 	 * @param invoice // Order to be added to update Report
 	 */
 	public void addInvoice(Order invoice) {
@@ -53,7 +53,7 @@ public class ReportController {
 	/**
 	 * Prints report (monthly or daily) based on byMonth param, consists of start
 	 * date , end date, Total price, Quantity of each item / Promo
-	 * 
+	 *
 	 * @param byMonth Indicates whether report to be generated is latest month or
 	 *                latest day
 	 */

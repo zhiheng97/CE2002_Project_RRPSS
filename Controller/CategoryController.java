@@ -13,7 +13,7 @@ public class CategoryController {
 
 	private List<Category> categories = new ArrayList<Category>();
 	private FileController fileController = new FileController();
-	private final static String PATH_TO_MENU_FILE = Path.of("./menu.txt").toString();
+	private final static String PATH_TO_MENU_FILE = Path.of("./Data/menu.txt").toString();
 	private final static String ESCAPE_STRING_1 = "\\";
 	private final static String ESCAPE_STRING_2 = "-1.0";
 
@@ -67,7 +67,7 @@ public class CategoryController {
 		Item toCopy = searchForItem(id);
 		return toCopy.copyOf();
 	}
-	
+
 	/**
 	 * Searches the list of categories for the provided categoryType
 	 * @param categoryType Category to be searched for

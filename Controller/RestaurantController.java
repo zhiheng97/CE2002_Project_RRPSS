@@ -17,7 +17,7 @@ public class RestaurantController {
 	private FileController fileController;
 
 	private List<Staff> staffList;
-	private static final String PATH_TO_STAFFS_FILE = Path.of("./staff.txt").toString();
+	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
 
 	/**
 	 * Constructor for RestaurantController
@@ -39,7 +39,7 @@ public class RestaurantController {
 
 	/**
 	 * Adds item to the menu
-	 * 
+	 *
 	 * @param itemParams Details of the item to be added
 	 * @return Returns true if added successfully, otherwise false
 	 */
@@ -49,7 +49,7 @@ public class RestaurantController {
 
 	/**
 	 * Adds item to either the promotion
-	 * 
+	 *
 	 * @param promoId,    the promotion id which is used to search for a specific
 	 *                    promotion
 	 * @param itemParams, the item's parameters in the order, id; name; description
@@ -62,7 +62,7 @@ public class RestaurantController {
 
 	/**
 	 * Adds a new promotion
-	 * 
+	 *
 	 * @param promoParams, the promotion id; name; description and price in string
 	 *                     list
 	 * @param items,       the items' parameters in the order, id; name; description
@@ -173,7 +173,7 @@ public class RestaurantController {
 
 	/**
 	 * Removes a specific promotion
-	 * 
+	 *
 	 * @param promoId, the promotion id which is used to search for a specific
 	 *                 promotion
 	 * @return true or false based on success/error
@@ -184,7 +184,7 @@ public class RestaurantController {
 
 	/**
 	 * Removes item from either menu or promotion.
-	 * 
+	 *
 	 * @param itemId  Id of item to be removed
 	 * @param isPromo Flag to check if item to remove is from promotions
 	 * @return True if item is removed successfully, otherwise false
@@ -195,7 +195,7 @@ public class RestaurantController {
 
 	/**
 	 * Removes an item from an existing promotion
-	 * 
+	 *
 	 * @param promoId, the promotion id which is used to search for a specific
 	 *                 promotion
 	 * @param itemId,  the item id which is used to search for a specific item in
@@ -216,7 +216,7 @@ public class RestaurantController {
 
 	/**
 	 * Updates the promotion's attributes, id; name; description and price
-	 * 
+	 *
 	 * @param promoParams, the promotion's parameters in the order, id; name;
 	 *                     description and price in string array
 	 * @return true or false based on success/error
@@ -227,7 +227,7 @@ public class RestaurantController {
 
 	/**
 	 * Updates item in either menu
-	 * 
+	 *
 	 * @param itemParams Details of item to be updated
 	 * @param isPromo    Flag to check if item to be updated is from Promotion
 	 */
@@ -237,7 +237,7 @@ public class RestaurantController {
 
 	/**
 	 * Updates the attributes of items in a promotion that have the same itemId
-	 * 
+	 *
 	 * @param itemParams, the item's parameters in the order, id; name; description
 	 *                    and price in string array
 	 * @return true or false based on success/error

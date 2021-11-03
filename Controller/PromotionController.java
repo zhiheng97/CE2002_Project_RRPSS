@@ -11,7 +11,7 @@ public class PromotionController {
 
 	private List<Promotion> promotions = new ArrayList<Promotion>();
 	private FileController fileController = new FileController();
-	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./promotion.txt").toString();
+	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./Data/promotion.txt").toString();
 	private final static String ESCAPE_STRING_1 = "\\";
 	private final static String ESCAPE_STRING_2 = "-1";
 

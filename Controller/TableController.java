@@ -14,8 +14,8 @@ import Models.*;
 public class TableController {
 
 	private List<Table> tables = new ArrayList<Table>();
-	private static final String PATH_TO_TABLES_FILE = Path.of("./table.txt").toString();
-	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./reservation.txt").toString();
+	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
+	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
 	private FileController fileController = new FileController();
 	private static final int EXPIRE_BUFFER_MILLISECOND = 300000;
@@ -67,9 +67,9 @@ public class TableController {
 				updateReservationFile();
 		} while (true);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param resId
 	 */
 	public boolean clearReservation(int resId) {
@@ -79,7 +79,7 @@ public class TableController {
 			return updateReservationFile();
 		return false;
 	}
-	
+
 	public Reservation findReservation(int resId){
 		return tables.stream()
 			.flatMap(t -> t.getReservations().stream())
@@ -89,7 +89,7 @@ public class TableController {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param tableNo
 	 */
 	public Table findTableByNo(int tableNo) {
@@ -128,14 +128,14 @@ public class TableController {
 	public boolean removeFromOrder(int tableNo, Promotion promotion) {
 		return this.findTableByNo(tableNo).removeFromOrder(promotion);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param details
 	 */
 	public boolean reserveTable(String[] details) {
 		Table table = tables.stream()
-			.filter(t ->  ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5])) || 
+			.filter(t ->  ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5])) ||
 				t.getTableNo() == Integer.parseInt(details[1])
 			)
 			.findAny()
