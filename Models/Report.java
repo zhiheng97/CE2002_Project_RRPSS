@@ -21,7 +21,6 @@ public class Report {
 		this.date = calDate;
 	}
 
-	
 	/**
 	 * 
 	 * @param invoice // Invoice to be added to report list
@@ -29,7 +28,7 @@ public class Report {
 	public int addInvoice(Order invoice) {
 
 		if (!invoice.getTimeStamp().split(" ")[0].equals(this.date)) {
-			System.out.println("Date of invoice does match current report date. Error.");
+			System.out.println("Date of invoice does match current report date.");
 			return 0; // Date does not match
 		}
 
@@ -59,7 +58,7 @@ public class Report {
 			promo_map.put(promo_name, count + 1);
 		}
 
-		System.out.println("Invoice successfully added to report");
+		System.out.println("Order of timestamp '" + invoice.getTimeStamp() + "' added successfully");
 		return 1;
 
 	}
