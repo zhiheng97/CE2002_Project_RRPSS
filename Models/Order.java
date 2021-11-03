@@ -50,7 +50,7 @@ public class Order {
 		}
 
 		System.out.println("--------------------------");
-		System.out.println("TOTAL AMOUNT: " + this.getTotal());
+		System.out.printf("TOTAL AMOUNT: %.2f\n", this.getTotal());
 		System.out.println("Date: " + this.timestamp);
 		System.out.println("Created by: " + this.getPlacedBy());
 	}
@@ -88,9 +88,11 @@ public class Order {
 		int id = item.getId();
 		if (!this.item2quantity.containsKey(id)) return false;
 		
-		this.items.remove(items.stream().filter(i -> i.getId() == id).findAny().orElse(null));
 		int curQuantity = this.item2quantity.get(id);
-		if (curQuantity == 1) this.item2quantity.remove(id);
+		if (curQuantity == 1) {
+			this.items.remove(item);
+			this.item2quantity.remove(id);
+		}
 		else this.item2quantity.replace(id, curQuantity, curQuantity - 1);
 		
 		// update price
@@ -103,9 +105,11 @@ public class Order {
 		int id = promotion.getId();
 		if (!this.promo2quantity.containsKey(id)) return false;
 
-		this.promotions.remove(promotions.stream().filter(p -> p.getId() == id).findAny().orElse(null));
 		int curQuantity = this.promo2quantity.get(id);
-		if (curQuantity == 1) this.promo2quantity.remove(id);
+		if (curQuantity == 1) {
+			this.promotions.remove(promotion);
+			this.promo2quantity.remove(id);
+		}
 		else this.promo2quantity.replace(id, curQuantity, curQuantity - 1);
 		
 		// update price

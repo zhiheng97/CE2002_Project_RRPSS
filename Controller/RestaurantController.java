@@ -17,7 +17,7 @@ public class RestaurantController {
 	private FileController fileController;
 
 	private List<Staff> staffList;
-	private static final String PATH_TO_STAFFS_FILE = Path.of("./table.txt").toString();
+	private static final String PATH_TO_STAFFS_FILE = Path.of("./staff.txt").toString();
 
 	/**
 	 * Constructor for RestaurantController
@@ -41,7 +41,7 @@ public class RestaurantController {
 			);
 		}
 	}
-
+	
 	/**
 	 * Adds item to the menu
 	 * @param itemParams Details of the item to be added
@@ -88,28 +88,28 @@ public class RestaurantController {
 	}
 
 	public void addToOrder(int tableNo, int itemId, int quantity) {
-		Promotion promoToAdd = promotionController.findPromotionById(itemId);
-		Item itemToAdd = categoryController.searchForItem(itemId);
+		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
+		Item itemToAdd = this.categoryController.searchForItem(itemId);
 		if(promoToAdd != null) {
-			Promotion copied = promotionController.copyPromotion(itemId);
+			Promotion copied = this.promotionController.copyPromotion(itemId);
 			this.tableController.addToOrder(tableNo, copied, quantity);
 		} else if(itemToAdd != null) {
-			Item copied = categoryController.copyItem(itemId); 
+			Item copied = this.categoryController.copyItem(itemId); 
 			this.tableController.addToOrder(tableNo, copied, quantity);
 		}
 	}
 
 	public void expireReservations(Date date) {
-		tableController.expireReservations(date);
+		this.tableController.expireReservations(date);
 	}
 
 	public boolean removeFromOrder(int tableNo, int itemId) {
-		Promotion promoToAdd = promotionController.findPromotionById(itemId);
-		if(promoToAdd != null) {
-			Promotion copied = promotionController.copyPromotion(itemId);
+		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
+		if(promoToRemove != null) {
+			Promotion copied = this.promotionController.copyPromotion(itemId);
 			return this.tableController.removeFromOrder(tableNo, copied);
 		} else {
-			Item copied = categoryController.copyItem(itemId); 
+			Item copied = this.categoryController.copyItem(itemId); 
 			return this.tableController.removeFromOrder(tableNo, copied);
 		}
 	}

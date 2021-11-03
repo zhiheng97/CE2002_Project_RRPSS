@@ -183,9 +183,9 @@ public class TableController {
 		Map<Integer, Integer> promo2quant = invoice.getOrderPromos();
 
 		System.out.println("Your current order is:");
-		for(Promotion promotion : promotions) System.out.println("[PROMO]" + promotion.getName() + ": " + promo2quant.get(promotion.getId()));
-		for (Item item : items) System.out.println("[ITEM]" + item.getName() + ": " + item2quant.get(item.getId()));
-		System.out.printf("--> The current cost for this order is: %.2f\n\n", invoice.getTotal());
+		for(Promotion promotion : promotions) System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
+		for (Item item : items) System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
+		System.out.printf("> The current price for this order is: %.2f\n\n", invoice.getTotal());
 	}
 
 }

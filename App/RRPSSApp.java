@@ -246,7 +246,6 @@ public class RRPSSApp {
 								System.out.println();
 								break;	
 							case 4:  
-							//
 								restaurantController.printInvoice(tableNo);
 								System.out.println("Returning....\n");
 								System.out.println();
