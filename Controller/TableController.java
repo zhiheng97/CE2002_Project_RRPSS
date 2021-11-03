@@ -29,19 +29,14 @@ public class TableController {
 		this.noOfTables = noOfTables;
 		this.tables = new ArrayList<Table>(noOfTables);
 		List<String> tableParams = fileController.readFile(PATH_TO_TABLES_FILE);
-		for(int i = 0; i < tableParams.size(); i+=3) {
-			tables.add(
-				new Table(
-					Integer.parseInt(tableParams.get(i)),
-					Boolean.parseBoolean(tableParams.get(i + 1)),
-					Integer.parseInt(tableParams.get(i + 2))
-				)
-			);
+		for (int i = 0; i < tableParams.size(); i += 3) {
+			tables.add(new Table(Integer.parseInt(tableParams.get(i)), Boolean.parseBoolean(tableParams.get(i + 1)),
+					Integer.parseInt(tableParams.get(i + 2))));
 		}
 		List<String> reserveParams = fileController.readFile(PATH_TO_RESERVATIONS_FILE);
-		if(reserveParams.size() > 0){
-			for(int i = 0; i < reserveParams.size(); i+=6) {
-				this.reserveTable(reserveParams.subList(i, i+6).toArray(new String[6]));
+		if (reserveParams.size() > 0) {
+			for (int i = 0; i < reserveParams.size(); i += 6) {
+				this.reserveTable(reserveParams.subList(i, i + 6).toArray(new String[6]));
 			}
 		}
 	}
@@ -57,16 +52,14 @@ public class TableController {
 	}
 
 	public void expireReservations(Date date) {
-		do{
-			Reservation expired = tables.stream()
-				.flatMap(t -> t.getReservations().stream())
-				.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER_MILLISECOND) - date.getTime() <= 0)
-				.findFirst()
-				.orElse(null);
-			if(expired == null)
+		do {
+			Reservation expired = tables.stream().flatMap(t -> t.getReservations().stream())
+					.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER_MILLISECOND) - date.getTime() <= 0).findFirst()
+					.orElse(null);
+			if (expired == null)
 				return;
 			Table table = tables.stream().filter(t -> t.getReservations().contains(expired)).findFirst().orElse(null);
-			if(table.getReservations().remove(expired))
+			if (table.getReservations().remove(expired))
 				updateReservationFile();
 		} while (true);
 	}
@@ -78,17 +71,14 @@ public class TableController {
 	public boolean clearReservation(int resId) {
 		Reservation toRemove = findReservation(resId);
 		Table table = tables.stream().filter(t -> t.getReservations().contains(toRemove)).findFirst().orElse(null);
-		if(table.getReservations().remove(toRemove))
+		if (table.getReservations().remove(toRemove))
 			return updateReservationFile();
 		return false;
 	}
 
-	public Reservation findReservation(int resId){
-		return tables.stream()
-			.flatMap(t -> t.getReservations().stream())
-			.filter(r -> r.getId() == resId)
-			.findFirst()
-			.orElse(null);
+	public Reservation findReservation(int resId) {
+		return tables.stream().flatMap(t -> t.getReservations().stream()).filter(r -> r.getId() == resId).findFirst()
+				.orElse(null);
 	}
 
 	/**
@@ -104,8 +94,8 @@ public class TableController {
 	}
 
 	public void printAvailableTables() {
-		for(Table t : tables){
-			if(!t.getIsOccupied()){
+		for (Table t : tables) {
+			if (!t.getIsOccupied()) {
 				System.out.println(t.getTableNo());
 			}
 		}
@@ -115,11 +105,11 @@ public class TableController {
 		Table table = this.findTableByNo(tableNo);
 		table.print();
 		table.setIsOccupied(false);
-		table.setInvoice(new Order(null, null, 0.0));
+		table.setInvoice(new Order(null, null));
 	}
 
-	public void printReservations(int tableNo){
-		for(Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
+	public void printReservations(int tableNo) {
+		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
 			reservation.print();
 		}
 	}
@@ -137,23 +127,20 @@ public class TableController {
 	 * @param details
 	 */
 	public boolean reserveTable(String[] details) {
-		Table table = tables.stream()
-			.filter(t ->  ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5])) ||
-				t.getTableNo() == Integer.parseInt(details[1])
-			)
-			.findAny()
-			.orElse(null);
+		Table table = tables.stream().filter(
+				t -> ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5]))
+						|| t.getTableNo() == Integer.parseInt(details[1]))
+				.findAny().orElse(null);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		Reservation reservation;
 		try {
-			reservation = new Reservation(
-				details[0].hashCode(), //id
-				details[2], //name
-				sdf.parse(details[4]), //date
-				Integer.parseInt(details[3]), //contact
-				Integer.parseInt(details[5]) //pax
+			reservation = new Reservation(details[0].hashCode(), // id
+					details[2], // name
+					sdf.parse(details[4]), // date
+					Integer.parseInt(details[3]), // contact
+					Integer.parseInt(details[5]) // pax
 			);
-			if(table.addReservation(reservation))
+			if (table.addReservation(reservation))
 				return updateReservationFile();
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
@@ -163,18 +150,18 @@ public class TableController {
 		return false;
 	}
 
-	private boolean updateReservationFile(){
+	private boolean updateReservationFile() {
 		List<String> updatedRes = new ArrayList<String>();
-			for(Table t : tables) {
-				for(Reservation r : t.getReservations()){
-					updatedRes.add(String.valueOf(r.getId()));
-					updatedRes.add(String.valueOf(t.getTableNo()));
-					updatedRes.add(r.getCustomer().getName());
-					updatedRes.add(String.valueOf(r.getCustomer().getMobileNo()));
-					updatedRes.add(r.getDate().toString());
-					updatedRes.add(String.valueOf(r.getNoPax()));
-				}
+		for (Table t : tables) {
+			for (Reservation r : t.getReservations()) {
+				updatedRes.add(String.valueOf(r.getId()));
+				updatedRes.add(String.valueOf(t.getTableNo()));
+				updatedRes.add(r.getCustomer().getName());
+				updatedRes.add(String.valueOf(r.getCustomer().getMobileNo()));
+				updatedRes.add(r.getDate().toString());
+				updatedRes.add(String.valueOf(r.getNoPax()));
 			}
+		}
 		return fileController.writeFile(updatedRes.toArray(new String[updatedRes.size()]), PATH_TO_RESERVATIONS_FILE);
 	}
 
@@ -186,8 +173,10 @@ public class TableController {
 		Map<Integer, Integer> promo2quant = invoice.getOrderPromos();
 
 		System.out.println("Your current order is:");
-		for(Promotion promotion : promotions) System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
-		for (Item item : items) System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
+		for (Promotion promotion : promotions)
+			System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
+		for (Item item : items)
+			System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
 		System.out.printf("> The current price for this order is: %.2f\n\n", invoice.getTotal());
 	}
 

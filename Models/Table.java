@@ -22,7 +22,7 @@ public class Table {
 		this.isOccupied = occupied;
 		this.reservations = new ArrayList<Reservation>(15);
 		this.seats = seatAvail;
-		this.invoice = new Order(null, null, 0);
+		this.invoice = new Order(null, null);
 	}
 
 	public void addToOrder(Item item, int quantity) {
@@ -44,10 +44,10 @@ public class Table {
 	/**
 	 * 
 	 * @param reserve
-	 * @return 
+	 * @return
 	 */
 	public boolean addReservation(Reservation reserve) {
-		
+
 		this.reservations.add(reserve);
 		return true;
 	}

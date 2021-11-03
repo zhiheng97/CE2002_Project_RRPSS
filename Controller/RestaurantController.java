@@ -86,7 +86,7 @@ public class RestaurantController {
 	public void createOrder(int tableNo, int staffID, String date) {
 		Staff staff = this.staffList.get(staffID);
 		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
-		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, date, 0.0));
+		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, date));
 	}
 
 	public void addToOrder(int tableNo, int itemId, int quantity) {

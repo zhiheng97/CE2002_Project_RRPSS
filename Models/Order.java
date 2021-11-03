@@ -13,24 +13,21 @@ public class Order {
 	private List<Promotion> promotions;
 	private Map<Integer, Integer> item2quantity;
 	private Map<Integer, Integer> promo2quantity;
-	private double total = 0;
+	private double total = 0.0;
 
 	/**
 	 * Constructor for Order Object
 	 * 
 	 * @param createdBy Indicates staff which created order, Staff Object
 	 * @param dateTime  Indicates time which order is created, String Object
-	 * @param total     Indicates total price of order //TODO: Is total needed for
-	 *                  constructor of order?
 	 */
-	public Order(Staff createdBy, String dateTime, double total) {
+	public Order(Staff createdBy, String dateTime) {
 		this.timestamp = dateTime;
 		this.placedBy = createdBy;
 		this.items = new ArrayList<Item>();
 		this.promotions = new ArrayList<Promotion>();
 		this.item2quantity = new HashMap<Integer, Integer>();
 		this.promo2quantity = new HashMap<Integer, Integer>();
-		this.total = total;
 	}
 
 	/**
