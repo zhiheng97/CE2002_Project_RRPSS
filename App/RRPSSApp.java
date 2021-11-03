@@ -3,7 +3,6 @@ package App;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,7 @@ public class RRPSSApp {
 			case 1:
 				String[] itemParams = new String[5];
 				do {
-					System.out.print("1. Add item to menu\n2. Update item in menu\n"
+					System.out.print("\nMenu's Sub-menu\n1. Add item to menu\n2. Update item in menu\n"
 							+ "3. Remove item from menu\n4. View Menu\n5. Return\nEnter your choice: ");
 					option = sc.nextInt();
 					switch (option) {
@@ -95,7 +94,6 @@ public class RRPSSApp {
 
 			/////////////////// PROMOTIONS ///////////////////
 			case 2:
-				// TODO - Write Options for Promotions
 				List<String> promoParams = new ArrayList<String>();
 				List<String> itemsParams = new ArrayList<String>();
 				do {

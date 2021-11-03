@@ -24,7 +24,6 @@ public class PromotionController {
 		List<String> tokens = fileController.readFile(PATH_TO_PROMOTIONS_FILE);
 		List<String> promoParams = new ArrayList<String>();
 		List<String> itemParams = new ArrayList<String>();
-		String prevCat = "", curCat = "";
 		int i = 0;
 		do{
 			promoParams.add(tokens.get(i)); 		//id
