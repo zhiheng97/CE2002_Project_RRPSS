@@ -1,4 +1,5 @@
-import java.util.*;
+package Tests;
+
 import Controller.PromotionController;
 import Models.Promotion;
 
