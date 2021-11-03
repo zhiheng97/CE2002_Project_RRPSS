@@ -26,11 +26,18 @@ public class ReportController {
 	}
 
 	/**
-	 * @param invoice // Order to be added to update report
+	 * Adds an order to the relevant report
+	 * 
+	 * @param invoice // Order to be added to update Report
 	 */
 	public void addInvoice(Order invoice) {
+		// TODO: Not sure if we are considering cases where completed orders do not come
+		// sequentially for date?
+		// Solution: Might want to consider creating a linkedhashmap with date as key?
+		// Is it relevant though? Will a restaurant be taking orders around midnight?
+
 		// Checks whether order matches the current date of report
-		if (currentReport.addInvoice(invoice) == 0) {
+		if (currentReport.addInvoice(invoice)) {
 			System.out.println("Order of timestamp " + invoice.getTimeStamp() + "added successfully");
 		} else {
 			String newDate = invoice.getTimeStamp().split(" ")[0]; // Get new date from report
@@ -44,10 +51,15 @@ public class ReportController {
 	}
 
 	/**
-	 *
-	 * @param byMonth
+	 * Prints report (monthly or daily) based on byMonth param, consists of start
+	 * date , end date, Total price, Quantity of each item / Promo
+	 * 
+	 * @param byMonth Indicates whether report to be generated is latest month or
+	 *                latest day
 	 */
 	public void print(boolean byMonth) {
+		// TODO: Consider GST as output field? Just add 7% tax to total price?
+
 		double salesRevenue = 0;
 
 		if (reports.size() == 0) {

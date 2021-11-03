@@ -22,14 +22,16 @@ public class Report {
 	}
 
 	/**
+	 * Adds Invoice to report list
 	 * 
 	 * @param invoice // Invoice to be added to report list
+	 * @return True if invoice added, False if otherwise
 	 */
-	public int addInvoice(Order invoice) {
+	public boolean addInvoice(Order invoice) {
 
 		if (!invoice.getTimeStamp().split(" ")[0].equals(this.date)) {
 			System.out.println("Date of invoice does match current report date.");
-			return 0; // Date does not match
+			return false; // Date does not match
 		}
 
 		invoices.add(invoice);
@@ -59,12 +61,14 @@ public class Report {
 		}
 
 		System.out.println("Order of timestamp '" + invoice.getTimeStamp() + "' added successfully");
-		return 1;
+		return true;
 
 	}
 
-	// Prints daily information regarding, individual sales item (ala carte/promo) &
-	// total revenue
+	/**
+	 * Prints daily information regarding, individual sales item (ala carte/promo) &
+	 * total revenue
+	 */
 	public void print() {
 		System.out.printf("\nDate: %s\nDaily Sales revenue $%.2f\n", date, salesRevenue);
 		for (Map.Entry<String, Integer> e : item_map.entrySet())
@@ -74,22 +78,47 @@ public class Report {
 			System.out.println("Promo: " + e.getKey() + " Quantity: " + e.getValue());
 	}
 
+	/**
+	 * Orders (order list) getter
+	 * 
+	 * @return list of all orders in this report
+	 */
 	public List<Order> getInvoices() {
 		return this.invoices;
 	}
 
+	/**
+	 * Item Map (LinkedHashMap) getter (Consists of item name and quantity)
+	 * 
+	 * @return LinkedHashMap of (item_name,quantity)
+	 */
 	public LinkedHashMap<String, Integer> getItemMap() {
 		return this.item_map;
 	}
 
+	/**
+	 * Promo Map (LinkedHashMap) getter (Consists of promo name and quantity)
+	 * 
+	 * @return LinkedHashMap of (promo_name,quantity)
+	 */
 	public LinkedHashMap<String, Integer> getPromoMap() {
 		return this.promo_map;
 	}
 
+	/**
+	 * Date getter
+	 * 
+	 * @return Date of current report as a string
+	 */
 	public String getDate() {
 		return this.date;
 	}
 
+	/**
+	 * Sales Revenue getter
+	 * 
+	 * @return the sales revenue of this report
+	 */
 	public double getSalesRevenue() {
 		return this.salesRevenue;
 	}
