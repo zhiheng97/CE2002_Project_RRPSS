@@ -14,6 +14,7 @@ public class Report {
 	private LinkedHashMap<String, Integer> promo_map = new LinkedHashMap<String, Integer>();
 
 	/**
+	 * Constructor for Report Object
 	 * 
 	 * @param calDate // Date of report
 	 */
@@ -88,19 +89,21 @@ public class Report {
 	}
 
 	/**
-	 * Item Map (LinkedHashMap) getter (Consists of item name and quantity)
+	 * Item Map (LinkedHashMap) getter (Key: item name, item quantity)
 	 * 
 	 * @return LinkedHashMap of (item_name,quantity)
 	 */
+	// TODO: Not sure if want to change to <Int,Int> map with (item_id,quantity)
 	public LinkedHashMap<String, Integer> getItemMap() {
 		return this.item_map;
 	}
 
 	/**
-	 * Promo Map (LinkedHashMap) getter (Consists of promo name and quantity)
+	 * Promo Map (LinkedHashMap) getter (Key: promo name, Value: quantity of promo)
 	 * 
 	 * @return LinkedHashMap of (promo_name,quantity)
 	 */
+	// TODO: Not sure if want to change to <Int,Int> map with (promo_id,quantity)
 	public LinkedHashMap<String, Integer> getPromoMap() {
 		return this.promo_map;
 	}
