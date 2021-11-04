@@ -113,7 +113,7 @@ public class TableController {
 			System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
 		for (Item item : items)
 			System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
-		System.out.printf("> The current price for this order is: %.2f\n\n", invoice.getTotal());
+		System.out.printf("-> The current price for this order is: %.2f\n\n", invoice.getTotal());
 	}
 
 	public void printInvoice(int tableNo) {
