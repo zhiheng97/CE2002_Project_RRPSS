@@ -51,7 +51,9 @@ public class Order {
 		}
 
 		System.out.println("--------------------------");
-		System.out.printf("TOTAL AMOUNT: %.2f\n", this.getTotal());
+		System.out.printf("SUB-TOTAL: $%.2f\n", this.getTotal());
+		System.out.printf("GST: $%.2f\n", this.getTotal() * 0.07);
+		System.out.printf("GRAND TOTAL: $%.2f\n", this.getTotal() * 1.07);
 		System.out.println("Date: " + this.timestamp);
 		System.out.println("Created by: " + this.getPlacedBy());
 	}
