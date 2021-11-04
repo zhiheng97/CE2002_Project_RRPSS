@@ -147,9 +147,18 @@ public class RestaurantController {
 	////////////////////// ORDER FUNCTIONS ///////////////////
 
 	public void createOrder(int tableNo, int staffID, String date) {
-		Staff staff = this.staffList.get(staffID);
+		int i = 0;
+		for(; i < staffList.size(); i++){
+			if(staffList.get(i).getId() == staffID) break;
+		}
+		if(i == staffList.size()){
+			System.out.println("There is no staff with the ID: " + staffID);
+			return;
+		}
+		Staff staff = this.staffList.get(i);
 		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
 		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, date));
+		System.out.printf("The new order is created for table %d. Enjoy!\n", tableNo);
 	}
 
 	public void addToOrder(int tableNo, int itemId, int quantity) {

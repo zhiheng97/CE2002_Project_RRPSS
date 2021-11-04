@@ -320,10 +320,10 @@ public class RRPSSApp {
 						break;
 					case 2:
 						int noPax; // custId;
-						System.out.print("Enter [y] if this customer made a reservation, [N] otherwise: ");
+						System.out.print("Enter [Y] if this customer made a reservation, [N] otherwise: ");
 						String isReserved = reader.readLine();
 
-						if (isReserved.toLowerCase().equals("y")) {
+						if (isReserved.toLowerCase().equals("y") || isReserved.toLowerCase().equals("Y")) {
 							// TODO later
 							// Enter the reservation id ....
 							// noPax = ....
@@ -355,7 +355,6 @@ public class RRPSSApp {
 						Date now = new Date();
 						sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 						restaurantController.createOrder(tableNo, staffID, sdf.format(now));
-						System.out.printf("The new order is created for table %d. Enjoy!\n", tableNo);
 						break;
 					default:
 						// not sure for now
