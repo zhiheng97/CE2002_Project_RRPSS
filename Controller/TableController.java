@@ -94,9 +94,9 @@ public class TableController {
 	}
 
 	public void printAvailableTables() {
-		for (Table t : tables) {
-			if (!t.getIsOccupied()) {
-				System.out.println(t.getTableNo());
+		for (Table table : tables) {
+			if (!table.getIsOccupied()) {
+				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
 			}
 		}
 	}

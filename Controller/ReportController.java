@@ -26,7 +26,7 @@ public class ReportController {
 	 */
 	public void addInvoice(Order invoice) {
 		Report currentReport;
-		String orderDate = invoice.getTimeStamp().split(" ")[0]; // Get new date from order
+		String orderDate = invoice.getTimeStamp(); //.split(" ")[0]; // Get new date from order
 		int report_size = reports.size();
 
 		// Case 1: If no reports we create new report and add directly
