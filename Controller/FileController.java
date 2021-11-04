@@ -32,7 +32,7 @@ public class FileController {
             csvReader.close();
             return list;
         } catch (IOException e) {
-            System.out.println("ERROR: Unable to access file");
+            System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
             e.printStackTrace();
         }
         return null;
@@ -55,7 +55,7 @@ public class FileController {
             fw.close();
             res = true;
         }catch (IOException e) {
-            System.out.println("ERROR: Unable to write file");
+            System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
             e.printStackTrace();
         }
         return res;

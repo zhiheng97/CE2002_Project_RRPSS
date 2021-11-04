@@ -88,7 +88,7 @@ public class PromotionController {
 			}
 		}
 		catch(Exception error){
-			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
+			System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
 			System.out.println(error);
 			return false;
 		}

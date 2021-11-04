@@ -186,7 +186,9 @@ public class CategoryController {
 				}
 			}
 		} catch(NumberFormatException e){
-			e.printStackTrace();
+			System.out.println("Error Occured!\nYou've entered a parameter value that cannot be parsed as a number");
+		} catch (Exception e) {
+			System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
 		}
 		return false;
 	}
