@@ -15,18 +15,20 @@ public class RRPSSApp {
 	
 	private static final String ESCAPE_STRING = "-9"; // use an integer, if we use a string, we cannot use try catch
 	private static final int ESCAPE_STRING_2 = -9; //Used in menu options to return to either previous menu or exit
-	private static final String DATE_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	private static final String DATETIME_FORMAT_PATTERN_2 = "dd-MMM-yy HH:mm";
 	public static void main(String[] args) throws IOException {
 
 		RestaurantController restaurantController = new RestaurantController();
 		Scanner sc = new Scanner(System.in);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		SimpleDateFormat sdf;
 		String option = "";
 		do {
 			System.out.println("Restaurant Reservation and Point of Sale System");
 			System.out.print("1. Menu\n2. Promotion\n3. Order\n4. Reservation\n"
 					+ "5. Print sales report\n-9. Exit\nEnter your choice: ");
-			option = sc.nextLine();
+			option = reader.readLine();
 			switch (option) {
 			/////////////////// MENU ///////////////////
 			case "1":
@@ -34,14 +36,14 @@ public class RRPSSApp {
 				do {
 					System.out.print("\nMenu's Sub-menu\n1. Add item to menu\n2. Update item in menu\n"
 							+ "3. Remove item from menu\n4. View Menu\n-9. Return\nEnter your choice: ");
-					option = sc.nextLine();
+					option = reader.readLine();
 					switch (option) {
 					case "1":
 						restaurantController.printMenu();
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the category id to add to [0 - Mains, 1 - Sides, 2 - Drinks]: ");
-							option = sc.nextLine();
+							option = reader.readLine();
 							if(option.equals(ESCAPE_STRING)) break;
 							itemParams[4] = String.valueOf(option);
 							System.out.print("Enter the item id: ");
@@ -69,7 +71,7 @@ public class RRPSSApp {
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the item id: ");
-							option = sc.nextLine();
+							option = reader.readLine();
 							if(option.equals(ESCAPE_STRING)) break;
 							itemParams[4] = String.valueOf(option);
 							System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
@@ -135,7 +137,7 @@ public class RRPSSApp {
 					System.out.println("\nPromotions Sub-menu");
 					System.out.println("1. Add a new promotion\n2. Update promotion\n3. Remove promotion\n4. Add item to promotion");
 					System.out.print("5. Update item in promotion\n6. Remove item from promotion \n7. View promotions\n-9. Return\nEnter your choice: ");
-					option = sc.nextLine();
+					option = reader.readLine();
 					switch (option) {
 					case "1":
 						restaurantController.printPromotion();
@@ -200,7 +202,7 @@ public class RRPSSApp {
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to remove: ");
-							option = sc.nextLine();
+							option = reader.readLine();
 						}
 						catch(Exception e){
 							System.out.println("Invalid input, returning to previous menu.");
@@ -216,7 +218,7 @@ public class RRPSSApp {
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to add an item to: ");
-							option = sc.nextLine();
+							option = reader.readLine();
 							if(option.equals(ESCAPE_STRING)) break;
 						}
 						catch(Exception e){
@@ -240,7 +242,7 @@ public class RRPSSApp {
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to update the item in: ");
-							option = sc.nextLine();
+							option = reader.readLine();
 							if(option.equals(ESCAPE_STRING)) break;
 						}
 						catch(Exception e){
@@ -264,7 +266,7 @@ public class RRPSSApp {
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the promotion id that you wish to remove the item from: ");
-							option = sc.nextLine();
+							option = reader.readLine();
 							if(option.equals(ESCAPE_STRING)) break;
 							System.out.print("Enter the item id that you wish to remove: ");
 							restaurantController.removeItem(Integer.parseInt(option), sc.nextInt());
@@ -299,8 +301,8 @@ public class RRPSSApp {
 				int tableNo = sc.nextInt();
 				System.out.print("Enter your staff ID: ");
 				int staffID = sc.nextInt();
-				SimpleDateFormat sdf = new SimpleDateFormat(DATE_PATTERN);
 				Date now = new Date();
+				sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 				restaurantController.createOrder(tableNo, staffID, sdf.format(now));
 				do {
 					System.out.println();
@@ -310,7 +312,7 @@ public class RRPSSApp {
 					System.out.println("4. Checkout and/or return");
 					System.out.println("-9. Return to main menu");
 					System.out.print("Enter your choice: ");
-					option = sc.nextLine();
+					option = reader.readLine();
 					System.out.println();
 
 					switch (option) {
@@ -355,7 +357,7 @@ public class RRPSSApp {
 						System.out.println();
 						break;
 					}
-				} while (!option.equals("4") && !option.equals(ESCAPE_STRING_2));
+				} while (!option.equals("4") && !option.equals(ESCAPE_STRING));
 				break;
 			/////////////////// RESERVATIONS ///////////////////
 			case "4":
@@ -368,12 +370,12 @@ public class RRPSSApp {
 					System.out.println("4. View available tables");
 					System.out.println("-9. Return");
 					System.out.print("Enter your choice: ");
-					option = sc.nextLine();
+					option = reader.readLine();
 					System.out.println();
 
 					switch (option) {
 					case "1":
-						String[] resParams = new String[8];
+						String[] resParams = new String[6];
 						try{
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the customer id: ");
@@ -384,12 +386,14 @@ public class RRPSSApp {
 							resParams[2] = reader.readLine();
 							System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
 							resParams[4] = reader.readLine();
-							System.out.print("Enter the time of reservation: ");
-							resParams[5] = reader.readLine();
+							System.out.print("Enter the time of reservation [HH:mm]: ");
+							String time = resParams[4].concat(" " + reader.readLine());
+							sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
+							resParams[4] = sdf.parse(time).toString();
 							System.out.print("Enter the contact number: ");
 							resParams[3] = String.valueOf(sc.nextInt());
 							System.out.print("Enter the number of guest: ");
-							resParams[6] = String.valueOf(sc.nextInt());
+							resParams[5] = String.valueOf(sc.nextInt());
 						}
 						catch(Exception e){
 							System.out.println("Invalid input, returning to previous menu.");
@@ -446,7 +450,7 @@ public class RRPSSApp {
 					System.out.println("2. Print Daily Report");
 					System.out.println("-9. Return");
 					System.out.print("Enter your choice: ");
-					option = sc.nextLine();
+					option = reader.readLine();
 					System.out.println();
 					switch (option) {
 					case "1":

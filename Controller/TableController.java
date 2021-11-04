@@ -139,14 +139,19 @@ public class TableController {
 	 * @param details
 	 */
 	public boolean reserveTable(String[] details) {
-		Table table = tables.stream().filter(
-				t -> ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5]))
-						|| t.getTableNo() == Integer.parseInt(details[1]))
+		Table table = null;
+		if(details[1] != null)
+			table = tables.stream()
+				.filter(t -> (t.getTableNo() == Integer.parseInt(details[1])))
+				.findAny().orElse(null);
+		else
+			table = tables.stream()
+				.filter(t -> ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5])))
 				.findAny().orElse(null);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		Reservation reservation;
 		try {
-			reservation = new Reservation(details[0].hashCode(), // id
+			reservation = new Reservation(Integer.parseInt(details[0]), // id
 					details[2], // name
 					sdf.parse(details[4]), // date
 					Integer.parseInt(details[3]), // contact
