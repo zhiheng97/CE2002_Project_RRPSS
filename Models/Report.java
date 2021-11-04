@@ -41,27 +41,33 @@ public class Report {
 		this.salesRevenue += invoice.getTotal(); // Update sales revenue
 
 		List<Item> invoice_items = invoice.getItems();
+		Map<Integer, Integer> item_quantity_map = invoice.getOrderItems();
 		int invoice_size = invoice_items.size();
 		String item_name;
+		int item_id;
 		int count;
 
 		// Increments item in array
 		for (int i = 0; i < invoice_size; i++) {
 			item_name = invoice_items.get(i).getName();
+			item_id = invoice_items.get(i).getId();
 			System.out.println("Item added: " + item_name);
 			count = item_map.containsKey(item_name) ? item_map.get(item_name) : 0;
-			item_map.put(item_name, count + 1);
+			item_map.put(item_name, count + item_quantity_map.get(item_id));
 		}
 
 		List<Promotion> promo_items = invoice.getPromo();
+		Map<Integer, Integer> promo_quantity_map = invoice.getOrderPromos();
 		int promo_size = promo_items.size();
+		int promo_id;
 		String promo_name;
 
 		// Increments promo in array
 		for (int i = 0; i < promo_size; i++) {
 			promo_name = promo_items.get(i).getName();
+			promo_id = promo_items.get(i).getId();
 			count = promo_map.containsKey(promo_name) ? promo_map.get(promo_name) : 0;
-			promo_map.put(promo_name, count + 1);
+			promo_map.put(promo_name, count + promo_quantity_map.get(promo_id));
 		}
 
 		System.out.println("\nOrder of timestamp '" + invoice.getTimeStamp() + "' added successfully");
@@ -76,11 +82,17 @@ public class Report {
 	 */
 	public void print() {
 		System.out.printf("\nDate: %s\nDaily Sales revenue $%.2f\n", date, salesRevenue);
-		for (Map.Entry<String, Integer> e : item_map.entrySet())
-			System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
 
+		System.out.println("--------------------------");
+		System.out.println("Items:");
+		for (Map.Entry<String, Integer> e : item_map.entrySet())
+			System.out.println(e.getValue() + " x " + e.getKey());
+		// System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
+
+		System.out.println("--------------------------");
+		System.out.println("Promotions:");
 		for (Map.Entry<String, Integer> e : promo_map.entrySet())
-			System.out.println("Promo: " + e.getKey() + " Quantity: " + e.getValue());
+			System.out.println(e.getValue() + " x " + e.getKey());
 	}
 
 	/**
