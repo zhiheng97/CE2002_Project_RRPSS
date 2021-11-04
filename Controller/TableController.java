@@ -16,14 +16,13 @@ import Models.Table;
 
 public class TableController {
 
+	private int noOfTables;
 	private List<Table> tables = new ArrayList<Table>();
 	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
 	private FileController fileController = new FileController();
 	private static final int EXPIRE_BUFFER_MILLISECOND = 300000;
-
-	private int noOfTables;
 
 	public TableController(int noOfTables) {
 		this.noOfTables = noOfTables;
@@ -41,6 +40,29 @@ public class TableController {
 		}
 	}
 
+////////////////////// BASIC METHODS ///////////////////
+
+	public Table findTableByNo(int tableNo) {
+		return tables.stream().filter(t -> t.getTableNo() == tableNo).findFirst().orElse(null);
+	}
+
+	public int getNoOfTables() {
+		return this.noOfTables;
+	}
+
+	public void printAvailableTables() {
+		int num_occupied = 0;
+		for (Table table : tables) {
+			if (!table.getIsOccupied()) {
+				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
+			} else num_occupied++;
+		}
+		if (num_occupied == this.noOfTables) 
+			System.out.println("All the tables are occupied!");
+	}
+
+////////////////////// ORDER FUNCTIONS ///////////////////
+
 	public void addToOrder(int tableNo, Item item, int quantity) {
 		this.findTableByNo(tableNo).setIsOccupied(true);
 		this.findTableByNo(tableNo).addToOrder(item, quantity);
@@ -51,54 +73,27 @@ public class TableController {
 		this.findTableByNo(tableNo).addToOrder(promotion, quantity);
 	}
 
-	public void expireReservations(Date date) {
-		do {
-			Reservation expired = tables.stream().flatMap(t -> t.getReservations().stream())
-					.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER_MILLISECOND) - date.getTime() <= 0).findFirst()
-					.orElse(null);
-			if (expired == null)
-				return;
-			Table table = tables.stream().filter(t -> t.getReservations().contains(expired)).findFirst().orElse(null);
-			if (table.getReservations().remove(expired))
-				updateReservationFile();
-		} while (true);
+	public boolean removeFromOrder(int tableNo, Item item) {
+		return this.findTableByNo(tableNo).removeFromOrder(item);
 	}
 
-	/**
-	 *
-	 * @param resId
-	 */
-	public boolean clearReservation(int resId) {
-		Reservation toRemove = findReservation(resId);
-		Table table = tables.stream().filter(t -> t.getReservations().contains(toRemove)).findFirst().orElse(null);
-		if (table.removeReservation(toRemove))
-			return updateReservationFile();
-		return false;
+	public boolean removeFromOrder(int tableNo, Promotion promotion) {
+		return this.findTableByNo(tableNo).removeFromOrder(promotion);
 	}
 
-	public Reservation findReservation(int resId) {
-		return tables.stream().flatMap(t -> t.getReservations().stream()).filter(r -> r.getId() == resId).findFirst()
-				.orElse(null);
-	}
+	public void viewOrder(int tableNo) {
+		Order invoice = this.findTableByNo(tableNo).getInvoice();
+		List<Item> items = invoice.getItems();
+		List<Promotion> promotions = invoice.getPromo();
+		Map<Integer, Integer> item2quant = invoice.getOrderItems();
+		Map<Integer, Integer> promo2quant = invoice.getOrderPromos();
 
-	/**
-	 *
-	 * @param tableNo
-	 */
-	public Table findTableByNo(int tableNo) {
-		return tables.stream().filter(t -> t.getTableNo() == tableNo).findFirst().orElse(null);
-	}
-
-	public int getNoOfTables() {
-		return this.noOfTables;
-	}
-
-	public void printAvailableTables() {
-		for (Table table : tables) {
-			if (!table.getIsOccupied()) {
-				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
-			}
-		}
+		System.out.println("Your current order is:");
+		for (Promotion promotion : promotions)
+			System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
+		for (Item item : items)
+			System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
+		System.out.printf("> The current price for this order is: %.2f\n\n", invoice.getTotal());
 	}
 
 	public void printInvoice(int tableNo) {
@@ -108,36 +103,8 @@ public class TableController {
 		table.setInvoice(new Order(null, null));
 	}
 
-	public void printReservations(int tableNo) {
-		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
-			reservation.print();
-		}
-	}
+////////////////////// RESERVATION FUNCTIONS ///////////////////
 
-	public void printReservations() {
-		for(Table table : tables){
-			if(table.noOfReseravtions == 0)
-				System.out.println("No reservations found for table " + table.getTableNo());
-			else
-				for (Reservation reservation : table.getReservations()){
-					reservation.print();
-				}
-		}
-		System.out.println();
-	}
-
-	public boolean removeFromOrder(int tableNo, Item item) {
-		return this.findTableByNo(tableNo).removeFromOrder(item);
-	}
-
-	public boolean removeFromOrder(int tableNo, Promotion promotion) {
-		return this.findTableByNo(tableNo).removeFromOrder(promotion);
-	}
-
-	/**
-	 *
-	 * @param details
-	 */
 	public boolean reserveTable(String[] details) {
 		Table table = null;
 		if(details[1] != null)
@@ -181,20 +148,53 @@ public class TableController {
 		}
 		return fileController.writeFile(updatedRes.toArray(new String[updatedRes.size()]), PATH_TO_RESERVATIONS_FILE);
 	}
+	
+	public void expireReservations(Date date) {
+		do {
+			Reservation expired = tables.stream().flatMap(t -> t.getReservations().stream())
+					.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER_MILLISECOND) - date.getTime() <= 0).findFirst()
+					.orElse(null);
+			if (expired == null)
+				return;
+			Table table = tables.stream().filter(t -> t.getReservations().contains(expired)).findFirst().orElse(null);
+			if (table.getReservations().remove(expired))
+				updateReservationFile();
+		} while (true);
+	}
 
-	public void viewOrder(int tableNo) {
-		Order invoice = this.findTableByNo(tableNo).getInvoice();
-		List<Item> items = invoice.getItems();
-		List<Promotion> promotions = invoice.getPromo();
-		Map<Integer, Integer> item2quant = invoice.getOrderItems();
-		Map<Integer, Integer> promo2quant = invoice.getOrderPromos();
+	/**
+	 *
+	 * @param resId
+	 */
+	public boolean clearReservation(int resId) {
+		Reservation toRemove = findReservation(resId);
+		Table table = tables.stream().filter(t -> t.getReservations().contains(toRemove)).findFirst().orElse(null);
+		if (table.removeReservation(toRemove))
+			return updateReservationFile();
+		return false;
+	}
 
-		System.out.println("Your current order is:");
-		for (Promotion promotion : promotions)
-			System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
-		for (Item item : items)
-			System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
-		System.out.printf("> The current price for this order is: %.2f\n\n", invoice.getTotal());
+	public Reservation findReservation(int resId) {
+		return tables.stream().flatMap(t -> t.getReservations().stream()).filter(r -> r.getId() == resId).findFirst()
+				.orElse(null);
+	}
+
+	public void printReservations(int tableNo) {
+		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
+			reservation.print();
+		}
+	}
+
+	public void printReservations() {
+		for(Table table : tables){
+			if(table.noOfReseravtions == 0)
+				System.out.println("No reservations found for table " + table.getTableNo());
+			else
+				for (Reservation reservation : table.getReservations()){
+					reservation.print();
+				}
+		}
+		System.out.println();
 	}
 
 }

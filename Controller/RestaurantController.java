@@ -21,9 +21,6 @@ public class RestaurantController {
 	private List<Staff> staffList;
 	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
 
-	/**
-	 * Constructor for RestaurantController
-	 */
 	public RestaurantController() {
 		this.tableController = new TableController(12);
 		this.reportController = new ReportController();
@@ -37,6 +34,14 @@ public class RestaurantController {
 			this.staffList.add(
 					new Staff(Integer.parseInt(staffParams.get(i)), staffParams.get(i + 1), staffParams.get(i + 2)));
 		}
+	}
+	
+////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
+	/**
+	 * Prints the menu
+	 */
+	public void printMenu() {
+		categoryController.print();
 	}
 
 	/**
@@ -63,129 +68,24 @@ public class RestaurantController {
 	}
 
 	/**
-	 * Adds a new promotion
+	 * Updates item in either menu
 	 *
-	 * @param promoParams, the promotion id; name; description and price in string
-	 *                     list
-	 * @param items,       the items' parameters in the order, id; name; description
-	 *                     and price in string list
+	 * @param itemParams Details of item to be updated
+	 * @param isPromo    Flag to check if item to be updated is from Promotion
+	 */
+	public boolean updateItem(String[] itemParams) {
+		return categoryController.updateItem(itemParams);
+	}
+
+	/**
+	 * Updates the attributes of items in a promotion that have the same itemId
+	 *
+	 * @param itemParams, the item's parameters in the order, id; name; description
+	 *                    and price in string array
 	 * @return true or false based on success/error
 	 */
-	public boolean addPromotion(List<String> promoParams, List<String> items) {
-		return promotionController.addPromotion(promoParams, items);
-	}
-
-	/**
-	 *
-	 * @param tableNo
-	 * @param quantity
-	 * @param itemId
-	 * @param isPromo
-	 */
-
-	public void createOrder(int tableNo, int staffID, String date) {
-		Staff staff = this.staffList.get(staffID);
-		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
-		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, date));
-	}
-
-	public void addToOrder(int tableNo, int itemId, int quantity) {
-		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
-		Item itemToAdd = this.categoryController.searchForItem(itemId);
-		if (promoToAdd != null) {
-			Promotion copied = this.promotionController.copyPromotion(itemId);
-			this.tableController.addToOrder(tableNo, copied, quantity);
-		} else if (itemToAdd != null) {
-			Item copied = this.categoryController.copyItem(itemId);
-			this.tableController.addToOrder(tableNo, copied, quantity);
-		}
-	}
-
-	public void expireReservations(Date date) {
-		this.tableController.expireReservations(date);
-	}
-
-	public boolean removeFromOrder(int tableNo, int itemId) {
-		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
-		if (promoToRemove != null) {
-			Promotion copied = this.promotionController.copyPromotion(itemId);
-			return this.tableController.removeFromOrder(tableNo, copied);
-		} else {
-			Item copied = this.categoryController.copyItem(itemId);
-			return this.tableController.removeFromOrder(tableNo, copied);
-		}
-	}
-
-	public void viewOrder(int tableNo) {
-		this.tableController.viewOrder(tableNo);
-	}
-
-	/**
-	 *
-	 * @param tableNo
-	 * @param details
-	 */
-	public boolean clearReservation(int tableNo) {
-		return tableController.clearReservation(tableNo);
-	}
-
-	/**
-	 *
-	 */
-	public void printAvailableTables() {
-		tableController.printAvailableTables();
-	}
-
-	/**
-	 *
-	 * @param tableNo
-	 */
-	public void printInvoice(int tableNo) {
-		this.tableController.printInvoice(tableNo);
-
-		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
-		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
-	}
-
-	/**
-	 * Prints the menu
-	 */
-	public void printMenu() {
-		categoryController.print();
-	}
-
-	/**
-	 * prints the Promotions
-	 */
-	public void printPromotion() {
-		promotionController.print();
-	}
-
-	public void printReservations(int tableNo) {
-		tableController.printReservations(tableNo);
-	}
-
-	public void printReservations() {
-		tableController.printReservations();
-	}
-
-	/**
-	 *
-	 * @param byMonth
-	 */
-	public void printSalesReport(boolean byMonth) {
-		reportController.print(byMonth);
-	}
-
-	/**
-	 * Removes a specific promotion
-	 *
-	 * @param promoId, the promotion id which is used to search for a specific
-	 *                 promotion
-	 * @return true or false based on success/error
-	 */
-	public boolean removePromotion(int promoId) {
-		return promotionController.removePromotion(promoId);
+	public boolean updateItem(int promoId, List<String> itemParams) {
+		return promotionController.updateItem(promoId, itemParams);
 	}
 
 	/**
@@ -213,11 +113,16 @@ public class RestaurantController {
 	}
 
 	/**
+	 * Adds a new promotion
 	 *
-	 * @param details
+	 * @param promoParams, the promotion id; name; description and price in string
+	 *                     list
+	 * @param items,       the items' parameters in the order, id; name; description
+	 *                     and price in string list
+	 * @return true or false based on success/error
 	 */
-	public boolean reserveTable(String[] details) {
-		return tableController.reserveTable(details);
+	public boolean addPromotion(List<String> promoParams, List<String> items) {
+		return promotionController.addPromotion(promoParams, items);
 	}
 
 	/**
@@ -231,25 +136,106 @@ public class RestaurantController {
 		return promotionController.updatePromotion(promoParams);
 	}
 
-	/**
-	 * Updates item in either menu
-	 *
-	 * @param itemParams Details of item to be updated
-	 * @param isPromo    Flag to check if item to be updated is from Promotion
-	 */
-	public boolean updateItem(String[] itemParams) {
-		return categoryController.updateItem(itemParams);
+	public boolean removePromotion(int promoId) {
+		return promotionController.removePromotion(promoId);
+	}
+
+	public void printPromotion() {
+		promotionController.print();
+	}
+	
+////////////////////// ORDER FUNCTIONS ///////////////////
+
+	public void createOrder(int tableNo, int staffID, String date) {
+		Staff staff = this.staffList.get(staffID);
+		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
+		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, date));
+	}
+
+	public void addToOrder(int tableNo, int itemId, int quantity) {
+		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
+		Item itemToAdd = this.categoryController.searchForItem(itemId);
+		if (promoToAdd != null) {
+			Promotion copied = this.promotionController.copyPromotion(itemId);
+			this.tableController.addToOrder(tableNo, copied, quantity);
+		} else if (itemToAdd != null) {
+			Item copied = this.categoryController.copyItem(itemId);
+			this.tableController.addToOrder(tableNo, copied, quantity);
+		}
+	}
+
+	public boolean removeFromOrder(int tableNo, int itemId) {
+		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
+		if (promoToRemove != null) {
+			Promotion copied = this.promotionController.copyPromotion(itemId);
+			return this.tableController.removeFromOrder(tableNo, copied);
+		} else {
+			Item copied = this.categoryController.copyItem(itemId);
+			return this.tableController.removeFromOrder(tableNo, copied);
+		}
+	}
+
+	public void printInvoice(int tableNo) {
+		this.tableController.printInvoice(tableNo);
+
+		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
+		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
+	}
+
+	public void viewOrder(int tableNo) {
+		this.tableController.viewOrder(tableNo);
+	}
+
+////////////////////// RESERVATION FUNCTIONS ///////////////////
+
+	public boolean reserveTable(String[] details) {
+		return tableController.reserveTable(details);
+	}
+
+	public void expireReservations(Date date) {
+		this.tableController.expireReservations(date);
+	}
+
+	public void printReservations(int tableNo) {
+		tableController.printReservations(tableNo);
+	}
+
+	public void printReservations() {
+		tableController.printReservations();
 	}
 
 	/**
-	 * Updates the attributes of items in a promotion that have the same itemId
 	 *
-	 * @param itemParams, the item's parameters in the order, id; name; description
-	 *                    and price in string array
+	 * @param tableNo
+	 * @param details
+	 */
+	public boolean clearReservation(int tableNo) {
+		return tableController.clearReservation(tableNo);
+	}
+
+	/**
+	 *
+	 */
+	public void printAvailableTables() {
+		tableController.printAvailableTables();
+	}
+
+////////////////////// REPORT FUNCTIONS ///////////////////
+
+	/**
+	 *
+	 * @param byMonth
+	 */
+	public void printSalesReport(boolean byMonth) {
+		reportController.print(byMonth);
+	}
+
+	/**
+	 * Removes a specific promotion
+	 *
+	 * @param promoId, the promotion id which is used to search for a specific
+	 *                 promotion
 	 * @return true or false based on success/error
 	 */
-	public boolean updateItem(int promoId, List<String> itemParams) {
-		return promotionController.updateItem(promoId, itemParams);
-	}
 
 }

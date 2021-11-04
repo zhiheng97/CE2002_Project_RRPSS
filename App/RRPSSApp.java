@@ -300,6 +300,7 @@ public class RRPSSApp {
 					System.out.print("Enter the table number: ");
 					int tableNo = sc.nextInt();
 					if(tableNo == Integer.parseInt(ESCAPE_STRING)) break;
+					// function check table
 					System.out.print("Enter your staff ID: ");
 					int staffID = sc.nextInt();
 					Date now = new Date();
