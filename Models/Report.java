@@ -29,14 +29,13 @@ public class Report {
 	 * @return True if invoice added, False if otherwise
 	 */
 	public boolean addInvoice(Order invoice) {
+		String[] timestamp = invoice.getTimeStamp().split(" "); // .split(" ")[0]; // Get new date from order
+		String invoiceDate = timestamp[0] + " " + timestamp[1] + " " + timestamp[2]; // Saves day month year
 
-		/* new timestamp format so I need to comment this so that the checkout function works properly
-		you may need to modify the rest if it is not suited your logic */
-
-		// if (!invoice.getTimeStamp().split(" ")[0].equals(this.date)) {
-		// 	System.out.println("Date of invoice does match current report date.");
-		// 	return false; // Date does not match
-		// }
+		if (!invoiceDate.equals(this.date)) {
+			System.out.println("Date of invoice does match current report date.");
+			return false; // Date does not match
+		}
 
 		invoices.add(invoice);
 		this.salesRevenue += invoice.getTotal(); // Update sales revenue
@@ -49,6 +48,7 @@ public class Report {
 		// Increments item in array
 		for (int i = 0; i < invoice_size; i++) {
 			item_name = invoice_items.get(i).getName();
+			System.out.println("Item added: " + item_name);
 			count = item_map.containsKey(item_name) ? item_map.get(item_name) : 0;
 			item_map.put(item_name, count + 1);
 		}
@@ -64,7 +64,8 @@ public class Report {
 			promo_map.put(promo_name, count + 1);
 		}
 
-		System.out.println("Order of timestamp '" + invoice.getTimeStamp() + "' added successfully");
+		System.out.println("\nOrder of timestamp '" + invoice.getTimeStamp() + "' added successfully");
+		this.print();
 		return true;
 
 	}

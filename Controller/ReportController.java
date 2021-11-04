@@ -25,8 +25,12 @@ public class ReportController {
 	 */
 	public void addInvoice(Order invoice) {
 		Report currentReport;
-		String orderDate = invoice.getTimeStamp(); //.split(" ")[0]; // Get new date from order
+		String[] timestamp = invoice.getTimeStamp().split(" "); // .split(" ")[0]; // Get new date from order
+		String orderDate = timestamp[0] + " " + timestamp[1] + " " + timestamp[2]; // Saves day month year
+		System.out.println("Timestamp of date only: " + orderDate);
 		int report_size = reports.size();
+
+		System.out.println("(Report Controller) Order date received: " + orderDate);
 
 		// Case 1: If no reports we create new report and add directly
 		if (report_size == 0) {
@@ -36,8 +40,8 @@ public class ReportController {
 		}
 		// Case 2: Checks whether order matches the date of latest report
 		else if (reports.get(report_size - 1).addInvoice(invoice)) {
-			System.out
-					.println("(Match Latest Date) Order of timestamp " + invoice.getTimeStamp() + "added successfully");
+			System.out.println(
+					"(Match Latest Date) Order of timestamp " + invoice.getTimeStamp() + " added successfully");
 		}
 		// Case 3: Order date does not match.
 		else {
@@ -48,6 +52,8 @@ public class ReportController {
 				System.out.println("Non-sequential order detected");
 			else {
 				// Case 3b: Order does not exist in reports
+				System.out.println(
+						"(New Report Created) Order of timestamp " + invoice.getTimeStamp() + " added successfully");
 				currentReport = new Report(orderDate); // Create new report for date
 				currentReport.addInvoice(invoice); // Adds order to newly created report fitting the date
 				this.reports.add(currentReport); // Adds to report list
