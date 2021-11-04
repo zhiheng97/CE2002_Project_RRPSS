@@ -10,6 +10,7 @@ public class Table {
 	private List<Reservation> reservations;
 	private int seats = 2;
 	private Order invoice;
+	public int noOfReseravtions = 0;
 
 	/**
 	 * 
@@ -20,7 +21,7 @@ public class Table {
 	public Table(int tableNo, boolean occupied, int seatAvail) {
 		this.tableNo = tableNo;
 		this.isOccupied = occupied;
-		this.reservations = new ArrayList<Reservation>(15);
+		this.reservations = new ArrayList<Reservation>();
 		this.seats = seatAvail;
 		this.invoice = new Order(null, null);
 	}
@@ -47,7 +48,8 @@ public class Table {
 	 * @return
 	 */
 	public boolean addReservation(Reservation reserve) {
-
+		if(noOfReseravtions == 15) return false;
+		noOfReseravtions++;
 		this.reservations.add(reserve);
 		return true;
 	}
@@ -75,6 +77,11 @@ public class Table {
 	public void print() {
 		System.out.println("The bill of table number: " + this.tableNo);
 		this.invoice.print();
+	}
+
+	public boolean removeReservation(Reservation reservation) {
+		noOfReseravtions--;
+		return this.reservations.remove(reservation);
 	}
 
 	/**

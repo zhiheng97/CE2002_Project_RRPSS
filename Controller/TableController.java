@@ -71,7 +71,7 @@ public class TableController {
 	public boolean clearReservation(int resId) {
 		Reservation toRemove = findReservation(resId);
 		Table table = tables.stream().filter(t -> t.getReservations().contains(toRemove)).findFirst().orElse(null);
-		if (table.getReservations().remove(toRemove))
+		if (table.removeReservation(toRemove))
 			return updateReservationFile();
 		return false;
 	}
@@ -112,6 +112,18 @@ public class TableController {
 		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
 			reservation.print();
 		}
+	}
+
+	public void printReservations() {
+		for(Table table : tables){
+			if(table.noOfReseravtions == 0)
+				System.out.println("No reservations found for table " + table.getTableNo());
+			else
+				for (Reservation reservation : table.getReservations()){
+					reservation.print();
+				}
+		}
+		System.out.println();
 	}
 
 	public boolean removeFromOrder(int tableNo, Item item) {

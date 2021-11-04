@@ -165,6 +165,10 @@ public class RestaurantController {
 		tableController.printReservations(tableNo);
 	}
 
+	public void printReservations() {
+		tableController.printReservations();
+	}
+
 	/**
 	 *
 	 * @param byMonth
