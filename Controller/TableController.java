@@ -8,39 +8,52 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import Models.Item;
-import Models.Order;
-import Models.Promotion;
-import Models.Reservation;
-import Models.Table;
+import Models.*;
 
 public class TableController {
 
 	private int noOfTables;
 	private List<Table> tables = new ArrayList<Table>();
+	private static final String PATH_TO_ORDERS_FILE = Path.of("./Data/orders.txt").toString();
 	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
 	private FileController fileController = new FileController();
 	private static final int EXPIRE_BUFFER_MILLISECOND = 300000;
 
-	public TableController(int noOfTables) {
+	public TableController(int noOfTables) throws NumberFormatException, ParseException {
 		this.noOfTables = noOfTables;
 		this.tables = new ArrayList<Table>(noOfTables);
+		// this.initializeTables();
 		List<String> tableParams = fileController.readFile(PATH_TO_TABLES_FILE);
-		for (int i = 0; i < tableParams.size(); i += 3) {
+		for (int i = 3; i < tableParams.size(); i += 3) {
 			tables.add(new Table(Integer.parseInt(tableParams.get(i)), Boolean.parseBoolean(tableParams.get(i + 1)),
 					Integer.parseInt(tableParams.get(i + 2))));
 		}
+
+		List<String> orderParams = fileController.readFile(PATH_TO_ORDERS_FILE);
+
 		List<String> reserveParams = fileController.readFile(PATH_TO_RESERVATIONS_FILE);
-		if (reserveParams.size() > 0) {
-			for (int i = 0; i < reserveParams.size(); i += 6) {
-				this.reserveTable(reserveParams.subList(i, i + 6).toArray(new String[6]));
-			}
+		for (int i = 4; i < reserveParams.size(); i += 4) {
+			this.reserveTable(reserveParams.subList(i, i + 4).toArray(new String[4]));
 		}
 	}
 
 ////////////////////// BASIC METHODS ///////////////////
+
+	// private void initializeTables() {
+	// 	Date now = new Date();
+	// 	SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+	// 	List<String> tableParams = fileController.readFile(PATH_TO_TABLES_FILE);
+	// 	for (int i = 3; i < tableParams.size(); i += 3) {
+	// 		this.tables.add(new Table(Integer.parseInt(tableParams.get(i)), Boolean.parseBoolean(tableParams.get(i + 1)),
+	// 				Integer.parseInt(tableParams.get(i + 2))));
+
+	// 		if (Boolean.parseBoolean(tableParams.get(i + 1))) {
+	// 			this.findTableByNo(Integer.parseInt(i)).setInvoice()
+	// 		}
+	// 	}
+	// }
 
 	public Table findTableByNo(int tableNo) {
 		return tables.stream().filter(t -> t.getTableNo() == tableNo).findFirst().orElse(null);
@@ -48,6 +61,17 @@ public class TableController {
 
 	public int getNoOfTables() {
 		return this.noOfTables;
+	}
+
+	public boolean printUnavailableTables() {
+		int num_occupied = 0;
+		for (Table table : tables) {
+			if (table.getIsOccupied()) {
+				System.out.printf("Table %d is occupied, staff: %s\n", table.getTableNo(), table.getInvoice().getPlacedBy());
+			} else num_occupied++;
+		}
+		if (num_occupied == 0) return false;
+		return true;
 	}
 
 	public void printAvailableTables() {
@@ -125,35 +149,110 @@ public class TableController {
 
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
 
-	public boolean reserveTable(String[] details) {
-		Table table = null;
-		if(details[1] != null)
-			table = tables.stream()
-				.filter(t -> (t.getTableNo() == Integer.parseInt(details[1])))
-				.findAny().orElse(null);
-		else
-			table = tables.stream()
-				.filter(t -> ((t.getReservations().stream().count() < 15) && t.getSeats() >= Integer.parseInt(details[5])))
-				.findAny().orElse(null);
+	// param String[3]: cust_id, res_datetime, pax
+	public int findValidTable(String[] details) throws ParseException {
+		int noPax = Integer.parseInt(details[2]);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-		Reservation reservation;
+		Date res_date = sdf.parse(details[1]);
+		
+		int tableNo = -1;
+		switch (noPax) {
+			case 1, 2, 3:	// search table 1->2 (2 paxes), 3->5 (4 paxes)
+				for (int id=1; id<=5; id++) {
+					boolean isValid = true;
+					Table table = this.findTableByNo(id);
+					for (Reservation res : table.getReservations()) {
+						Date temp_date = res.getDate();
+						long time_diff = res_date.getTime() - temp_date.getTime();
+						if (time_diff >= 8.64e7) continue; 				// 1 day
+						if (time_diff <= 60000) isValid = false;		// 1 min
+					}
+					if (isValid) {
+						tableNo = id;
+						break;
+					}
+				}
+				break;
+			case 4, 5:		// search table 3->5 (4 paxes), 6->8 (6 paxes)
+				for (int id=3; id<=8; id++) {
+					boolean isValid = true;
+					Table table = this.findTableByNo(id);
+					for (Reservation res : table.getReservations()) {
+						Date temp_date = res.getDate();
+						long time_diff = res_date.getTime() - temp_date.getTime();
+						if (time_diff >= 8.64e7) continue; 				// 1 day
+						if (time_diff <= 120000) isValid = false;		// 2 min
+					}
+					if (isValid) {
+						tableNo = id;
+						break;
+					}
+				}
+				break;
+			case 6, 7:		// search table 6->8 (6 paxes), 9->10 (8 paxes)
+				for (int id=6; id<=10; id++) {
+					boolean isValid = true;
+					Table table = this.findTableByNo(id);
+					for (Reservation res : table.getReservations()) {
+						Date temp_date = res.getDate();
+						long time_diff = res_date.getTime() - temp_date.getTime();
+						if (time_diff >= 8.64e7) continue; 				// 1 day
+						if (time_diff <= 120000) isValid = false;		// 2 min
+					}
+					if (isValid) {
+						tableNo = id;
+						break;
+					}
+				}
+				break;
+			case 8, 9, 10:	// search table 9->10 (8 paxes), 11->12 (10 paxes)
+				for (int id=9; id<=12; id++) {
+					boolean isValid = true;
+					Table table = this.findTableByNo(id);
+					for (Reservation res : table.getReservations()) {
+						Date temp_date = res.getDate();
+						long time_diff = res_date.getTime() - temp_date.getTime();
+						if (time_diff >= 8.64e7) continue; 				// 1 day
+						if (time_diff <= 120000) isValid = false;		// 2 min
+					}
+					if (isValid) {
+						tableNo = id;
+						break;
+					}
+				}
+				break;
+		}
+		return tableNo;
+	}
+
+	// param String[3]: cust_id, res_datetime, pax
+	// param String[4]: cust_id, res_datetime, pax, table_id
+	public boolean reserveTable(String[] details) throws NumberFormatException, ParseException {
+		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		try {
-			reservation = new Reservation(Integer.parseInt(details[0]), // id
-					details[2], // name
-					sdf.parse(details[4]), // date
-					Integer.parseInt(details[3]), // contact
-					Integer.parseInt(details[5]) // pax
+			int tableNo = -1;
+			if (details.length == 4) tableNo = Integer.parseInt(details[3]);
+			else {
+				tableNo = this.findValidTable(details);
+				if (tableNo == -1) return false;
+			}
+
+			Reservation reservation = new Reservation(
+				Integer.parseInt(details[0]), 
+				sdf.parse(details[1]), // date
+				Integer.parseInt(details[2]) // pax
 			);
-			if (table.addReservation(reservation))
-				return updateReservationFile();
+
+			this.findTableByNo(tableNo).addReservation(reservation);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
+/*
 	private boolean updateReservationFile() {
 		List<String> updatedRes = new ArrayList<String>();
 		for (Table t : tables) {
@@ -182,10 +281,6 @@ public class TableController {
 		} while (true);
 	}
 
-	/**
-	 *
-	 * @param resId
-	 */
 	public boolean clearReservation(int resId) {
 		Reservation toRemove = findReservation(resId);
 		Table table = tables.stream().filter(t -> t.getReservations().contains(toRemove)).findFirst().orElse(null);
@@ -198,23 +293,21 @@ public class TableController {
 		return tables.stream().flatMap(t -> t.getReservations().stream()).filter(r -> r.getId() == resId).findFirst()
 				.orElse(null);
 	}
-
+*/
 	public void printReservations(int tableNo) {
+		System.out.println("Reservations for table " + this.findTableByNo(tableNo));
 		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
 			reservation.print();
+			System.out.println();
 		}
 	}
 
 	public void printReservations() {
 		for(Table table : tables){
-			if(table.noOfReseravtions == 0)
-				System.out.println("No reservations found for table " + table.getTableNo());
-			else
-				for (Reservation reservation : table.getReservations()){
-					reservation.print();
-				}
+			System.out.printf("- Table %d: %d resevation.\n", table.getTableNo(),table.getNoOfReseravtions());
+			for (Reservation reservation : table.getReservations())
+				reservation.print();
 		}
-		System.out.println();
 	}
 
 }

@@ -4,26 +4,27 @@ import java.util.Date;
 
 public class Reservation {
 
-	private int id;
-	private Customer customer;
+	private int res_id;
+	private int cust_id;
 	private Date dateTime;
 	private String time;
 	private int noPax = 2;
 
 	/**
+	 * res_id,table_id,cust_id,res_datetime,pax
 	 * Constructor for Reservation Class
-	 * @param id identifier for reservation object
+	 * @param res_id identifier for reservation object
 	 * @param custName Customer's name, for customer object
 	 * @param resDate Date of reservation, Date Object
 	 * @param contact Customer's mobile number, for customer object
 	 * @param pax Number of guests the reservation was made for
 	 */
-	public Reservation(int id, String custName, Date resDate, int contact, int pax) {
-		if (id < 0) {
-			throw new UnsupportedOperationException("Invalid customer ID.");
-		}
-		this.id = id;
-		this.customer = new Customer(id, custName, false, contact);
+	public Reservation(int cust_id, Date resDate, int pax) {
+		// if (res_id < 0) {
+		// 	throw new UnsupportedOperationException("Invalid ID.");
+		// }
+		// this.res_id = res_id;
+		this.cust_id = cust_id;
 		this.dateTime = resDate;
 		this.noPax = pax;
 	}
@@ -32,9 +33,9 @@ public class Reservation {
 	 * Gets the customer object of this reservation
 	 * @return Customer object
 	 */
-	public Customer getCustomer() {
-		return this.customer;
-	}
+	// public Customer getCustomer() {
+	// 	return this.customer;
+	// }
 
 	/**
 	 * Gets the date of this reservation
@@ -48,9 +49,9 @@ public class Reservation {
 	 * Gets the id of this reservation
 	 * @return id of this reservation
 	 */
-	public int getId() {
-		return this.id;
-	}
+	// public int getId() {
+	// 	return this.id;
+	// }
 
 	/**
 	 * Gets the number of guests this reservation is made for
@@ -72,11 +73,10 @@ public class Reservation {
 	 * Prints the information about this reservation. Calls customer object to print customer information.
 	 */
 	public void print() {
-		System.out.println("Reservation Id and Customer Id: " + this.id);
-		System.out.print("Customer details: ");
-		this.customer.print();
-		System.out.println("Date of reservation: " + this.dateTime.toString());
-		System.out.println("Time of reservation: " + this.time);
+		System.out.println("Customer Id: " + this.cust_id);
+		// System.out.print("Customer details: ");
+		// this.customer.print();
+		System.out.println("Date and time of the reservation: " + this.dateTime.toString());
 		System.out.println("Number of guests: " + this.noPax);
 	}
 
@@ -84,9 +84,9 @@ public class Reservation {
 	 * Sets the customer object
 	 * @param cust customer object to be set
 	 */
-	public void setCustomer(Customer cust) {
-		this.customer = cust;
-	}
+	// public void setCustomer(Customer cust) {
+	// 	this.customer = cust;
+	// }
 
 	/**
 	 * Sets the date of this reservation

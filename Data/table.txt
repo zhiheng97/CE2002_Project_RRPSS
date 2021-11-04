@@ -1,3 +1,4 @@
+table_id,is_occupied,max_pax
 1,false,2
 2,false,2
 3,false,4

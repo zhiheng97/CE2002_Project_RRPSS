@@ -1,14 +1,14 @@
 package Controller;
 
 import java.nio.file.Path;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
-import Models.Item;
-import Models.Order;
-import Models.Promotion;
-import Models.Staff;
+import Models.*;
 
 public class RestaurantController {
 
@@ -17,26 +17,62 @@ public class RestaurantController {
 	private CategoryController categoryController;
 	private PromotionController promotionController;
 	private FileController fileController;
-
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	
 	private List<Staff> staffList;
 	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
 
-	public RestaurantController() {
+	private List<Customer> memberList;
+	private static final String PATH_TO_MEMBERS_FILE = Path.of("./Data/members.txt").toString();
+
+	public RestaurantController() throws NumberFormatException, ParseException {
 		this.tableController = new TableController(12);
 		this.reportController = new ReportController();
 		this.categoryController = new CategoryController();
 		this.promotionController = new PromotionController();
 		this.fileController = new FileController();
 
+		this.memberList = new ArrayList<Customer>();
+		List<String> memberParams = fileController.readFile(PATH_TO_MEMBERS_FILE);
+		for (int i = 3; i < memberParams.size(); i += 3) {
+			this.memberList.add(
+				new Customer(
+					Integer.parseInt(memberParams.get(i)), 
+					memberParams.get(i + 1), 
+					true,
+					Integer.parseInt(memberParams.get(i + 2))
+				)
+			);
+		}
+
 		this.staffList = new ArrayList<Staff>();
 		List<String> staffParams = fileController.readFile(PATH_TO_STAFFS_FILE);
-		for (int i = 0; i < staffParams.size(); i += 3) {
+		for (int i = 3; i < staffParams.size(); i += 3) {
 			this.staffList.add(
-					new Staff(Integer.parseInt(staffParams.get(i)), staffParams.get(i + 1), staffParams.get(i + 2)));
+				new Staff(
+					Integer.parseInt(staffParams.get(i)), 
+					staffParams.get(i + 1), 
+					staffParams.get(i + 2)
+				)
+			);
+		}
+
+		Random rand = new Random();
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+		for (int id=1; id<=12; id++) {
+			if (this.tableController.findTableByNo(id).getIsOccupied()){
+				this.tableController.findTableByNo(id).setInvoice(
+					new Order(
+						this.staffList.get(rand.nextInt(this.staffList.size())),
+						sdf.format(now)
+					)
+				);
+			}
 		}
 	}
-
-	////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
+	
+////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
 	/**
 	 * Prints the menu
 	 */
@@ -143,8 +179,8 @@ public class RestaurantController {
 	public void printPromotion() {
 		promotionController.print();
 	}
-
-	////////////////////// ORDER FUNCTIONS ///////////////////
+	
+////////////////////// ORDER FUNCTIONS ///////////////////
 
 	public void createOrder(int tableNo, int staffID, String date) {
 		int i = 0;
@@ -186,57 +222,75 @@ public class RestaurantController {
 
 	public void printInvoice(int tableNo) {
 		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
-		this.tableController.printInvoice(tableNo);
 		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
+		this.tableController.printInvoice(tableNo);
 	}
 
 	public void viewOrder(int tableNo) {
 		this.tableController.viewOrder(tableNo);
 	}
 
+	// find first availabe table for noPax
 	public int findValidTable(int noPax) {
 		return this.tableController.findValidTable(noPax);
 	}
 
-	public void printAvailableTables(int noPax) {
-		tableController.printAvailableTables(noPax);
+	public boolean isTableOccupied(int tableNo) {
+		return this.tableController.findTableByNo(tableNo).getIsOccupied();
 	}
 
-	////////////////////// RESERVATION FUNCTIONS ///////////////////
+	public boolean printUnavailableTables() {
+		return this.tableController.printUnavailableTables();
+	}
 
-	public boolean reserveTable(String[] details) {
+	public void printAvailableTables() {
+		this.tableController.printAvailableTables();
+	}
+
+	public void printAvailableTables(int noPax) {
+		this.tableController.printAvailableTables(noPax);
+	}
+
+////////////////////// RESERVATION FUNCTIONS ///////////////////
+
+	public void showCustomers() { 		// for debug
+		for (Customer cust : this.memberList) 
+			System.out.printf("%d %s\n", cust.getId(), cust.getName());
+	}
+
+	public int registerCustomer(String cust_name, int contactNo) {
+		int new_id = this.memberList.size();
+		this.memberList.add(new Customer(new_id, cust_name, false, contactNo));
+		return new_id + 1;
+	}
+
+	public boolean reserveTable(String[] details) throws NumberFormatException, ParseException {
 		return tableController.reserveTable(details);
 	}
 
-	public void expireReservations(Date date) {
-		this.tableController.expireReservations(date);
-	}
+	// public void expireReservations(Date date) {
+	// 	this.tableController.expireReservations(date);
+	// }
 
-	public void printReservations(int tableNo) {
-		tableController.printReservations(tableNo);
-	}
+	// public void printReservations(int tableNo) {
+	// 	tableController.printReservations(tableNo);
+	// }
 
 	public void printReservations() {
 		tableController.printReservations();
 	}
 
-	/**
-	 *
-	 * @param tableNo
-	 * @param details
-	 */
-	public boolean clearReservation(int tableNo) {
-		return tableController.clearReservation(tableNo);
-	}
+	// /**
+	//  *
+	//  * @param tableNo
+	//  * @param details
+	//  */
+	// public boolean clearReservation(int tableNo) {
+	// 	return tableController.clearReservation(tableNo);
+	// }
 
-	/**
-	 *
-	 */
-	public void printAvailableTables() {
-		tableController.printAvailableTables();
-	}
 
-	////////////////////// REPORT FUNCTIONS ///////////////////
+////////////////////// REPORT FUNCTIONS ///////////////////
 
 	/**
 	 *

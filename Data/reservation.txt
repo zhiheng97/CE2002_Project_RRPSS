@@ -1,1 +1,5 @@
-49,1,help,12345678,Fri Nov 05 15:00:00 SGT 2021,2,49,2,test,4,Thu Nov 04 15:00:00 SGT 2021,4,
+cust_id,res_datetime,pax,table_id
+1,Thu Nov 04 11:00:00 SGT 2021,1,1
+2,Thu Nov 04 11:00:00 SGT 2021,2,2
+3,Thu Nov 04 11:00:00 SGT 2021,3,3
+3,Thu Nov 04 11:00:00 SGT 2021,4,4

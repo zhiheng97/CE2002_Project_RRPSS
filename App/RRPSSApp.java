@@ -18,7 +18,7 @@ public class RRPSSApp {
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
 	private static final String DATETIME_FORMAT_PATTERN_2 = "dd-MMM-yy HH:mm";
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NumberFormatException, ParseException {
 
 		RestaurantController restaurantController = new RestaurantController();
 		Scanner sc = new Scanner(System.in);
@@ -296,7 +296,7 @@ public class RRPSSApp {
 							System.out.println();
 							break;
 						default:
-							System.out.println("Invalid option");
+							System.out.println("Invalid option!");
 							System.out.println();
 							break;
 						}
@@ -310,56 +310,67 @@ public class RRPSSApp {
 					System.out.println("Do you want to update a current order or checkin new table?");
 					System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
 					choice = sc.nextInt();
-					if (choice == Integer.parseInt(ESCAPE_STRING))
-						break;
+					if (choice == Integer.parseInt(ESCAPE_STRING)) break;
 
-					switch (choice) {
-					case 1:
-						System.out.print("Enter the table number: ");
-						tableNo = sc.nextInt();
-						break;
-					case 2:
-						int noPax; // custId;
-						System.out.print("Enter [Y] if this customer made a reservation, [N] otherwise: ");
-						String isReserved = reader.readLine();
-
-						if (isReserved.toLowerCase().equals("y") || isReserved.toLowerCase().equals("Y")) {
-							// TODO later
-							// Enter the reservation id ....
-							// noPax = ....
-							// custId = ...
-							break;
-						} else {
+					do {
+						System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
+						choice = sc.nextInt();
+						switch (choice) {
+						case 1:
+							boolean check = restaurantController.printUnavailableTables();
+							if (!check) {
+								System.out.println("All the tables are available, please checkin to create new order.");
+								break;
+							}
 							while (true) {
-								System.out.print("Enter the number of pax: ");
-								noPax = sc.nextInt();
-								if (noPax < 2 || noPax > 10)
-									System.out.println(
-											"Invalid! The number of pax must be between 2 and 10, please try again.");
-								// if > 10 then try again or ask comeback later or split into 2 tables or
-								// anything idk
-								// this would be new feature (not for now).
-								else
-									break;
+								System.out.print("Enter the table number you want to update: ");
+								tableNo = sc.nextInt();
+								if (tableNo < 1 || tableNo > 12) System.out.println("Invalid table!");
+								else if (restaurantController.isTableOccupied(tableNo)) System.out.println("This table is not occupied!");
+								else break;
 							}
-							// System.out.print("Enter customer ID: ");
-							tableNo = restaurantController.findValidTable(noPax);
-							if (tableNo == -1) {
-								System.out.printf("There are no available tables for %d!\n", tableNo);
-								break; // no available table for noPax, maybe ask to reserve for future meal(?)
-							}
-						}
+							break;
+						case 2:
+							int noPax; // custId;
+							System.out.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
+							String isReserved = reader.readLine();
 
-						System.out.print("Enter your staff ID: ");
-						int staffID = sc.nextInt();
-						Date now = new Date();
-						sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-						restaurantController.createOrder(tableNo, staffID, sdf.format(now));
-						break;
-					default:
-						// not sure for now
-						break;
-					}
+							if (isReserved.toLowerCase().equals("y") || isReserved.toLowerCase().equals("Y")) {
+								// TODO later
+								// Enter the reservation id ....
+								// noPax = ....
+								// custId = ...
+								break;
+							} else {
+								while (true) {
+									System.out.print("Enter the number of pax: ");
+									noPax = sc.nextInt();
+									if (noPax < 2 || noPax > 10)
+										System.out.println("Invalid! The number of pax must be between 2 and 10, please try again.");
+									// if > 10 then try again or ask comeback later or split into 2 tables or
+									// anything idk
+									// this would be new feature (not for now).
+									else break;
+								}
+								// System.out.print("Enter customer ID: ");
+								tableNo = restaurantController.findValidTable(noPax);
+								if (tableNo == -1) {
+									System.out.printf("There are no available tables for %d!\n", tableNo);
+									break; // no available table for noPax, maybe ask to reserve for future meal(?)
+								}
+							}
+
+							System.out.print("Enter your staff ID: ");
+							int staffID = sc.nextInt();
+							Date now = new Date();
+							sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+							restaurantController.createOrder(tableNo, staffID, sdf.format(now));
+							break;
+						default:
+							System.out.println("Invalid option!");
+							break;
+						}
+					} while (!(choice == 1 || choice == 2));
 
 					do {
 						System.out.println();
@@ -420,7 +431,7 @@ public class RRPSSApp {
 					break;
 				/////////////////// RESERVATIONS ///////////////////
 				case "4":
-					restaurantController.expireReservations(new Date());
+					// restaurantController.expireReservations(new Date());
 					do {
 						System.out.println();
 						System.out.println("1. Add reservation");
@@ -434,26 +445,35 @@ public class RRPSSApp {
 
 						switch (option_sub) {
 						case "1":
-							String[] resParams = new String[6];
+							String[] resParams = new String[3];
 							try {
+								String ans;
+								int custId = -1;
 								System.out.println("(type -9 to return to previous menu)");
-								System.out.print("Enter the customer id: ");
-								int custId = sc.nextInt();
-								if (custId == Integer.parseInt(ESCAPE_STRING))
-									break;
+								System.out.print("Is this a registered member [y/N]? ");
+								ans = reader.readLine();
+								if (ans.equals(ESCAPE_STRING)) break;
+								if (ans.toLowerCase().equals("y")) {
+									System.out.print("Enter the customer id: ");
+									custId = sc.nextInt();
+								} else {
+									System.out.print("Enter the customer name: ");
+									String cust_name = reader.readLine();
+									System.out.print("Enter your contact number: ");
+									int contactNo = sc.nextInt();
+									custId = restaurantController.registerCustomer(cust_name, contactNo);
+								}
+								// restaurantController.showCustomers();
+
 								resParams[0] = String.valueOf(custId);
-								System.out.print("Enter the customer name: ");
-								resParams[2] = reader.readLine();
 								System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
-								resParams[4] = reader.readLine();
+								String time = reader.readLine();
 								System.out.print("Enter the time of reservation [HH:mm]: ");
-								String time = resParams[4].concat(" " + reader.readLine());
+								time = time.concat(" " + reader.readLine());
 								sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
-								resParams[4] = sdf.parse(time).toString();
-								System.out.print("Enter the contact number: ");
-								resParams[3] = String.valueOf(sc.nextInt());
+								resParams[1] = sdf.parse(time).toString();
 								System.out.print("Enter the number of guest: ");
-								resParams[5] = String.valueOf(sc.nextInt());
+								resParams[2] = String.valueOf(sc.nextInt());
 							} catch (InputMismatchException e) {
 								System.out.println("Invalid input, returning to previous menu.");
 								System.out.println();
@@ -463,23 +483,24 @@ public class RRPSSApp {
 										"Error occured while trying to parse input for date and time of reservation!");
 								System.out.println();
 							}
+
 							if (restaurantController.reserveTable(resParams))
 								System.out.println("Reservation has been made successfully!");
 							else
-								System.out.println("Reservation was not made!");
+								System.out.println("Reservation is not made!");
 							System.out.println();
 							break;
 						case "2":
-							restaurantController.printReservations();
+							// restaurantController.printReservations();
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the reservation Id that you wish to remove: ");
 							int resIdToRemove = sc.nextInt();
 							if (resIdToRemove == Integer.parseInt(ESCAPE_STRING))
 								break;
-							else if (restaurantController.clearReservation(resIdToRemove))
-								System.out.println("Reservation has been removed successfully!");
-							else
-								System.out.println("Reservation was not removed!");
+							// else if (restaurantController.clearReservation(resIdToRemove))
+							// 	System.out.println("Reservation has been removed successfully!");
+							// else
+							// 	System.out.println("Reservation was not removed!");
 							System.out.println();
 							break;
 						case "3":
@@ -489,7 +510,7 @@ public class RRPSSApp {
 							int tableNum = sc.nextInt();
 							if (tableNum == Integer.parseInt(ESCAPE_STRING))
 								break;
-							restaurantController.printReservations(tableNum);
+							restaurantController.printReservations();
 							System.out.println();
 							break;
 						case "4":
