@@ -35,8 +35,8 @@ public class RestaurantController {
 					new Staff(Integer.parseInt(staffParams.get(i)), staffParams.get(i + 1), staffParams.get(i + 2)));
 		}
 	}
-	
-////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
+
+	////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
 	/**
 	 * Prints the menu
 	 */
@@ -143,8 +143,8 @@ public class RestaurantController {
 	public void printPromotion() {
 		promotionController.print();
 	}
-	
-////////////////////// ORDER FUNCTIONS ///////////////////
+
+	////////////////////// ORDER FUNCTIONS ///////////////////
 
 	public void createOrder(int tableNo, int staffID, String date) {
 		Staff staff = this.staffList.get(staffID);
@@ -176,9 +176,8 @@ public class RestaurantController {
 	}
 
 	public void printInvoice(int tableNo) {
-		this.tableController.printInvoice(tableNo);
-
 		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
+		this.tableController.printInvoice(tableNo);
 		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
 	}
 
@@ -194,7 +193,7 @@ public class RestaurantController {
 		tableController.printAvailableTables(noPax);
 	}
 
-////////////////////// RESERVATION FUNCTIONS ///////////////////
+	////////////////////// RESERVATION FUNCTIONS ///////////////////
 
 	public boolean reserveTable(String[] details) {
 		return tableController.reserveTable(details);
@@ -228,7 +227,7 @@ public class RestaurantController {
 		tableController.printAvailableTables();
 	}
 
-////////////////////// REPORT FUNCTIONS ///////////////////
+	////////////////////// REPORT FUNCTIONS ///////////////////
 
 	/**
 	 *
