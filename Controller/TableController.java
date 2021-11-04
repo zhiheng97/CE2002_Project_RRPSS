@@ -61,7 +61,27 @@ public class TableController {
 			System.out.println("All the tables are occupied!");
 	}
 
+	public void printAvailableTables(int noPax) {
+		int num_occupied = 0;
+		for (Table table : tables) {
+			if (!table.getIsOccupied() && table.getSeats() >= noPax) {
+				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
+			} else num_occupied++;
+		}
+		if (num_occupied == this.noOfTables) 
+			System.out.println("All the tables are occupied!");
+	}
+
 ////////////////////// ORDER FUNCTIONS ///////////////////
+
+	public int findValidTable(int noPax) {
+		// the tables are sorted by noPax already so just loop until got one, return -1 if none availabe
+		for (Table table : this.tables) {
+			if (!table.getIsOccupied() && noPax <= table.getSeats())
+				return table.getTableNo();
+		}
+		return -1;
+	}
 
 	public void addToOrder(int tableNo, Item item, int quantity) {
 		this.findTableByNo(tableNo).setIsOccupied(true);

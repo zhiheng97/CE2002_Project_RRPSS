@@ -186,6 +186,14 @@ public class RestaurantController {
 		this.tableController.viewOrder(tableNo);
 	}
 
+	public int findValidTable(int noPax) {
+		return this.tableController.findValidTable(noPax);
+	}
+
+	public void printAvailableTables(int noPax) {
+		tableController.printAvailableTables(noPax);
+	}
+
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
 
 	public boolean reserveTable(String[] details) {

@@ -296,16 +296,49 @@ public class RRPSSApp {
 
 				/////////////////// ORDER ///////////////////
 				case "3":
+					int choice, tableNo = 0;
 					System.out.println("\n(type -9 to return to previous menu)");
-					System.out.print("Enter the table number: ");
-					int tableNo = sc.nextInt();
-					if(tableNo == Integer.parseInt(ESCAPE_STRING)) break;
-					// function check table
-					System.out.print("Enter your staff ID: ");
-					int staffID = sc.nextInt();
-					Date now = new Date();
-					sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-					restaurantController.createOrder(tableNo, staffID, sdf.format(now));
+					System.out.println("Do you want to update a current order or checkin new table?");
+					System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
+					choice = sc.nextInt();
+					if (choice == Integer.parseInt(ESCAPE_STRING)) break;
+					if (choice == 1) {
+						System.out.print("Enter the table number: ");
+						tableNo = sc.nextInt();
+					} else if (choice == 2) {
+						int noPax, custId;
+						System.out.print("Enter [y] if this customer made a reservation, [N] otherwise: ");
+						String isReserved = reader.readLine();
+						if (isReserved.toLowerCase().equals("y")) {
+							// TODO later
+							// noPax = ....
+							// custId = ...
+							break;
+						} else {
+							while (true) {
+								System.out.print("Enter the number of pax: ");
+								noPax = sc.nextInt(); 
+								if (noPax < 2 || noPax > 10) 
+									System.out.println("Invalid! The number of pax must be between 2 and 10, please try again.");
+									// try again or ask comeback split the pax or anything idk, this would be new feature (not for now).
+								else break;
+							}
+							System.out.print("Enter customer name: ");
+						}
+
+						tableNo = restaurantController.findValidTable(noPax);
+						if (tableNo == -1) {
+							break; // no available table for noPax, maybe ask to reserve for future meal(?)
+						} 
+						
+						System.out.print("Enter your staff ID: ");
+						int staffID = sc.nextInt();
+						Date now = new Date();
+						sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+						restaurantController.createOrder(tableNo, staffID, sdf.format(now));
+						System.out.printf("The new order is created for table %d, please update it. Enjoy!\n", tableNo);
+					}
+
 					do {
 						System.out.println();
 						System.out.println("1. Add item to your order");
