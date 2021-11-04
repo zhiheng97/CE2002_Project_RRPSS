@@ -30,10 +30,13 @@ public class Report {
 	 */
 	public boolean addInvoice(Order invoice) {
 
-		if (!invoice.getTimeStamp().split(" ")[0].equals(this.date)) {
-			System.out.println("Date of invoice does match current report date.");
-			return false; // Date does not match
-		}
+		/* new timestamp format so I need to comment this so that the checkout function works properly
+		you may need to modify the rest if it is not suited your logic */
+
+		// if (!invoice.getTimeStamp().split(" ")[0].equals(this.date)) {
+		// 	System.out.println("Date of invoice does match current report date.");
+		// 	return false; // Date does not match
+		// }
 
 		invoices.add(invoice);
 		this.salesRevenue += invoice.getTotal(); // Update sales revenue
