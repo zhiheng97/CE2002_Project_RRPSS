@@ -69,8 +69,6 @@ public class ReportController {
 	 *                latest day
 	 */
 	public void print(boolean byMonth) {
-		// TODO: Consider GST as output field? Just add 7% tax to total price?
-
 		double salesRevenue = 0;
 		int reports_size = reports.size();
 
@@ -125,13 +123,16 @@ public class ReportController {
 			System.out.println(
 					"\n\n(Monthly Report " + "(" + reports.size() + ") ) Start: " + start_date + " / End: " + end_date);
 			System.out.println("Monthly Sales: " + salesRevenue);
-			System.out.println("\nItems:");
+			System.out.println("--------------------------");
+			System.out.println("Items:");
 			for (Map.Entry<String, Integer> e : item_map.entrySet())
-				System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
+				System.out.println(e.getValue() + " x " + e.getKey());
+			// System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
 
-			System.out.println("\nPromos:");
+			System.out.println("--------------------------");
+			System.out.println("Promotions:");
 			for (Map.Entry<String, Integer> e : promo_map.entrySet())
-				System.out.println("Promo: " + e.getKey() + " Quantity: " + e.getValue());
+				System.out.println(e.getValue() + " x " + e.getKey());
 		}
 	}
 }
