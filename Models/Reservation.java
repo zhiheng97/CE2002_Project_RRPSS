@@ -1,14 +1,16 @@
 package Models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Reservation {
 
-	private int res_id;
+	private String res_id;
 	private int cust_id;
 	private Date dateTime;
 	private String time;
 	private int noPax = 2;
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
 
 	/**
 	 * res_id,table_id,cust_id,res_datetime,pax
@@ -19,13 +21,12 @@ public class Reservation {
 	 * @param contact Customer's mobile number, for customer object
 	 * @param pax Number of guests the reservation was made for
 	 */
-	public Reservation(int cust_id, Date resDate, int pax) {
-		// if (res_id < 0) {
-		// 	throw new UnsupportedOperationException("Invalid ID.");
-		// }
-		// this.res_id = res_id;
+	public Reservation(String res_id, int cust_id, Date resDate, int pax) {
+		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+		this.res_id = res_id;
 		this.cust_id = cust_id;
 		this.dateTime = resDate;
+		this.time = sdf.format(resDate);
 		this.noPax = pax;
 	}
 
@@ -49,10 +50,12 @@ public class Reservation {
 	 * Gets the id of this reservation
 	 * @return id of this reservation
 	 */
-	// public int getId() {
-	// 	return this.id;
-	// }
-
+	public String getResId() {
+		return this.res_id;
+	}
+	public int getCustId() {
+		return this.cust_id;
+	}
 	/**
 	 * Gets the number of guests this reservation is made for
 	 * @return noPax of this reservation
@@ -73,9 +76,8 @@ public class Reservation {
 	 * Prints the information about this reservation. Calls customer object to print customer information.
 	 */
 	public void print() {
-		System.out.println("Customer Id: " + this.cust_id);
-		// System.out.print("Customer details: ");
-		// this.customer.print();
+		System.out.println("Reservation ID: " + this.res_id);
+		System.out.println("Customer ID: " + this.cust_id);
 		System.out.println("Date and time of the reservation: " + this.dateTime.toString());
 		System.out.println("Number of guests: " + this.noPax);
 	}

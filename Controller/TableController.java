@@ -31,11 +31,9 @@ public class TableController {
 					Integer.parseInt(tableParams.get(i + 2))));
 		}
 
-		List<String> orderParams = fileController.readFile(PATH_TO_ORDERS_FILE);
-
 		List<String> reserveParams = fileController.readFile(PATH_TO_RESERVATIONS_FILE);
-		for (int i = 4; i < reserveParams.size(); i += 4) {
-			this.reserveTable(reserveParams.subList(i, i + 4).toArray(new String[4]));
+		for (int i = 5; i < reserveParams.size(); i += 5) {
+			this.reserveTable(reserveParams.subList(i, i + 5).toArray(new String[5]));
 		}
 	}
 
@@ -149,7 +147,11 @@ public class TableController {
 
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
 
-	// param String[3]: cust_id, res_datetime, pax
+	/**
+	 * input from RestaurantController
+	 * @param details[3]: cust_id, res_datetime, pax
+	 * @return tableNo that is allocated for reservation, -1 if not found
+	 */
 	public int findValidTable(String[] details) throws ParseException {
 		int noPax = Integer.parseInt(details[2]);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
@@ -225,33 +227,96 @@ public class TableController {
 		return tableNo;
 	}
 
-	// param String[3]: cust_id, res_datetime, pax
-	// param String[4]: cust_id, res_datetime, pax, table_id
-	public boolean reserveTable(String[] details) throws NumberFormatException, ParseException {
+	/**
+	 * 1) input from RestaurantController
+	 * @param details[3]: cust_id, res_datetime, pax
+	 * 2) input from TableController's constructor for initialize the memory
+	 * @param details[5]: cust_id, res_datetime, pax, table_id, res_id
+	 * @return res_id if allocated succesfully, "false" other
+	 */
+	public String reserveTable(String[] details) throws NumberFormatException, ParseException {
+		int tableNo = -1;
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		try {
-			int tableNo = -1;
-			if (details.length == 4) tableNo = Integer.parseInt(details[3]);
-			else {
+			if (details.length == 5) {
+				tableNo = Integer.parseInt(details[3]);
+				this.findTableByNo(tableNo).addReservation(
+					Integer.parseInt(details[0]), // cust_id
+					sdf.parse(details[1]), // date
+					Integer.parseInt(details[2]), // pax
+					details[4]
+				);
+			} else {
 				tableNo = this.findValidTable(details);
-				if (tableNo == -1) return false;
+				if (tableNo == -1) return "false";
+				return this.findTableByNo(tableNo).addReservation(
+					Integer.parseInt(details[0]), 
+					sdf.parse(details[1]), // date
+					Integer.parseInt(details[2]) // pax
+				);
 			}
-
-			Reservation reservation = new Reservation(
-				Integer.parseInt(details[0]), 
-				sdf.parse(details[1]), // date
-				Integer.parseInt(details[2]) // pax
-			);
-
-			this.findTableByNo(tableNo).addReservation(reservation);
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return true;
+		return "false";
 	}
 
+	public Reservation findReservation(String res_id) {
+		String[] res_id_params = res_id.split("-");
+		return this.findTableByNo(Integer.parseInt(res_id_params[0]))
+					.getReservations()
+					.get(Integer.parseInt(res_id_params[1]));
+	}
+
+	/**
+	 * @param res_id e.g. 5-6 -> table 5, id 6
+	 * @return true/false 
+	 * idk when it should return false
+	 */
+	public boolean clearReservation(String res_id) {
+		String[] res_id_params = res_id.split("-");
+		return this.findTableByNo(Integer.parseInt(res_id_params[0])).removeReservation(res_id);
+	}
+
+	public String updateReservation(String res_id, String datetime) throws NumberFormatException, ParseException {
+		String[] res_id_params = res_id.split("-");
+		
+		Reservation copied = this.findTableByNo(Integer.parseInt(res_id_params[0]))
+								.getReservations()
+								.get(Integer.parseInt(res_id_params[1]));
+		this.clearReservation(res_id);
+
+		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+		String[] new_res_params = new String[3];
+		new_res_params[0] = String.valueOf(copied.getCustId());
+		new_res_params[1] = datetime;
+		new_res_params[2] = String.valueOf(copied.getNoPax());
+		String new_res_id = this.reserveTable(new_res_params);
+
+		if (new_res_id == "false") this.findTableByNo(Integer.parseInt(res_id_params[0])).addReservation(copied);
+		return new_res_id;
+	}
+
+	public String updateReservation(String res_id, int noPax) throws NumberFormatException, ParseException {
+		String[] res_id_params = res_id.split("-");
+		
+		Reservation copied = this.findTableByNo(Integer.parseInt(res_id_params[0]))
+								.getReservations()
+								.get(Integer.parseInt(res_id_params[1]));
+		this.clearReservation(res_id);
+
+		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+		String[] new_res_params = new String[3];
+		new_res_params[0] = String.valueOf(copied.getCustId());
+		new_res_params[1] = copied.getTime();
+		new_res_params[2] = String.valueOf(noPax);
+		String new_res_id = this.reserveTable(new_res_params);
+
+		if (new_res_id == "false") this.findTableByNo(Integer.parseInt(res_id_params[0])).addReservation(copied);
+		return new_res_id;
+	}
 /*
 	private boolean updateReservationFile() {
 		List<String> updatedRes = new ArrayList<String>();
@@ -294,6 +359,10 @@ public class TableController {
 				.orElse(null);
 	}
 */
+	/**
+	 * @param tableNo
+	 * print all reservation of 1 table tableNo
+	 */
 	public void printReservations(int tableNo) {
 		System.out.println("Reservations for table " + this.findTableByNo(tableNo));
 		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
@@ -302,6 +371,10 @@ public class TableController {
 		}
 	}
 
+	/**
+	 * @param tableNo
+	 * print all reservation of all tables
+	 */
 	public void printReservations() {
 		for(Table table : tables){
 			System.out.printf("- Table %d: %d resevation.\n", table.getTableNo(),table.getNoOfReseravtions());

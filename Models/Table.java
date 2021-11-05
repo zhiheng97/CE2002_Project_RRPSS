@@ -1,5 +1,6 @@
 package Models;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public class Table {
 	private int seats = 2;
 	private Order invoice;
 	private int noOfReseravtions = 0;
-
+	
 	/**
 	 * 
 	 * @param table
@@ -43,15 +44,47 @@ public class Table {
 	}
 
 	/**
-	 * 
-	 * @param reserve
-	 * @return
+	 * @params cust_id, res_datetime, pax, res_id
+	 * @return nothing because this is for initilization part
 	 */
-	public boolean addReservation(Reservation reserve) {
-		if(this.noOfReseravtions == 15) return false;
+	public void addReservation(int cust_id, Date date, int pax, String res_id) {
 		this.noOfReseravtions++;
-		this.reservations.add(reserve);
-		return true;
+		this.reservations.add(new Reservation(res_id, cust_id, date, pax));
+	}
+	/**
+	 * @params cust_id, res_datetime, pax
+	 * @return res_id
+	 */
+	public String addReservation(int cust_id, Date date, int pax) {
+		if(this.noOfReseravtions == 15) return "false";
+		
+		this.noOfReseravtions++;
+		int id=0;
+		for (Reservation reservation : this.reservations) {
+			String[] temp_id = reservation.getResId().split("-");
+			if (id != Integer.parseInt(temp_id[1])) break;
+			id++;
+		}
+
+		String res_id = String.valueOf(this.tableNo) + "-" + String.valueOf(id);
+		this.reservations.add(new Reservation(res_id, cust_id, date, pax));
+		return res_id;
+	}
+
+	public void addReservation(Reservation reservation) {
+		this.noOfReseravtions++;
+		this.reservations.add(reservation);
+	}
+
+	public boolean removeReservation(String id) {
+		noOfReseravtions--;
+		for (Reservation res : this.reservations) {
+			if (res.getResId().equals(id)) {
+				this.reservations.remove(res);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public Order getInvoice() {
@@ -82,10 +115,7 @@ public class Table {
 		this.invoice.print();
 	}
 
-	public boolean removeReservation(Reservation reservation) {
-		noOfReseravtions--;
-		return this.reservations.remove(reservation);
-	}
+	
 
 	/**
 	 * 

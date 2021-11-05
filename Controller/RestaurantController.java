@@ -57,6 +57,7 @@ public class RestaurantController {
 			);
 		}
 
+		// initialize order for occupied tables
 		Random rand = new Random();
 		Date now = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
@@ -253,41 +254,75 @@ public class RestaurantController {
 
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
 
+	/**
+	 * for debugging purpose only when add register new Customer
+	 * show all customers in memory
+	 */
 	public void showCustomers() { 		// for debug
 		for (Customer cust : this.memberList) 
 			System.out.printf("%d %s\n", cust.getId(), cust.getName());
 	}
 
+	/**
+	 * @param cust_name
+	 * @param contactNo
+	 * @return cust_id for the new Customer
+	 */
 	public int registerCustomer(String cust_name, int contactNo) {
 		int new_id = this.memberList.size();
 		this.memberList.add(new Customer(new_id, cust_name, false, contactNo));
 		return new_id + 1;
 	}
 
-	public boolean reserveTable(String[] details) throws NumberFormatException, ParseException {
-		return tableController.reserveTable(details);
+	/**
+	 * @param details
+	 * @return res_id if reserve successfully, "false" otherwise
+	 */
+	public String reserveTable(String[] details) throws NumberFormatException, ParseException {
+		return this.tableController.reserveTable(details);
+	}
+
+	/**
+	 * @param res_id
+	 * return true/false
+	 */
+	public boolean clearReservation(String res_id) {
+		return this.tableController.clearReservation(res_id);
+	}
+
+	/**
+	 * @params res_id, datetime
+	 * @return new_res_id or "false"
+	 * @throws ParseException
+	 * @throws NumberFormatException
+	 */
+	public String updateReservation(String res_id, String datetime) throws NumberFormatException, ParseException {
+		return this.tableController.updateReservation(res_id, datetime);
+	}
+
+	/**
+	 * @params res_id, noPax
+	 * @return new_res_id or "false"
+	 * @throws ParseException
+	 * @throws NumberFormatException
+	 */
+	public String updateReservation(String res_id, int noPax) throws NumberFormatException, ParseException {
+		return this.tableController.updateReservation(res_id, noPax);
 	}
 
 	// public void expireReservations(Date date) {
 	// 	this.tableController.expireReservations(date);
 	// }
 
-	// public void printReservations(int tableNo) {
-	// 	tableController.printReservations(tableNo);
-	// }
-
-	public void printReservations() {
-		tableController.printReservations();
+	public void printReservations(int tableNo) {
+		this.tableController.printReservations(tableNo);
 	}
 
-	// /**
-	//  *
-	//  * @param tableNo
-	//  * @param details
-	//  */
-	// public boolean clearReservation(int tableNo) {
-	// 	return tableController.clearReservation(tableNo);
-	// }
+	public void printReservations() {
+		this.tableController.printReservations();
+	}
+
+	
 
 
 ////////////////////// REPORT FUNCTIONS ///////////////////
@@ -297,7 +332,7 @@ public class RestaurantController {
 	 * @param byMonth
 	 */
 	public void printSalesReport(boolean byMonth) {
-		reportController.print(byMonth);
+		this.reportController.print(byMonth);
 	}
 
 	/**
