@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-
 public class Table {
 
 	private int tableNo;
@@ -123,13 +121,13 @@ public class Table {
 		return null;
 	}
 
-	public boolean checkReservedTable() {
+	public boolean isReserved() {
 		Date date = new Date();
 		for (Reservation res : this.reservations) {
 			long time_diff = res.getDate().getTime() - date.getTime();
-			if (time_diff < 200000) return false;	 
+			if (time_diff < 200000) return true;	 
 		}
-		return true;
+		return false;
 	}
 
 	/**

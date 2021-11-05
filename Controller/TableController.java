@@ -109,7 +109,7 @@ public class TableController {
 	public int findValidTable(int noPax) {
 		for (Table table : this.tables) {
 			if (!table.getIsOccupied() && noPax <= table.getSeats() &&
-				!table.checkReservedTable())
+				!table.isReserved())
 				return table.getTableNo();
 		}
 		return -1;
