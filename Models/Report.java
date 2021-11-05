@@ -47,12 +47,15 @@ public class Report {
 			id = tmpItem.getId(); // Item id
 
 			// Proceed to check for new items not added (Used for item price later)
-			if (!this.items.contains(tmpItem)) {
+			if (!this.item2quantity.containsKey(id)) {
+				System.out.println("Does not contain " + tmpItem.getName() + "adding to report items");
 				this.items.add(tmpItem);
 				this.item2quantity.put(id, 0); // Initialize item id in item2quantity
 			}
 
 			// Updates item quantity in report
+			System.out.println("Quantity added " + this.item2quantity.get(id) + tmpItem2quantity.get(id)
+					+ "adding to report items");
 			this.item2quantity.put(id, this.item2quantity.get(id) + tmpItem2quantity.get(id));
 		}
 
@@ -63,12 +66,15 @@ public class Report {
 			id = tmpPromo.getId(); // Promo id
 
 			// Proceed to check for new promos not added (Used for promo price later)
-			if (!this.promotions.contains(tmpPromo)) {
+			if (!this.promo2quantity.containsKey(id)) {
+				System.out.println("Does not contain " + tmpPromo.getName() + "adding to report promos");
 				this.promotions.add(tmpPromo);
 				this.promo2quantity.put(id, 0); // Initialize promo id in promo2quantity
 			}
 
 			// Updates promo quantity in report
+			System.out.println("Quantity added " + this.promo2quantity.get(id) + tmpPromo2quantity.get(id)
+					+ "adding to report promos");
 			this.promo2quantity.put(id, this.promo2quantity.get(id) + tmpPromo2quantity.get(id));
 		}
 

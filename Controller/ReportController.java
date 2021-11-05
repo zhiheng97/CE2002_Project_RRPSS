@@ -105,7 +105,6 @@ public class ReportController {
 			for (int i = 0; i < end_index + 1; i++) {
 				tmpReport = reports.get(i);
 				salesRevenue += tmpReport.getSalesRevenue(); // Update sales revenue
-				int count;
 				int id;
 
 				List<Item> reportItems = tmpReport.getItems();
@@ -115,7 +114,7 @@ public class ReportController {
 					id = tmpItem.getId(); // Item id
 
 					// Proceed to check for new items not added (Used for item price later)
-					if (!items.contains(tmpItem)) {
+					if (!item2quantity.containsKey(id)) {
 						items.add(tmpItem);
 						item2quantity.put(id, 0); // Initialize item id in item2quantity
 					}
@@ -131,7 +130,7 @@ public class ReportController {
 					id = tmpPromo.getId(); // Promo id
 
 					// Proceed to check for new promos not added (Used for promo price later)
-					if (!promotions.contains(tmpPromo)) {
+					if (!promo2quantity.containsKey(id)) {
 						promotions.add(tmpPromo);
 						promo2quantity.put(id, 0); // Initialize promo id in promo2quantity
 					}
@@ -149,6 +148,7 @@ public class ReportController {
 			System.out.println("Monthly Sales: " + salesRevenue);
 			System.out.println("--------------------------");
 			System.out.println("Items:");
+
 			for (Item item : items) {
 				quantity = item2quantity.get(item.getId());
 				System.out.printf(Itemformat, item.getName(), quantity, item.getPrice() * quantity);
