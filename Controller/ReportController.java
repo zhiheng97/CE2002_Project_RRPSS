@@ -1,12 +1,14 @@
 package Controller;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import Models.Order;
 import Models.Report;
+import Models.Item;
+import Models.Promotion;
 
 public class ReportController {
 
@@ -69,7 +71,6 @@ public class ReportController {
 	 *                latest day
 	 */
 	public void print(boolean byMonth) {
-		double salesRevenue = 0;
 		int reports_size = reports.size();
 
 		if (reports.size() == 0) {
@@ -79,9 +80,11 @@ public class ReportController {
 			// Prints latest daily report if byMonth not specified
 			reports.get(reports.size() - 1).print();
 		else {
-
-			LinkedHashMap<String, Integer> item_map = new LinkedHashMap<String, Integer>();
-			LinkedHashMap<String, Integer> promo_map = new LinkedHashMap<String, Integer>();
+			double salesRevenue = 0;
+			Map<Integer, Integer> item2quantity = new HashMap<Integer, Integer>();
+			Map<Integer, Integer> promo2quantity = new HashMap<Integer, Integer>();
+			List<Item> items = new ArrayList<Item>();
+			List<Promotion> promotions = new ArrayList<Promotion>();
 			// Get last 30 reports
 
 			int start_index = reports_size - 1;
@@ -103,36 +106,60 @@ public class ReportController {
 				tmpReport = reports.get(i);
 				salesRevenue += tmpReport.getSalesRevenue(); // Update sales revenue
 				int count;
-				String item_name;
-				LinkedHashMap<String, Integer> tmpReportItems = tmpReport.getItemMap();
-				for (Map.Entry<String, Integer> e : tmpReportItems.entrySet()) {
-					item_name = e.getKey();
-					count = item_map.containsKey(item_name) ? item_map.get(item_name) : 0;
-					item_map.put(item_name, count + e.getValue());
+				int id;
+
+				List<Item> reportItems = tmpReport.getItems();
+				Map<Integer, Integer> tmpItem2quantity = tmpReport.getReportItems();
+				for (Item tmpItem : reportItems) {
+
+					id = tmpItem.getId(); // Item id
+
+					// Proceed to check for new items not added (Used for item price later)
+					if (!items.contains(tmpItem)) {
+						items.add(tmpItem);
+						item2quantity.put(id, 0); // Initialize item id in item2quantity
+					}
+
+					// Updates item quantity
+					item2quantity.put(id, item2quantity.get(id) + tmpItem2quantity.get(id));
 				}
 
-				String promo_name;
-				LinkedHashMap<String, Integer> tmpReportPromos = tmpReport.getPromoMap();
-				for (Map.Entry<String, Integer> e : tmpReportPromos.entrySet()) {
-					promo_name = e.getKey();
-					count = promo_map.containsKey(promo_name) ? promo_map.get(promo_name) : 0;
-					promo_map.put(promo_name, count + e.getValue());
+				List<Promotion> orderPromo = tmpReport.getPromo();
+				Map<Integer, Integer> tmpPromo2quantity = tmpReport.getReportPromos();
+				for (Promotion tmpPromo : orderPromo) {
+
+					id = tmpPromo.getId(); // Promo id
+
+					// Proceed to check for new promos not added (Used for promo price later)
+					if (!promotions.contains(tmpPromo)) {
+						promotions.add(tmpPromo);
+						promo2quantity.put(id, 0); // Initialize promo id in promo2quantity
+					}
+
+					// Updates promo quantity in report
+					promo2quantity.put(id, promo2quantity.get(id) + tmpPromo2quantity.get(id));
 				}
 
 			}
+			int quantity;
+			String Itemformat = "  %-25s  ".concat(" %3d  ").concat("   %3$.2f %n");
+
 			System.out.println(
 					"\n\n(Monthly Report " + "(" + reports.size() + ") ) Start: " + start_date + " / End: " + end_date);
 			System.out.println("Monthly Sales: " + salesRevenue);
 			System.out.println("--------------------------");
 			System.out.println("Items:");
-			for (Map.Entry<String, Integer> e : item_map.entrySet())
-				System.out.println(e.getValue() + " x " + e.getKey());
-			// System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
+			for (Item item : items) {
+				quantity = item2quantity.get(item.getId());
+				System.out.printf(Itemformat, item.getName(), quantity, item.getPrice() * quantity);
+			}
 
 			System.out.println("--------------------------");
 			System.out.println("Promotions:");
-			for (Map.Entry<String, Integer> e : promo_map.entrySet())
-				System.out.println(e.getValue() + " x " + e.getKey());
+			for (Promotion promo : promotions) {
+				quantity = promo2quantity.get(promo.getId());
+				System.out.printf(Itemformat, promo.getName(), quantity, promo.getPrice() * quantity);
+			}
 		}
 	}
 }
