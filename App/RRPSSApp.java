@@ -15,7 +15,7 @@ import Controller.RestaurantController;
 public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; // use an integer, if we use a string, we cannot use try catch
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 	private static final String DATETIME_FORMAT_PATTERN_2 = "dd-MMM-yy HH:mm";
 
 	public static void main(String[] args) throws NumberFormatException, ParseException {
@@ -78,7 +78,7 @@ public class RRPSSApp {
 								option_sub = reader.readLine();
 								if (option_sub.equals(ESCAPE_STRING))
 									break;
-								itemParams[4] = String.valueOf(option_sub);
+								itemParams[1] = String.valueOf(option_sub);
 								System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
 								itemParams[0] = reader.readLine();
 								System.out.print(
