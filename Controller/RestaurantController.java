@@ -1,5 +1,8 @@
 package Controller;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import Models.Customer;
 import Models.Item;
@@ -80,6 +84,7 @@ public class RestaurantController {
 	}
 	
 ////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
+	
 	/**
 	 * Prints the menu
 	 */
@@ -189,6 +194,11 @@ public class RestaurantController {
 	
 ////////////////////// ORDER FUNCTIONS ///////////////////
 
+	public boolean isRegisteredCustomer(int cust_id) {
+		if (cust_id < 0 || cust_id >= this.customerList.size()) return false;
+		return true;
+	}
+
 	/**
 	 * TODO: handle the mismatch input
 	 *  
@@ -212,16 +222,8 @@ public class RestaurantController {
 	 * @param staffID
 	 * @param date
 	 */
-	public void createOrder(int tableNo, int cust_id, int staffID, String date) {
-		int i = 0;
-		for(; i < staffList.size(); i++){
-			if(staffList.get(i).getId() == staffID) break;
-		}
-		if(i == staffList.size()){
-			System.out.println("There is no staff with the ID: " + staffID);
-			return;
-		}
-		Staff staff = this.staffList.get(i);
+	public void createOrder(int tableNo, int cust_id, int staff_id, String date) {
+		Staff staff = this.staffList.get(staff_id);
 		Customer cust = this.customerList.get(cust_id);
 		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
 		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, cust, date));
@@ -334,17 +336,22 @@ public class RestaurantController {
 			System.out.printf("%d %s\n", cust.getId(), cust.getName());
 	}
 
-
-
 	/**
 	 * @param cust_name
 	 * @param contactNo
 	 * @return cust_id for the new Customer
+	 * @throws IOException
 	 */
-	public int registerCustomer(String cust_name, int contactNo) {
+	public int registerCustomer() throws IOException {
+		Scanner sc = new Scanner(System.in);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		System.out.print("Enter the customer name: ");
+		String cust_name = reader.readLine();
+		System.out.print("Enter the customer's contact number: ");
+		int contactNo = sc.nextInt();
 		int new_id = this.customerList.size();
 		this.customerList.add(new Customer(new_id, cust_name, false, contactNo));
-		return new_id + 1;
+		return new_id;
 	}
 
 	/**

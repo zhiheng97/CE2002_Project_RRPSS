@@ -313,6 +313,8 @@ public class RRPSSApp {
 					choice = sc.nextInt();
 					if (choice == Integer.parseInt(ESCAPE_STRING)) break;
 					System.out.println();
+
+					boolean back = false;
 					do {
 						switch (choice) {
 						case 1:
@@ -331,7 +333,7 @@ public class RRPSSApp {
 							break;
 						case 2:
 							restaurantController.deleteExpiredReservations();
-							int noPax, cust_id; 
+							int noPax, cust_id, staff_id; 
 							System.out.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
 							String isReserved = reader.readLine();
 
@@ -360,25 +362,35 @@ public class RRPSSApp {
 								if (isRegistered.toLowerCase().equals("y")) {
 									System.out.print("Enter the customer ID: ");
 									cust_id = sc.nextInt();
+									if (!restaurantController.isRegisteredCustomer(cust_id)) {
+										System.out.printf("Canont find any customer with ID %d, do you want to register [Y/N]? ", cust_id);
+										String opt = reader.readLine();
+										if (!opt.toLowerCase().equals("y")) {
+											back = true;
+											break;
+										}
+										else cust_id = restaurantController.registerCustomer();
+									}
 								} else {
-									System.out.print("Enter the customer name: ");
-									String cust_name = reader.readLine();
-									System.out.print("Enter the customer's contact number: ");
-									int contactNo = sc.nextInt();
-									cust_id = restaurantController.registerCustomer(cust_name, contactNo);
+									cust_id = restaurantController.registerCustomer();
 								}
 								tableNo = restaurantController.findValidTable(noPax);
 								if (tableNo == -1) {
 									System.out.printf("There are no available tables for %d!\n", tableNo);
+									back = true;
 									break; // no available table for noPax, maybe ask to reserve for future meal(?)
 								}
 							}
 
-							System.out.print("Enter your staff ID: ");
-							int staffID = sc.nextInt();
+							while (true) {
+								System.out.print("Enter your staff ID: ");
+								staff_id = sc.nextInt();
+								if (0 <= staff_id && staff_id <= 3) break;
+								else System.out.println("Unknown staff ID!");
+							}
 							Date now = new Date();
 							sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-							restaurantController.createOrder(tableNo, cust_id, staffID, sdf.format(now));
+							restaurantController.createOrder(tableNo, cust_id, staff_id, sdf.format(now));
 							break;
 						default:
 							System.out.println("Invalid option!");
@@ -387,6 +399,7 @@ public class RRPSSApp {
 							break;
 						}
 					} while (!(choice == 1 || choice == 2));
+					if (back) break;
 
 					do {
 						System.out.println();
@@ -474,11 +487,7 @@ public class RRPSSApp {
 									System.out.print("Enter the customer id: ");
 									cust_id = sc.nextInt();
 								} else {
-									System.out.print("Enter the customer name: ");
-									String cust_name = reader.readLine();
-									System.out.print("Enter your contact number: ");
-									int contactNo = sc.nextInt();
-									cust_id = restaurantController.registerCustomer(cust_name, contactNo);
+									cust_id = restaurantController.registerCustomer();
 								}
 
 								resParams[0] = String.valueOf(cust_id);
