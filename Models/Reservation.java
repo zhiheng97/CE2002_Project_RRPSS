@@ -63,7 +63,7 @@ public class Reservation {
 	public void print() {
 		System.out.println("Reservation ID: " + this.res_id);
 		System.out.println("Customer ID: " + this.cust_id);
-		System.out.println("Date and time of the reservation: " + this.time);
+		System.out.println("Date and time of the reservation: " + this.dateTime);
 		System.out.println("Number of guests: " + this.noPax);
 	}
 

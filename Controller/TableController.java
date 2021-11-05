@@ -115,8 +115,6 @@ public class TableController {
 		return -1;
 	}
 
-	
-
 	/**
 	 * add a quantity of Item objects to the order of table tableNo
 	 * @param tableNo
@@ -208,6 +206,7 @@ public class TableController {
 				for (int id=1; id<=5; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
+					if (table.getSeats() < noPax) continue;
 					for (Reservation res : table.getReservations()) {
 						Date temp_date = res.getDate();
 						long time_diff = res_date.getTime() - temp_date.getTime();
@@ -224,6 +223,7 @@ public class TableController {
 				for (int id=3; id<=8; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
+					if (table.getSeats() < noPax) continue;
 					for (Reservation res : table.getReservations()) {
 						Date temp_date = res.getDate();
 						long time_diff = res_date.getTime() - temp_date.getTime();
@@ -240,6 +240,7 @@ public class TableController {
 				for (int id=6; id<=10; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
+					if (table.getSeats() < noPax) continue;
 					for (Reservation res : table.getReservations()) {
 						Date temp_date = res.getDate();
 						long time_diff = res_date.getTime() - temp_date.getTime();
@@ -256,6 +257,7 @@ public class TableController {
 				for (int id=9; id<=12; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
+					if (table.getSeats() < noPax) continue;
 					for (Reservation res : table.getReservations()) {
 						Date temp_date = res.getDate();
 						long time_diff = res_date.getTime() - temp_date.getTime();
@@ -398,7 +400,7 @@ public class TableController {
 	 */
 	public void printReservations() {
 		for(Table table : this.tables){
-			System.out.printf("- Table %d: %d resevation.\n", table.getTableNo(),table.getNoOfReseravtions());
+			System.out.printf("- Table %d: %d resevation(s).\n", table.getTableNo(), table.getNoOfReseravtions());
 			for (Reservation reservation : table.getReservations())
 				reservation.print();
 		}

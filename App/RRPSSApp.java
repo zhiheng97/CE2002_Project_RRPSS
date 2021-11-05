@@ -465,23 +465,23 @@ public class RRPSSApp {
 							String[] resParams = new String[3];
 							try {
 								String ans;
-								int custId = -1;
+								int cust_id = -1;
 								System.out.println("(type -9 to return to previous menu)");
 								System.out.print("Is this a registered member [y/N]? ");
 								ans = reader.readLine();
 								if (ans.equals(ESCAPE_STRING)) break;
 								if (ans.toLowerCase().equals("y")) {
 									System.out.print("Enter the customer id: ");
-									custId = sc.nextInt();
+									cust_id = sc.nextInt();
 								} else {
 									System.out.print("Enter the customer name: ");
 									String cust_name = reader.readLine();
 									System.out.print("Enter your contact number: ");
 									int contactNo = sc.nextInt();
-									custId = restaurantController.registerCustomer(cust_name, contactNo);
+									cust_id = restaurantController.registerCustomer(cust_name, contactNo);
 								}
 
-								resParams[0] = String.valueOf(custId);
+								resParams[0] = String.valueOf(cust_id);
 								System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
 								String time = reader.readLine();
 								System.out.print("Enter the time of reservation [HH:mm]: ");

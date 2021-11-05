@@ -121,11 +121,16 @@ public class Table {
 		return null;
 	}
 
+	/**
+	 * check if the table is reserved in the next 5 minutes
+	 * upon the time the customer checkin
+	 * @return
+	 */
 	public boolean isReserved() {
 		Date date = new Date();
 		for (Reservation res : this.reservations) {
 			long time_diff = res.getDate().getTime() - date.getTime();
-			if (time_diff < 200000) return true;	 
+			if (time_diff < 300000) return true;	 
 		}
 		return false;
 	}
