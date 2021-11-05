@@ -313,8 +313,6 @@ public class RRPSSApp {
 					if (choice == Integer.parseInt(ESCAPE_STRING)) break;
 
 					do {
-						System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
-						choice = sc.nextInt();
 						switch (choice) {
 						case 1:
 							boolean check = restaurantController.printUnavailableTables();
@@ -368,6 +366,8 @@ public class RRPSSApp {
 							break;
 						default:
 							System.out.println("Invalid option!");
+							System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
+							choice = sc.nextInt();
 							break;
 						}
 					} while (!(choice == 1 || choice == 2));
