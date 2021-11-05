@@ -379,9 +379,9 @@ public class RestaurantController {
 		return this.tableController.updateReservation(res_id, noPax);
 	}
 
-	// public void expireReservations(Date date) {
-	// 	this.tableController.expireReservations(date);
-	// }
+	public void deleteExpiredReservations() {
+		this.tableController.deleteExpiredReservations();
+	}
 
 	/**
 	 * @param tableNo

@@ -108,11 +108,14 @@ public class TableController {
 	 */
 	public int findValidTable(int noPax) {
 		for (Table table : this.tables) {
-			if (!table.getIsOccupied() && noPax <= table.getSeats())
+			if (!table.getIsOccupied() && noPax <= table.getSeats() &&
+				!table.checkReservedTable())
 				return table.getTableNo();
 		}
 		return -1;
 	}
+
+	
 
 	/**
 	 * add a quantity of Item objects to the order of table tableNo
@@ -200,7 +203,7 @@ public class TableController {
 		Date res_date = sdf.parse(details[1]);
 		
 		int tableNo = -1;
-		switch (noPax) {
+		switch (noPax) { 
 			case 1, 2, 3:	// search table 1->2 (2 paxes), 3->5 (4 paxes)
 				for (int id=1; id<=5; id++) {
 					boolean isValid = true;
@@ -270,7 +273,7 @@ public class TableController {
 	}
 
 	/**
-	 * 1) input from RestaurantController
+	 * 1) input from RestaurantController when add new reservation
 	 * @param details[3]: cust_id, res_datetime, pax
 	 * @return res_id if allocated succesfully, "false" other
 	 * 2) input from TableController's constructor for initialize the memory
@@ -314,9 +317,7 @@ public class TableController {
 	 */
 	public Reservation findReservation(String res_id) {
 		String[] res_id_params = res_id.split("-");
-		return this.findTableByNo(Integer.parseInt(res_id_params[0]))
-					.getReservations()
-					.get(Integer.parseInt(res_id_params[1]));
+		return this.findTableByNo(Integer.parseInt(res_id_params[0])).findReservation(res_id);
 	}
 
 	/**
@@ -396,10 +397,21 @@ public class TableController {
 	 * print all reservation of all tables
 	 */
 	public void printReservations() {
-		for(Table table : tables){
+		for(Table table : this.tables){
 			System.out.printf("- Table %d: %d resevation.\n", table.getTableNo(),table.getNoOfReseravtions());
 			for (Reservation reservation : table.getReservations())
 				reservation.print();
+		}
+	}
+
+	/**
+	 * pass the Date object to the table and clear all reservations 
+	 * after 1 minute not cheking in
+	 */
+	public void deleteExpiredReservations() {
+		Date date = new Date();
+		for (Table table : this.tables) {
+			table.deleteExpiredReservations(date);
 		}
 	}
 /*

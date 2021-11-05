@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.html.HTMLDocument.Iterator;
+
 public class Table {
 
 	private int tableNo;
@@ -22,7 +24,7 @@ public class Table {
 	public Table(int tableNo, boolean occupied, int seatAvail) {
 		this.tableNo = tableNo;
 		this.isOccupied = occupied;
-		this.reservations = new ArrayList<Reservation>();
+		this.reservations = new ArrayList<Reservation>(15);
 		this.seats = seatAvail;
 		this.invoice = new Order(null, null, null);
 	}
@@ -84,6 +86,7 @@ public class Table {
 		return res_id;
 	}
 
+
 	/**
 	 * Use when restaurant construction or when cannot update reservation
 	 * @param reservation Reservation object
@@ -94,20 +97,56 @@ public class Table {
 	}
 
 	/**
-	 * remove reservation by reservation's id of table
-	 * Example, res_id is 5-4, then the input id is 4
-	 * @param id
+	 * remove reservation by res_id
+	 * @param res_id
 	 * @return
 	 */
-	public boolean removeReservation(String id) {
+	public boolean removeReservation(String res_id) {
 		noOfReseravtions--;
 		for (Reservation res : this.reservations) {
-			if (res.getResId().equals(id)) {
+			if (res.getResId().equals(res_id)) {
 				this.reservations.remove(res);
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	/**
+	 * 
+	 * @param reservation
+	 */
+	public Reservation findReservation(String res_id) {
+		for (Reservation res : this.reservations) {
+			if (res.getResId().equals(res_id)) return res;
+		}
+		return null;
+	}
+
+	public boolean checkReservedTable() {
+		Date date = new Date();
+		for (Reservation res : this.reservations) {
+			long time_diff = res.getDate().getTime() - date.getTime();
+			if (time_diff < 200000) return false;	 
+		}
+		return true;
+	}
+
+	/**
+	 * remove the reservation after 1 minute not checking in
+	 * @param date
+	 */
+	public void deleteExpiredReservations(Date date) {
+		List<Reservation> toClear = new ArrayList<Reservation>();
+		for (Reservation res : this.reservations) {
+			long time_diff = date.getTime() - res.getDate().getTime();
+			if (time_diff > 60000) toClear.add(res); 
+		}
+		for (Reservation res : toClear) {
+			this.reservations.remove(res);
+			this.noOfReseravtions--;
+		}
+		toClear.clear();
 	}
 
 	public Order getInvoice() {

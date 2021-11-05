@@ -306,6 +306,7 @@ public class RRPSSApp {
 
 				/////////////////// ORDER ///////////////////
 				case "3":
+					restaurantController.deleteExpiredReservations();
 					System.out.println("\n(type -9 to return to previous menu)");
 					System.out.println("Do you want to update a current order or checkin new table?");
 					System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
@@ -329,6 +330,7 @@ public class RRPSSApp {
 							}
 							break;
 						case 2:
+							restaurantController.deleteExpiredReservations();
 							int noPax, cust_id; 
 							System.out.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
 							String isReserved = reader.readLine();
@@ -340,13 +342,13 @@ public class RRPSSApp {
 								int[] res_info = restaurantController.checkinReservation(res_id);
 								tableNo = res_info[0];
 								cust_id = res_info[1];
-								System.out.printf("Customer ID %d is allocated with table %d.\n", tableNo, cust_id);
+								System.out.printf("Customer ID %d is allocated with table %d.\n", cust_id, tableNo);
 							} else {
 								while (true) {
 									System.out.print("Enter the number of pax: ");
 									noPax = sc.nextInt();
-									if (noPax < 2 || noPax > 10)
-										System.out.println("Invalid! The number of pax must be between 2 and 10, please try again.");
+									if (noPax < 1 || noPax > 10)
+										System.out.println("Invalid! The number of pax must be between 1 and 10, please try again.");
 									// if > 10 then try again or ask comeback later or split into 2 tables or
 									// anything idk
 									// this would be new feature (not for now).
@@ -370,7 +372,6 @@ public class RRPSSApp {
 									System.out.printf("There are no available tables for %d!\n", tableNo);
 									break; // no available table for noPax, maybe ask to reserve for future meal(?)
 								}
-
 							}
 
 							System.out.print("Enter your staff ID: ");
@@ -446,7 +447,7 @@ public class RRPSSApp {
 					break;
 				/////////////////// RESERVATIONS ///////////////////
 				case "4":
-					// restaurantController.expireReservations(new Date());
+					restaurantController.deleteExpiredReservations();
 					do {
 						System.out.println();
 						System.out.println("1. Add reservation");
@@ -460,6 +461,7 @@ public class RRPSSApp {
 
 						switch (option_sub) {
 						case "1":
+							restaurantController.deleteExpiredReservations();
 							String[] resParams = new String[3];
 							try {
 								String ans;
@@ -506,6 +508,7 @@ public class RRPSSApp {
 							System.out.println();
 							break;
 						case "2":
+							restaurantController.deleteExpiredReservations();
 							restaurantController.printReservations();
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the reservation ID that you wish to remove: ");
@@ -519,6 +522,7 @@ public class RRPSSApp {
 							System.out.println();
 							break;
 						case "3":
+							restaurantController.deleteExpiredReservations();
 							restaurantController.printReservations();
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the reservation ID you want to update: ");
@@ -569,6 +573,7 @@ public class RRPSSApp {
 							System.out.println();
 							break;
 						case "4":
+							restaurantController.deleteExpiredReservations();
 							restaurantController.printReservations();
 							System.out.println();
 							break;
