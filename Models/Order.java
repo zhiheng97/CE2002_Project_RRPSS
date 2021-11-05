@@ -1,5 +1,7 @@
 package Models;
 
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.HashMap;
 public class Order {
 
 	private Staff placedBy;
+	private Customer cust;
 	private String timestamp;
 	private List<Item> items;
 	private List<Promotion> promotions;
@@ -21,8 +24,9 @@ public class Order {
 	 * @param createdBy Indicates staff which created order, Staff Object
 	 * @param dateTime  Indicates time which order is created, String Object
 	 */
-	public Order(Staff createdBy, String dateTime) {
+	public Order(Staff createdBy, Customer cust, String dateTime) {
 		this.timestamp = dateTime;
+		this.cust = cust;
 		this.placedBy = createdBy;
 		this.items = new ArrayList<Item>();
 		this.promotions = new ArrayList<Promotion>();
@@ -34,28 +38,35 @@ public class Order {
 	 * Prints quantity of each item, quantity of each promo, total amount, date and
 	 * staff which placed order
 	 */
-	public void print() {
+	public void print(int table_id) {
 		int quantity;
-		System.out.println("--------------------------");
-		System.out.println("Items:");
-		for (Item item : this.items) {
-			quantity = this.item2quantity.get(item.getId());
-			System.out.printf(quantity + " x " + item.getName() + "\t %f\n", item.getPrice() * quantity);
-		}
+        String Itemformat = "  %-25s  ".concat(" %3d  ").concat("   %3$.2f %n");
+		
+        String line = new String(new char[48]).replace('\0', '-');
 
-		System.out.println("--------------------------");
-		System.out.println("Promotions:");
+        System.out.println(line);
+		System.out.printf("%-18s %d%n", "Table ID:", table_id);
+		System.out.printf("%-18s %s%n", "Customer:", this.cust.getName());
+		System.out.printf("%-18s %d%n", "Customer contact:", this.cust.getMobileNo());
+		System.out.printf("%-18s %s%n", "Staff:", this.placedBy.getName());
+		System.out.printf("%-18s %s%n", "Date & Time:", this.timestamp);
+		System.out.println(line);
+		System.out.printf("%-25s   %6s   %6s%n", "Promotion/Item Name", "Qty", "Amount");
+
 		for (Promotion promo : this.promotions) {
 			quantity = this.promo2quantity.get(promo.getId());
-			System.out.printf(quantity + " x " + promo.getName() + "\t %f\n", promo.getPrice() * quantity);
+			System.out.printf(Itemformat, promo.getName(), quantity, promo.getPrice() * quantity);
 		}
-
-		System.out.println("--------------------------");
-		System.out.printf("SUB-TOTAL: $%.2f\n", this.getTotal());
-		System.out.printf("GST: $%.2f\n", this.getTotal() * 0.07);
-		System.out.printf("GRAND TOTAL: $%.2f\n", this.getTotal() * 1.07);
-		System.out.println("Date: " + this.timestamp);
-		System.out.println("Created by: " + this.getPlacedBy());
+		
+		for (Item item : this.items) {
+			quantity = this.item2quantity.get(item.getId());
+			System.out.printf(Itemformat, item.getName(), quantity, item.getPrice() * quantity);
+		}
+		System.out.println(line);
+		System.out.printf("%-25s %18.2f%n", "Sub-Total Amount:", this.getTotal());
+		System.out.printf("%-25s %18.2f%n", "7% GST:", this.getTotal() * 0.07);
+		System.out.printf("%-25s %18.2f%n", "10% Membership Discount:", (this.cust.getIsMember())? this.getTotal() * 0.1 : 0.0);
+		System.out.printf("%-25s %18.2f%n", "Total Amount:", (this.cust.getIsMember())? this.getTotal() * 0.97 : this.getTotal() * 1.07);
 	}
 
 	/**

@@ -311,7 +311,7 @@ public class RRPSSApp {
 					System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
 					choice = sc.nextInt();
 					if (choice == Integer.parseInt(ESCAPE_STRING)) break;
-
+					System.out.println();
 					do {
 						switch (choice) {
 						case 1:
@@ -324,21 +324,23 @@ public class RRPSSApp {
 								System.out.print("Enter the table number you want to update: ");
 								tableNo = sc.nextInt();
 								if (tableNo < 1 || tableNo > 12) System.out.println("Invalid table!");
-								else if (restaurantController.isTableOccupied(tableNo)) System.out.println("This table is not occupied!");
+								else if (!restaurantController.isTableOccupied(tableNo)) System.out.println("This table is not occupied!");
 								else break;
 							}
 							break;
 						case 2:
-							int noPax; // custId;
+							int noPax, cust_id; 
 							System.out.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
 							String isReserved = reader.readLine();
 
-							if (isReserved.toLowerCase().equals("y") || isReserved.toLowerCase().equals("Y")) {
-								// TODO later
-								// Enter the reservation id ....
-								// noPax = ....
-								// custId = ...
-								break;
+							if (isReserved.toLowerCase().equals("y")) {
+								// TODO: handle the mismatch input
+								System.out.print("Enter the reservation ID: ");
+								String res_id = reader.readLine();
+								int[] res_info = restaurantController.checkinReservation(res_id);
+								tableNo = res_info[0];
+								cust_id = res_info[1];
+								System.out.printf("Customer ID %d is allocated with table %d.\n", tableNo, cust_id);
 							} else {
 								while (true) {
 									System.out.print("Enter the number of pax: ");
@@ -350,19 +352,32 @@ public class RRPSSApp {
 									// this would be new feature (not for now).
 									else break;
 								}
-								// System.out.print("Enter customer ID: ");
+
+								System.out.print("Enter [Y] if this is a registerd customer, [N] otherwise: ");
+								String isRegistered = reader.readLine();
+								if (isRegistered.toLowerCase().equals("y")) {
+									System.out.print("Enter the customer ID: ");
+									cust_id = sc.nextInt();
+								} else {
+									System.out.print("Enter the customer name: ");
+									String cust_name = reader.readLine();
+									System.out.print("Enter the customer's contact number: ");
+									int contactNo = sc.nextInt();
+									cust_id = restaurantController.registerCustomer(cust_name, contactNo);
+								}
 								tableNo = restaurantController.findValidTable(noPax);
 								if (tableNo == -1) {
 									System.out.printf("There are no available tables for %d!\n", tableNo);
 									break; // no available table for noPax, maybe ask to reserve for future meal(?)
 								}
+
 							}
 
 							System.out.print("Enter your staff ID: ");
 							int staffID = sc.nextInt();
 							Date now = new Date();
 							sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-							restaurantController.createOrder(tableNo, staffID, sdf.format(now));
+							restaurantController.createOrder(tableNo, cust_id, staffID, sdf.format(now));
 							break;
 						default:
 							System.out.println("Invalid option!");

@@ -24,7 +24,7 @@ public class Table {
 		this.isOccupied = occupied;
 		this.reservations = new ArrayList<Reservation>();
 		this.seats = seatAvail;
-		this.invoice = new Order(null, null);
+		this.invoice = new Order(null, null, null);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class Table {
 	}
 	public void print() {
 		System.out.println("The bill of table number: " + this.tableNo);
-		this.invoice.print();
+		this.invoice.print(this.tableNo);
 	}
 
 	/**

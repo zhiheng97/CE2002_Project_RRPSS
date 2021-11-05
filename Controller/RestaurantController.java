@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 
@@ -22,8 +23,8 @@ public class RestaurantController {
 	private List<Staff> staffList;
 	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
 
-	private List<Customer> memberList;
-	private static final String PATH_TO_MEMBERS_FILE = Path.of("./Data/members.txt").toString();
+	private List<Customer> customerList;
+	private static final String PATH_TO_CUSTOMERS_FILE = Path.of("./Data/customers.txt").toString();
 
 	public RestaurantController() throws NumberFormatException, ParseException {
 		this.tableController = new TableController(12);
@@ -32,15 +33,15 @@ public class RestaurantController {
 		this.promotionController = new PromotionController();
 		this.fileController = new FileController();
 
-		this.memberList = new ArrayList<Customer>();
-		List<String> memberParams = fileController.readFile(PATH_TO_MEMBERS_FILE);
-		for (int i = 3; i < memberParams.size(); i += 3) {
-			this.memberList.add(
+		this.customerList = new ArrayList<Customer>();
+		List<String> custParams = fileController.readFile(PATH_TO_CUSTOMERS_FILE);
+		for (int i = 4; i < custParams.size(); i += 4) {
+			this.customerList.add(
 				new Customer(
-					Integer.parseInt(memberParams.get(i)), 
-					memberParams.get(i + 1), 
-					true,
-					Integer.parseInt(memberParams.get(i + 2))
+					Integer.parseInt(custParams.get(i)), 
+					custParams.get(i + 1), 
+					Boolean.parseBoolean(custParams.get(i + 2)),
+					Integer.parseInt(custParams.get(i + 3))
 				)
 			);
 		}
@@ -66,6 +67,7 @@ public class RestaurantController {
 				this.tableController.findTableByNo(id).setInvoice(
 					new Order(
 						this.staffList.get(rand.nextInt(this.staffList.size())),
+						this.customerList.get(rand.nextInt(this.customerList.size())),
 						sdf.format(now)
 					)
 				);
@@ -184,12 +186,29 @@ public class RestaurantController {
 ////////////////////// ORDER FUNCTIONS ///////////////////
 
 	/**
+	 * TODO: handle the mismatch input
+	 *  
+	 * @param res_id
+	 * @return the tableNo and cust_id that for this reservation
+	 */
+	public int[] checkinReservation(String res_id) {
+		String[] res_id_params = res_id.split("-");
+		int tableNo = Integer.parseInt(res_id_params[0]);
+		int id = Integer.parseInt(res_id_params[1]);
+		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15) return null;
+		Reservation res = this.tableController.findReservation(res_id);
+		int cust_id = res.getCustId();
+		this.tableController.clearReservation(res_id);
+		return new int[]{tableNo, cust_id};
+	}
+
+	/**
 	 * create new order for new customer
 	 * @param tableNo
 	 * @param staffID
 	 * @param date
 	 */
-	public void createOrder(int tableNo, int staffID, String date) {
+	public void createOrder(int tableNo, int cust_id, int staffID, String date) {
 		int i = 0;
 		for(; i < staffList.size(); i++){
 			if(staffList.get(i).getId() == staffID) break;
@@ -199,8 +218,9 @@ public class RestaurantController {
 			return;
 		}
 		Staff staff = this.staffList.get(i);
+		Customer cust = this.customerList.get(cust_id);
 		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
-		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, date));
+		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, cust, date));
 		System.out.printf("The new order is created for table %d. Enjoy!\n", tableNo);
 	}
 
@@ -306,9 +326,11 @@ public class RestaurantController {
 	 * show all customers in memory
 	 */
 	public void showCustomers() { 		// for debug
-		for (Customer cust : this.memberList) 
+		for (Customer cust : this.customerList) 
 			System.out.printf("%d %s\n", cust.getId(), cust.getName());
 	}
+
+
 
 	/**
 	 * @param cust_name
@@ -316,8 +338,8 @@ public class RestaurantController {
 	 * @return cust_id for the new Customer
 	 */
 	public int registerCustomer(String cust_name, int contactNo) {
-		int new_id = this.memberList.size();
-		this.memberList.add(new Customer(new_id, cust_name, false, contactNo));
+		int new_id = this.customerList.size();
+		this.customerList.add(new Customer(new_id, cust_name, false, contactNo));
 		return new_id + 1;
 	}
 

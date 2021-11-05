@@ -184,7 +184,7 @@ public class TableController {
 		Table table = this.findTableByNo(tableNo);
 		table.print();
 		table.setIsOccupied(false);
-		table.setInvoice(new Order(null, null));
+		table.setInvoice(new Order(null, null, null));
 	}
 
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
@@ -344,7 +344,6 @@ public class TableController {
 								.get(Integer.parseInt(res_id_params[1]));
 		this.clearReservation(res_id);
 
-		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		String[] new_res_params = new String[3];
 		new_res_params[0] = String.valueOf(copied.getCustId());
 		new_res_params[1] = datetime;
@@ -370,7 +369,6 @@ public class TableController {
 								.get(Integer.parseInt(res_id_params[1]));
 		this.clearReservation(res_id);
 
-		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		String[] new_res_params = new String[3];
 		new_res_params[0] = String.valueOf(copied.getCustId());
 		new_res_params[1] = copied.getTime();

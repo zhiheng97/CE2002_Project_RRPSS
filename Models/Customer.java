@@ -15,9 +15,6 @@ public class Customer {
 	 * @param cusMobile customer mobile number
 	 */
 	public Customer(int custId, String custName, boolean cusIsMember, int cusMobile) {
-		if (custId < 0) {
-			throw new UnsupportedOperationException("Invalid customer ID.");
-		}
 		this.id = custId;
 		this.name = custName;
 		this.isMember = cusIsMember;
