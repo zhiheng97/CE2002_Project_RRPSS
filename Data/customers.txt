@@ -3,7 +3,7 @@ customer_id,member_name,membership,member_mobile
 1,test2,false,23456781
 2,test3,true,34567812
 3,test4,false,45678123
-0,test5,true,56781234
-1,test6,false,67812345
-2,test7,true,78123456
-3,test8,false,81234567
+4,test5,true,56781234
+5,test6,false,67812345
+6,test7,true,78123456
+7,test8,false,81234567
