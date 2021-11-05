@@ -8,18 +8,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import Models.*;
+import Models.Item;
+import Models.Order;
+import Models.Promotion;
+import Models.Reservation;
+import Models.Table;
 
 public class TableController {
 
 	private int noOfTables;
 	private List<Table> tables = new ArrayList<Table>();
-	private static final String PATH_TO_ORDERS_FILE = Path.of("./Data/orders.txt").toString();
 	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 	private FileController fileController = new FileController();
-	private static final int EXPIRE_BUFFER_MILLISECOND = 300000;
 
 	public TableController(int noOfTables) throws NumberFormatException, ParseException {
 		this.noOfTables = noOfTables;

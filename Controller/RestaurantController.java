@@ -5,11 +5,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 
-import Models.*;
+import Models.Customer;
+import Models.Item;
+import Models.Order;
+import Models.Promotion;
+import Models.Reservation;
+import Models.Staff;
 
 public class RestaurantController {
 
@@ -18,7 +22,7 @@ public class RestaurantController {
 	private CategoryController categoryController;
 	private PromotionController promotionController;
 	private FileController fileController;
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 	
 	private List<Staff> staffList;
 	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
