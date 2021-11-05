@@ -2,7 +2,7 @@ package Models;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Report {
@@ -10,8 +10,10 @@ public class Report {
 	private List<Order> invoices = new ArrayList<Order>();
 	private String date;
 	private double salesRevenue = 0;
-	private LinkedHashMap<String, Integer> item_map = new LinkedHashMap<String, Integer>();
-	private LinkedHashMap<String, Integer> promo_map = new LinkedHashMap<String, Integer>();
+	private List<Item> items = new ArrayList<Item>();
+	private List<Promotion> promotions = new ArrayList<Promotion>();;
+	private Map<Integer, Integer> item2quantity = new HashMap<Integer, Integer>();
+	private Map<Integer, Integer> promo2quantity = new HashMap<Integer, Integer>();
 
 	/**
 	 * Constructor for Report Object
@@ -37,38 +39,41 @@ public class Report {
 			return false; // Date does not match
 		}
 
-		invoices.add(invoice);
+		int id;
+		List<Item> orderItems = invoice.getItems();
+		Map<Integer, Integer> tmpItem2quantity = invoice.getOrderItems();
+		for (Item tmpItem : orderItems) {
+
+			id = tmpItem.getId(); // Item id
+
+			// Proceed to check for new items not added (Used for item price later)
+			if (!this.items.contains(tmpItem)) {
+				this.items.add(tmpItem);
+				this.item2quantity.put(id, 0); // Initialize item id in item2quantity
+			}
+
+			// Updates item quantity in report
+			this.item2quantity.put(id, this.item2quantity.get(id) + tmpItem2quantity.get(id));
+		}
+
+		List<Promotion> orderPromo = invoice.getPromo();
+		Map<Integer, Integer> tmpPromo2quantity = invoice.getOrderPromos();
+		for (Promotion tmpPromo : orderPromo) {
+
+			id = tmpPromo.getId(); // Promo id
+
+			// Proceed to check for new promos not added (Used for promo price later)
+			if (!this.promotions.contains(tmpPromo)) {
+				this.promotions.add(tmpPromo);
+				this.promo2quantity.put(id, 0); // Initialize promo id in promo2quantity
+			}
+
+			// Updates promo quantity in report
+			this.promo2quantity.put(id, this.promo2quantity.get(id) + tmpPromo2quantity.get(id));
+		}
+
+		this.invoices.add(invoice);
 		this.salesRevenue += invoice.getTotal(); // Update sales revenue
-
-		List<Item> invoice_items = invoice.getItems();
-		Map<Integer, Integer> item_quantity_map = invoice.getOrderItems();
-		int invoice_size = invoice_items.size();
-		String item_name;
-		int item_id;
-		int count;
-
-		// Increments item in array
-		for (int i = 0; i < invoice_size; i++) {
-			item_name = invoice_items.get(i).getName();
-			item_id = invoice_items.get(i).getId();
-			System.out.println("Item added: " + item_name);
-			count = item_map.containsKey(item_name) ? item_map.get(item_name) : 0;
-			item_map.put(item_name, count + item_quantity_map.get(item_id));
-		}
-
-		List<Promotion> promo_items = invoice.getPromo();
-		Map<Integer, Integer> promo_quantity_map = invoice.getOrderPromos();
-		int promo_size = promo_items.size();
-		int promo_id;
-		String promo_name;
-
-		// Increments promo in array
-		for (int i = 0; i < promo_size; i++) {
-			promo_name = promo_items.get(i).getName();
-			promo_id = promo_items.get(i).getId();
-			count = promo_map.containsKey(promo_name) ? promo_map.get(promo_name) : 0;
-			promo_map.put(promo_name, count + promo_quantity_map.get(promo_id));
-		}
 
 		System.out.println("\nOrder of timestamp '" + invoice.getTimeStamp() + "' added successfully");
 		this.print();
@@ -81,18 +86,24 @@ public class Report {
 	 * total revenue
 	 */
 	public void print() {
+		int quantity;
+		String Itemformat = "  %-25s  ".concat(" %3d  ").concat("   %3$.2f %n");
+
 		System.out.printf("\nDate: %s\nDaily Sales revenue $%.2f\n", date, salesRevenue);
 
 		System.out.println("--------------------------");
 		System.out.println("Items:");
-		for (Map.Entry<String, Integer> e : item_map.entrySet())
-			System.out.println(e.getValue() + " x " + e.getKey());
-		// System.out.println("Item: " + e.getKey() + " Quantity: " + e.getValue());
+		for (Item item : this.items) {
+			quantity = this.item2quantity.get(item.getId());
+			System.out.printf(Itemformat, item.getName(), quantity, item.getPrice() * quantity);
+		}
 
 		System.out.println("--------------------------");
 		System.out.println("Promotions:");
-		for (Map.Entry<String, Integer> e : promo_map.entrySet())
-			System.out.println(e.getValue() + " x " + e.getKey());
+		for (Promotion promo : this.promotions) {
+			quantity = this.promo2quantity.get(promo.getId());
+			System.out.printf(Itemformat, promo.getName(), quantity, promo.getPrice() * quantity);
+		}
 	}
 
 	/**
@@ -105,23 +116,39 @@ public class Report {
 	}
 
 	/**
-	 * Item Map (LinkedHashMap) getter (Key: item name, item quantity)
+	 * Item list getter, contains list of items for the order
 	 * 
-	 * @return LinkedHashMap of (item_name,quantity)
+	 * @return List of items
 	 */
-	// TODO: Not sure if want to change to <Int,Int> map with (item_id,quantity)
-	public LinkedHashMap<String, Integer> getItemMap() {
-		return this.item_map;
+	public List<Item> getItems() {
+		return this.items;
 	}
 
 	/**
-	 * Promo Map (LinkedHashMap) getter (Key: promo name, Value: quantity of promo)
+	 * Promotion List getter
 	 * 
-	 * @return LinkedHashMap of (promo_name,quantity)
+	 * @return List of promotions
 	 */
-	// TODO: Not sure if want to change to <Int,Int> map with (promo_id,quantity)
-	public LinkedHashMap<String, Integer> getPromoMap() {
-		return this.promo_map;
+	public List<Promotion> getPromo() {
+		return this.promotions;
+	}
+
+	/**
+	 * Item Map getter (Key: item_id, Value: Quantity of item)
+	 * 
+	 * @return Map of (item_id,quantity)
+	 */
+	public Map<Integer, Integer> getReportItems() {
+		return this.item2quantity;
+	}
+
+	/**
+	 * Promo Map getter (Key: promo_id, Value: Quantity of promo)
+	 * 
+	 * @return Map of (promo_name,quantity)
+	 */
+	public Map<Integer, Integer> getReportPromos() {
+		return this.promo2quantity;
 	}
 
 	/**
