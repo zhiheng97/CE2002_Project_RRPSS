@@ -39,28 +39,25 @@ public class TableController {
 
 ////////////////////// BASIC METHODS ///////////////////
 
-	// private void initializeTables() {
-	// 	Date now = new Date();
-	// 	SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-	// 	List<String> tableParams = fileController.readFile(PATH_TO_TABLES_FILE);
-	// 	for (int i = 3; i < tableParams.size(); i += 3) {
-	// 		this.tables.add(new Table(Integer.parseInt(tableParams.get(i)), Boolean.parseBoolean(tableParams.get(i + 1)),
-	// 				Integer.parseInt(tableParams.get(i + 2))));
-
-	// 		if (Boolean.parseBoolean(tableParams.get(i + 1))) {
-	// 			this.findTableByNo(Integer.parseInt(i)).setInvoice()
-	// 		}
-	// 	}
-	// }
-
+	/**
+	 * @param tableNo
+	 * @return Table object
+	 */
 	public Table findTableByNo(int tableNo) {
 		return tables.stream().filter(t -> t.getTableNo() == tableNo).findFirst().orElse(null);
 	}
 
+	/**
+	 * @return number of tables
+	 */
 	public int getNoOfTables() {
 		return this.noOfTables;
 	}
 
+	/**
+	 * print all occupied tables
+	 * @return false if all the tables are unoccupied
+	 */
 	public boolean printUnavailableTables() {
 		int num_occupied = 0;
 		for (Table table : tables) {
@@ -72,6 +69,9 @@ public class TableController {
 		return true;
 	}
 
+	/**
+	 * print all unoccupied tables
+	 */
 	public void printAvailableTables() {
 		int num_occupied = 0;
 		for (Table table : tables) {
@@ -83,6 +83,10 @@ public class TableController {
 			System.out.println("All the tables are occupied!");
 	}
 
+	/**
+	 * print all unoccupied tables that has number of seats >= noPax 
+	 * @param noPax
+	 */
 	public void printAvailableTables(int noPax) {
 		int num_occupied = 0;
 		for (Table table : tables) {
@@ -96,8 +100,13 @@ public class TableController {
 
 ////////////////////// ORDER FUNCTIONS ///////////////////
 
+	/**
+	 * find the first valid table for noPax
+	 * the tables are sorted by noPax already so just loop until got one
+	 * @param noPax
+	 * @return tableNo, -1 if there is no available tables
+	 */
 	public int findValidTable(int noPax) {
-		// the tables are sorted by noPax already so just loop until got one, return -1 if none availabe
 		for (Table table : this.tables) {
 			if (!table.getIsOccupied() && noPax <= table.getSeats())
 				return table.getTableNo();
@@ -105,24 +114,52 @@ public class TableController {
 		return -1;
 	}
 
+	/**
+	 * add a quantity of Item objects to the order of table tableNo
+	 * @param tableNo
+	 * @param item
+	 * @param quantity
+	 */
 	public void addToOrder(int tableNo, Item item, int quantity) {
 		this.findTableByNo(tableNo).setIsOccupied(true);
 		this.findTableByNo(tableNo).addToOrder(item, quantity);
 	}
 
+	/**
+	 * add a quantity of Promotion objects to the order of table tableNo
+	 * @param tableNo
+	 * @param promotion
+	 * @param quantity
+	 */
 	public void addToOrder(int tableNo, Promotion promotion, int quantity) {
 		this.findTableByNo(tableNo).setIsOccupied(true);
 		this.findTableByNo(tableNo).addToOrder(promotion, quantity);
 	}
 
+	/**
+	 * remove Item object from the order of table tableNo
+	 * @param tableNo
+	 * @param item
+	 * @return true/false
+	 */
 	public boolean removeFromOrder(int tableNo, Item item) {
 		return this.findTableByNo(tableNo).removeFromOrder(item);
 	}
 
+	/**
+	 * remove Promotion object from the order of table tableNo
+	 * @param tableNo
+	 * @param promotion
+	 * @return true/false
+	 */
 	public boolean removeFromOrder(int tableNo, Promotion promotion) {
 		return this.findTableByNo(tableNo).removeFromOrder(promotion);
 	}
 
+	/**
+	 * view the current order of the table tableNo
+	 * @param tableNo
+	 */
 	public void viewOrder(int tableNo) {
 		Order invoice = this.findTableByNo(tableNo).getInvoice();
 		List<Item> items = invoice.getItems();
@@ -138,6 +175,11 @@ public class TableController {
 		System.out.printf("-> The current price for this order is: %.2f\n\n", invoice.getTotal());
 	}
 
+	/**
+	 * print the final invoice of table tableNo
+	 * clear the table (set to unoccupied + remove order)
+	 * @param tableNo
+	 */
 	public void printInvoice(int tableNo) {
 		Table table = this.findTableByNo(tableNo);
 		table.print();
@@ -230,9 +272,10 @@ public class TableController {
 	/**
 	 * 1) input from RestaurantController
 	 * @param details[3]: cust_id, res_datetime, pax
+	 * @return res_id if allocated succesfully, "false" other
 	 * 2) input from TableController's constructor for initialize the memory
 	 * @param details[5]: cust_id, res_datetime, pax, table_id, res_id
-	 * @return res_id if allocated succesfully, "false" other
+	 * @return nothing, does not matter
 	 */
 	public String reserveTable(String[] details) throws NumberFormatException, ParseException {
 		int tableNo = -1;
@@ -241,18 +284,20 @@ public class TableController {
 			if (details.length == 5) {
 				tableNo = Integer.parseInt(details[3]);
 				this.findTableByNo(tableNo).addReservation(
-					Integer.parseInt(details[0]), // cust_id
-					sdf.parse(details[1]), // date
-					Integer.parseInt(details[2]), // pax
-					details[4]
+					new Reservation (
+						details[4],						// res_id
+						Integer.parseInt(details[0]), 	// cust_id
+						sdf.parse(details[1]), 			// date
+						Integer.parseInt(details[2]) 	// pax
+					)
 				);
 			} else {
 				tableNo = this.findValidTable(details);
 				if (tableNo == -1) return "false";
 				return this.findTableByNo(tableNo).addReservation(
-					Integer.parseInt(details[0]), 
-					sdf.parse(details[1]), // date
-					Integer.parseInt(details[2]) // pax
+					Integer.parseInt(details[0]), 		// cust_id
+					sdf.parse(details[1]), 				// date
+					Integer.parseInt(details[2]) 		// pax
 				);
 			}
 		} catch (NumberFormatException e) {
@@ -263,6 +308,10 @@ public class TableController {
 		return "false";
 	}
 
+	/**
+	 * @param res_id String
+	 * @return the corresponding Reservation object
+	 */
 	public Reservation findReservation(String res_id) {
 		String[] res_id_params = res_id.split("-");
 		return this.findTableByNo(Integer.parseInt(res_id_params[0]))
@@ -271,7 +320,7 @@ public class TableController {
 	}
 
 	/**
-	 * @param res_id e.g. 5-6 -> table 5, id 6
+	 * @param res_id (e.g. 5-6 -> table 5, id 6)
 	 * @return true/false 
 	 * idk when it should return false
 	 */
@@ -280,6 +329,13 @@ public class TableController {
 		return this.findTableByNo(Integer.parseInt(res_id_params[0])).removeReservation(res_id);
 	}
 
+	/**
+	 * @param res_id
+	 * @param datetime
+	 * @return String new_res_id or "false"
+	 * @throws NumberFormatException
+	 * @throws ParseException
+	 */
 	public String updateReservation(String res_id, String datetime) throws NumberFormatException, ParseException {
 		String[] res_id_params = res_id.split("-");
 		
@@ -299,6 +355,13 @@ public class TableController {
 		return new_res_id;
 	}
 
+	/**
+	 * @param res_id
+	 * @param noPax
+	 * @return
+	 * @throws NumberFormatException
+	 * @throws ParseException
+	 */
 	public String updateReservation(String res_id, int noPax) throws NumberFormatException, ParseException {
 		String[] res_id_params = res_id.split("-");
 		
@@ -316,6 +379,30 @@ public class TableController {
 
 		if (new_res_id == "false") this.findTableByNo(Integer.parseInt(res_id_params[0])).addReservation(copied);
 		return new_res_id;
+	}
+
+	/**
+	 * @param tableNo
+	 * print all reservation of 1 table tableNo
+	 */
+	public void printReservations(int tableNo) {
+		System.out.println("Reservations for table " + this.findTableByNo(tableNo));
+		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
+			reservation.print();
+			System.out.println();
+		}
+	}
+
+	/**
+	 * @param tableNo
+	 * print all reservation of all tables
+	 */
+	public void printReservations() {
+		for(Table table : tables){
+			System.out.printf("- Table %d: %d resevation.\n", table.getTableNo(),table.getNoOfReseravtions());
+			for (Reservation reservation : table.getReservations())
+				reservation.print();
+		}
 	}
 /*
 	private boolean updateReservationFile() {
@@ -345,42 +432,8 @@ public class TableController {
 				updateReservationFile();
 		} while (true);
 	}
-
-	public boolean clearReservation(int resId) {
-		Reservation toRemove = findReservation(resId);
-		Table table = tables.stream().filter(t -> t.getReservations().contains(toRemove)).findFirst().orElse(null);
-		if (table.removeReservation(toRemove))
-			return updateReservationFile();
-		return false;
-	}
-
-	public Reservation findReservation(int resId) {
-		return tables.stream().flatMap(t -> t.getReservations().stream()).filter(r -> r.getId() == resId).findFirst()
-				.orElse(null);
-	}
 */
-	/**
-	 * @param tableNo
-	 * print all reservation of 1 table tableNo
-	 */
-	public void printReservations(int tableNo) {
-		System.out.println("Reservations for table " + this.findTableByNo(tableNo));
-		for (Reservation reservation : this.findTableByNo(tableNo).getReservations()) {
-			reservation.print();
-			System.out.println();
-		}
-	}
 
-	/**
-	 * @param tableNo
-	 * print all reservation of all tables
-	 */
-	public void printReservations() {
-		for(Table table : tables){
-			System.out.printf("- Table %d: %d resevation.\n", table.getTableNo(),table.getNoOfReseravtions());
-			for (Reservation reservation : table.getReservations())
-				reservation.print();
-		}
-	}
+	
 
 }

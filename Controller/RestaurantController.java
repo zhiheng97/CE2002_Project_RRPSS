@@ -183,6 +183,12 @@ public class RestaurantController {
 	
 ////////////////////// ORDER FUNCTIONS ///////////////////
 
+	/**
+	 * create new order for new customer
+	 * @param tableNo
+	 * @param staffID
+	 * @param date
+	 */
 	public void createOrder(int tableNo, int staffID, String date) {
 		int i = 0;
 		for(; i < staffList.size(); i++){
@@ -198,6 +204,12 @@ public class RestaurantController {
 		System.out.printf("The new order is created for table %d. Enjoy!\n", tableNo);
 	}
 
+	/**
+	 * add a quantity of item/promotion to the order of table tableNo
+	 * @param tableNo
+	 * @param itemId
+	 * @param quantity
+	 */
 	public void addToOrder(int tableNo, int itemId, int quantity) {
 		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
 		Item itemToAdd = this.categoryController.searchForItem(itemId);
@@ -210,6 +222,12 @@ public class RestaurantController {
 		}
 	}
 
+	/**
+	 * remove item or promotion from the order of table tableNo
+	 * @param tableNo
+	 * @param itemId
+	 * @return
+	 */
 	public boolean removeFromOrder(int tableNo, int itemId) {
 		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
 		if (promoToRemove != null) {
@@ -221,33 +239,62 @@ public class RestaurantController {
 		}
 	}
 
+	/**
+	 * print the final invoice of table tableNo
+	 * add the invoice to the reportController and clear the table
+	 * @param tableNo
+	 */
 	public void printInvoice(int tableNo) {
 		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
 		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
 		this.tableController.printInvoice(tableNo);
 	}
 
+	/**
+	 * view the current order of the table tableNo
+	 * @param tableNo
+	 */
 	public void viewOrder(int tableNo) {
 		this.tableController.viewOrder(tableNo);
 	}
 
-	// find first availabe table for noPax
+	/**
+	 * find first availabe table for noPax
+	 * @param noPax
+	 * @return
+	 */
 	public int findValidTable(int noPax) {
 		return this.tableController.findValidTable(noPax);
 	}
 
+	/**
+	 * check whether table tableNo is occupied or not
+	 * @param tableNo
+	 * @return
+	 */
 	public boolean isTableOccupied(int tableNo) {
 		return this.tableController.findTableByNo(tableNo).getIsOccupied();
 	}
 
+	/**
+	 * print all occupied tables to let the staff choose which table to udpate order
+	 * @return false if all tables are unoccupied
+	 */
 	public boolean printUnavailableTables() {
 		return this.tableController.printUnavailableTables();
 	}
 
+	/**
+	 * print all unoccupied tables
+	 */
 	public void printAvailableTables() {
 		this.tableController.printAvailableTables();
 	}
 
+	/**
+	 * print all unoccupied tables that has number of seats >= noPax 
+	 * @param noPax
+	 */
 	public void printAvailableTables(int noPax) {
 		this.tableController.printAvailableTables(noPax);
 	}
@@ -314,10 +361,17 @@ public class RestaurantController {
 	// 	this.tableController.expireReservations(date);
 	// }
 
+	/**
+	 * @param tableNo
+	 * print all reservations of a specified table 
+	 */
 	public void printReservations(int tableNo) {
 		this.tableController.printReservations(tableNo);
 	}
 
+	/**
+	 * print all reservations of the restaurant
+	 */
 	public void printReservations() {
 		this.tableController.printReservations();
 	}

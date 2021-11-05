@@ -59,7 +59,6 @@ public class Order {
 	}
 
 	/**
-	 * 
 	 * Adds an item and indicated quantities of it to Order
 	 * 
 	 * @param item     Item to be added
