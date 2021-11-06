@@ -330,7 +330,10 @@ public class RRPSSApp {
 									System.out.println("\n(type -9 to return to previous menu)");
 									System.out.print("Enter the reservation ID: ");
 									res_id = reader.readLine();
-									if (res_id.equals(ESCAPE_STRING)) break;
+									if (res_id.equals(ESCAPE_STRING)) {
+										backToMenu = true;
+										break;
+									}
 
 									// TODO: checkin at the correct datetime, to avoid the case many reservations
 									// same table but different timeslots check in at the same time
