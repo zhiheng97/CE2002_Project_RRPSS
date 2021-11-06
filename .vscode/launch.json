@@ -1,0 +1,48 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch RRPSSApp",
+            "request": "launch",
+            "mainClass": "App.RRPSSApp",
+            "projectName": "CE2002_Project_RRPSS_7ffc52a3"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestPromotionController",
+            "request": "launch",
+            "mainClass": "Tests.TestPromotionController",
+            "projectName": "CE2002_Project_RRPSS_7ffc52a3"
+        },
+        {
+            "type": "java",
+            "name": "Launch testCalendar",
+            "request": "launch",
+            "mainClass": "Tests.testCalendar",
+            "projectName": "CE2002_Project_RRPSS_7ffc52a3"
+        },
+        {
+            "type": "java",
+            "name": "Launch testFileReader",
+            "request": "launch",
+            "mainClass": "Tests.testFileReader",
+            "projectName": "CE2002_Project_RRPSS_7ffc52a3"
+        },
+        {
+            "type": "java",
+            "name": "Launch TableController",
+            "request": "launch",
+            "mainClass": "TableController"
+        }
+    ]
+}

@@ -69,7 +69,6 @@ public class RestaurantController {
 		// initialize order for occupied tables
 		Random rand = new Random();
 		Date now = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		for (int id=1; id<=12; id++) {
 			if (this.tableController.findTableByNo(id).getIsOccupied()){
 				this.tableController.findTableByNo(id).setInvoice(
@@ -206,11 +205,13 @@ public class RestaurantController {
 	 * @return the tableNo and cust_id that for this reservation
 	 */
 	public int[] checkinReservation(String res_id) {
+		if (!res_id.contains("-")) return new int[]{-1, -1};
 		String[] res_id_params = res_id.split("-");
 		int tableNo = Integer.parseInt(res_id_params[0]);
 		int id = Integer.parseInt(res_id_params[1]);
-		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15) return null;
+		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15) return new int[]{-1, -1};
 		Reservation res = this.tableController.findReservation(res_id);
+		if (res == null) return new int[]{-1, -1};
 		int cust_id = res.getCustId();
 		this.tableController.clearReservation(res_id);
 		return new int[]{tableNo, cust_id};

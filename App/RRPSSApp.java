@@ -27,7 +27,7 @@ public class RRPSSApp {
 		SimpleDateFormat sdf;
 		Calendar c = Calendar.getInstance();
 		String option_main = "", option_sub = "";
-		int tableNo = 0, choice;
+		int choice, tableNo = -1, cust_id = -1, staff_id = -1, noPax = -1;
 		try {
 			do {
 				System.out.println("\nRestaurant Reservation and Point of Sale System");
@@ -310,55 +310,45 @@ public class RRPSSApp {
 				case "3":
 					restaurantController.deleteExpiredReservations();
 					System.out.println("\n(type -9 to return to previous menu)");
-					System.out.println("Do you want to update a current order or checkin new table?");
-					System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
-					choice = sc.nextInt();
-					if (choice == Integer.parseInt(ESCAPE_STRING))
-						break;
+					System.out.println("Do you want to checkin a new table or update a current order?");
+					System.out.print("Enter 1 to checkin or 2 to update, your choice is: ");
+					option_sub = reader.readLine();
+					if (option_sub.equals(ESCAPE_STRING)) break;
 					System.out.println();
 
-					boolean back = false;
+					boolean backToMenu = false;
 					do {
-						switch (choice) {
-						case 1:
-							boolean isAnyOccupied = restaurantController.printUnavailableTables();
-							if (!isAnyOccupied) {
-								back = true;
-								break;
-							}
-							while (true) {
-								System.out.println("\n(type -9 to return to previous menu)");
-								System.out.print("Enter the table number you want to update: ");
-								tableNo = sc.nextInt();
-								if (tableNo == Integer.parseInt(ESCAPE_STRING))
-									break;
-								if (tableNo < 1 || tableNo > 12)
-									System.out.println("Invalid table!");
-								else if (!restaurantController.isTableOccupied(tableNo))
-									System.out.println("This table is not occupied!");
-								else
-									break;
-							}
-							break;
-						case 2:
+						switch (option_sub) {
+						case "1":
 							restaurantController.deleteExpiredReservations();
-							int noPax, cust_id, staff_id;
-							System.out
-									.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
+							System.out.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
 							String isReserved = reader.readLine();
 
 							if (isReserved.toLowerCase().equals("y")) {
-								// TODO: handle the mismatch input
-								System.out.print("Enter the reservation ID: ");
-								String res_id = reader.readLine();
-								int[] res_info = restaurantController.checkinReservation(res_id);
+								int[] res_info = {-1, -1};
+								while (true){
+									System.out.println("\n(type -9 to return to previous menu)");
+									System.out.print("Enter the reservation ID: ");
+									String res_id = reader.readLine();
+									if (res_id.equals(ESCAPE_STRING)) break;
+									res_info = restaurantController.checkinReservation(res_id);
+									if (res_info[0] == -1 || res_info[1] == -1) {
+										System.out.printf("Cannot find any reservation id %s, enter [Y] to retry: ", res_id);
+										String temp = reader.readLine();
+										if (!temp.toLowerCase().equals("y")) {
+											backToMenu = true;
+											break;
+										}
+									} else break;
+								}
+								if (backToMenu) break;
 								tableNo = res_info[0];
 								cust_id = res_info[1];
 								System.out.printf("Customer ID %d is allocated with table %d.\n", cust_id, tableNo);
 							} else {
 								boolean isAnyAvail = restaurantController.printAvailableTables();
 								if (!isAnyAvail) {
-									back = true;
+									backToMenu = true;
 									break;
 								}
 								while (true) {
@@ -380,12 +370,10 @@ public class RRPSSApp {
 									System.out.print("Enter the customer ID: ");
 									cust_id = sc.nextInt();
 									if (!restaurantController.isRegisteredCustomer(cust_id)) {
-										System.out.printf(
-												"Canont find any customer with ID %d, do you want to register [Y/N]? ",
-												cust_id);
+										System.out.printf("Canont find any customer with ID %d, do you want to register [Y/N]? ", cust_id);
 										String opt = reader.readLine();
 										if (!opt.toLowerCase().equals("y")) {
-											back = true;
+											backToMenu = true;
 											break;
 										} else
 											cust_id = restaurantController.registerCustomer();
@@ -396,7 +384,7 @@ public class RRPSSApp {
 								tableNo = restaurantController.findValidTable(noPax);
 								if (tableNo == -1) {
 									System.out.printf("There are no available tables for %d!\n", tableNo);
-									back = true;
+									backToMenu = true;
 									break; // no available table for noPax, maybe ask to reserve for future meal(?)
 								}
 							}
@@ -409,9 +397,27 @@ public class RRPSSApp {
 								else
 									System.out.println("Unknown staff ID!");
 							}
-							Date now = c.getTime();
-							sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 							restaurantController.createOrder(tableNo, cust_id, staff_id, c.getTime());
+							break;
+						case "2":
+							boolean isAnyOccupied = restaurantController.printUnavailableTables();
+							if (!isAnyOccupied) {
+								backToMenu = true;
+								break;
+							}
+							while (true) {
+								System.out.println("\n(type -9 to return to previous menu)");
+								System.out.print("Enter the table number you want to update: ");
+								tableNo = sc.nextInt();
+								if (tableNo == Integer.parseInt(ESCAPE_STRING))
+									break;
+								if (tableNo < 1 || tableNo > 12)
+									System.out.println("Invalid table!");
+								else if (!restaurantController.isTableOccupied(tableNo))
+									System.out.println("This table is not occupied!");
+								else
+									break;
+							}
 							break;
 						default:
 							System.out.println("Invalid option!");
@@ -419,11 +425,9 @@ public class RRPSSApp {
 							choice = sc.nextInt();
 							break;
 						}
-					} while (!(choice == 1 || choice == 2));
-					if (back)
-						break;
-					if (tableNo == Integer.parseInt(ESCAPE_STRING))
-						break;
+					} while (!(option_sub.equals("1") || option_sub.equals("2")));
+					
+					if (backToMenu || tableNo == Integer.parseInt(ESCAPE_STRING)) break;
 
 					do {
 						int itemId, quantity;
@@ -510,6 +514,7 @@ public class RRPSSApp {
 				/////////////////// RESERVATIONS ///////////////////
 				case "4":
 					restaurantController.deleteExpiredReservations();
+					backToMenu = false;
 					do {
 						System.out.println();
 						System.out.println("1. Add reservation");
@@ -526,19 +531,29 @@ public class RRPSSApp {
 							restaurantController.deleteExpiredReservations();
 							String[] resParams = new String[3];
 							try {
-								String ans;
-								int cust_id = -1;
 								System.out.println("(type -9 to return to previous menu)");
-								System.out.print("Is this a registered member [y/N]? ");
-								ans = reader.readLine();
-								if (ans.equals(ESCAPE_STRING))
-									break;
-								if (ans.toLowerCase().equals("y")) {
-									System.out.print("Enter the customer id: ");
+								System.out.print("Enter [Y] if this is a registerd customer, enter anything otherwise: ");
+								String isRegistered = reader.readLine();
+								if (isRegistered.equals(ESCAPE_STRING)) break;
+								if (isRegistered.toLowerCase().equals("y")) {
+									System.out.print("Enter the customer ID: ");
 									cust_id = sc.nextInt();
+									if (!restaurantController.isRegisteredCustomer(cust_id)) {
+										System.out.printf("Canont find any customer with ID %d, do you want to register [Y]? ", cust_id);
+										String opt = reader.readLine();
+										if (!opt.toLowerCase().equals("y")) {
+											backToMenu = true;
+											break;
+										} else
+											cust_id = restaurantController.registerCustomer();
+									}
 								} else {
-									cust_id = restaurantController.registerCustomer();
+									System.out.print("Enter [Y] if you want to register new customer: ");
+									String temp = reader.readLine();
+									if (temp.toLowerCase().equals("y")) cust_id = restaurantController.registerCustomer();
+									else break;
 								}
+								if (backToMenu) continue;
 
 								resParams[0] = String.valueOf(cust_id);
 								System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
@@ -615,7 +630,7 @@ public class RRPSSApp {
 											"There is no available table for your time date and number of paxes!");
 								break;
 							case "2":
-								int noPax = -1;
+								noPax = -1;
 								while (true) {
 									System.out.println("(type -9 to return to previous menu)");
 									System.out.print("Enter the number of pax you want to update: ");
