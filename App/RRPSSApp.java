@@ -26,7 +26,7 @@ public class RRPSSApp {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		SimpleDateFormat sdf;
 		Calendar c = Calendar.getInstance();
-		String option_main = "", option_sub = "";
+		String option_main = "", option_sub = "", res_id = "";
 		int choice, tableNo = -1, cust_id = -1, staff_id = -1, noPax = -1;
 		try {
 			do {
@@ -329,11 +329,14 @@ public class RRPSSApp {
 								while (true){
 									System.out.println("\n(type -9 to return to previous menu)");
 									System.out.print("Enter the reservation ID: ");
-									String res_id = reader.readLine();
+									res_id = reader.readLine();
 									if (res_id.equals(ESCAPE_STRING)) break;
+
+									// TODO: checkin at the correct datetime, to avoid the case many reservations
+									// same table but different timeslots check in at the same time
 									res_info = restaurantController.checkinReservation(res_id);
 									if (res_info[0] == -1 || res_info[1] == -1) {
-										System.out.printf("Cannot find any reservation id %s, enter [Y] to retry: ", res_id);
+										System.out.printf("Cannot find any reservation id %s, enter [Y] if you want to retry: ", res_id);
 										String temp = reader.readLine();
 										if (!temp.toLowerCase().equals("y")) {
 											backToMenu = true;
@@ -355,8 +358,7 @@ public class RRPSSApp {
 									System.out.print("Enter the number of pax: ");
 									noPax = sc.nextInt();
 									if (noPax < 1 || noPax > 10)
-										System.out.println(
-												"Invalid! The number of pax must be between 1 and 10, please try again.");
+										System.out.println("Invalid! The number of pax must be between 1 and 10, please try again.");
 									// if > 10 then try again or ask comeback later or split into 2 tables or
 									// anything idk
 									// this would be new feature (not for now).
@@ -562,6 +564,7 @@ public class RRPSSApp {
 								time = time.concat(" " + reader.readLine());
 								sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
 								resParams[1] = sdf.parse(time).toString();
+								System.out.println(resParams[1]);
 								System.out.print("Enter the number of guest: ");
 								resParams[2] = String.valueOf(sc.nextInt());
 							} catch (InputMismatchException e) {
@@ -569,18 +572,15 @@ public class RRPSSApp {
 								System.out.println();
 								break;
 							} catch (ParseException e) {
-								System.out.println(
-										"Error occured while trying to parse input for date and time of reservation!");
+								System.out.println("Error occured while trying to parse input for date and time of reservation!");
 								System.out.println();
 							}
 
-							String res_id = restaurantController.reserveTable(resParams);
+							res_id = restaurantController.reserveTable(resParams);
 							if (!res_id.equals("false"))
-								System.out.println(
-										"Reservation has been made successfully with reservation ID: " + res_id);
+								System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
 							else
-								System.out
-										.println("There is no available table for your time date and number of paxes!");
+								System.out.println("There is no available table for your time date and number of paxes!");
 							System.out.println();
 							break;
 						case "2":
@@ -588,46 +588,63 @@ public class RRPSSApp {
 							restaurantController.printReservations();
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the reservation ID that you wish to remove: ");
-							String resIdToRemove = reader.readLine();
-							if (resIdToRemove.equals(ESCAPE_STRING))
-								break;
-							else if (restaurantController.clearReservation(resIdToRemove))
+							res_id = reader.readLine();
+							if (res_id.equals(ESCAPE_STRING)) break;
+							else if (restaurantController.clearReservation(res_id))
 								System.out.println("Reservation has been removed successfully!");
 							else
-								System.out.println("Reservation was not removed!");
+								System.out.printf("Cannot find any reservation with id %s to remove!\n", res_id);
 							System.out.println();
 							break;
 						case "3":
+							backToMenu = false;
 							restaurantController.deleteExpiredReservations();
 							restaurantController.printReservations();
-							System.out.println("(type -9 to return to previous menu)");
-							System.out.print("Enter the reservation ID you want to update: ");
-							String resIdToUpdate = reader.readLine();
-							if (resIdToUpdate.equals(ESCAPE_STRING))
-								break;
-							System.out.println("(type anything to return)");
+							while (true) {
+								System.out.println("(type -9 to return to previous menu)");
+								System.out.print("Enter the reservation ID you want to update: ");
+								res_id = reader.readLine();
+								if (res_id.equals(ESCAPE_STRING)) break;
+								if (!restaurantController.checkReservation(res_id)) {
+									System.out.printf("Cannot find any reservation with id %s, enter [Y] if you want to try again: ", res_id);
+									String temp = reader.readLine();
+									if (!temp.toLowerCase().equals("y")) {
+										backToMenu = true;
+										break;
+									}
+								} else break;
+							}
+							if (backToMenu || res_id.equals(ESCAPE_STRING)) break;
+
+							System.out.println("(type anything else to return)");
 							System.out.println("1. Date and time of the reservation");
 							System.out.println("2. Number of paxes");
 							System.out.print("Enter your choice: ");
 							option_sub = reader.readLine();
 							switch (option_sub) {
 							case "1":
-								System.out.println("(type -9 to return to previous menu)");
-								System.out.print("Enter the date you want to update [dd-MMM-yy]: ");
-								String time = reader.readLine();
-								if (time.equals(ESCAPE_STRING))
+								try {
+									System.out.println("(type -9 to return to previous menu)");
+									System.out.print("Enter the date you want to update [dd-MMM-yy]: ");
+									String time = reader.readLine();
+									if (time.equals(ESCAPE_STRING)) break;
+									System.out.print("Enter the time of reservation [HH:mm]: ");
+									time = time.concat(" " + reader.readLine());
+									sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
+									time = sdf.parse(time).toString();
+									res_id = restaurantController.updateReservation(res_id, time);
+									if (!res_id.equals("false"))
+										System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
+									else
+										System.out.println("There is no available table for your time date and number of paxes!");
+								} catch (InputMismatchException e) {
+									System.out.println("Invalid input, returning to previous menu.");
+									System.out.println();
 									break;
-								System.out.print("Enter the time of reservation [HH:mm]: ");
-								time = time.concat(" " + reader.readLine());
-								sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
-								time = sdf.parse(time).toString();
-								res_id = restaurantController.updateReservation(resIdToUpdate, time);
-								if (!res_id.equals("false"))
-									System.out.println(
-											"Reservation has been made successfully with reservation ID: " + res_id);
-								else
-									System.out.println(
-											"There is no available table for your time date and number of paxes!");
+								} catch (ParseException e) {
+									System.out.println("Error occured while trying to parse input for date and time of reservation!");
+									System.out.println();
+								}
 								break;
 							case "2":
 								noPax = -1;
@@ -635,21 +652,16 @@ public class RRPSSApp {
 									System.out.println("(type -9 to return to previous menu)");
 									System.out.print("Enter the number of pax you want to update: ");
 									noPax = sc.nextInt();
-									if (noPax < 2 || noPax > 10)
-										System.out.println(
-												"Invalid! The number of pax must be between 2 and 10, please try again.");
-									else
-										break;
+									if (noPax < 1 || noPax > 10)
+										System.out.println("Invalid! The number of pax must be between 1 and 10, please try again.");
+									else break;
 								}
-								if (noPax == Integer.parseInt(ESCAPE_STRING))
-									break;
-								res_id = restaurantController.updateReservation(resIdToUpdate, noPax);
+								if (noPax == Integer.parseInt(ESCAPE_STRING)) break;
+								res_id = restaurantController.updateReservation(res_id, noPax);
 								if (!res_id.equals("false"))
-									System.out.println(
-											"Reservation has been made successfully with reservation ID: " + res_id);
+									System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
 								else
-									System.out.println(
-											"There is no available table for your time date and number of paxes!");
+									System.out.println("There is no available table for your time date and number of paxes!");
 								break;
 							default:
 								break;

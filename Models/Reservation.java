@@ -10,7 +10,7 @@ public class Reservation {
 	private Date dateTime;
 	private String time;
 	private int noPax = 2;
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM yy HH:mm:ss z yyyy";
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 
 	/**
 	 * res_id,table_id,cust_id,res_datetime,pax
@@ -63,7 +63,7 @@ public class Reservation {
 	public void print() {
 		System.out.println("Reservation ID: " + this.res_id);
 		System.out.println("Customer ID: " + this.cust_id);
-		System.out.println("Date and time of the reservation: " + this.dateTime);
+		System.out.println("Date and time of the reservation: " + this.time);
 		System.out.println("Number of guests: " + this.noPax);
 	}
 

@@ -210,7 +210,24 @@ public class TableController {
 		
 		int tableNo = -1;
 		switch (noPax) { 
-			case 1, 2, 3:	// search table 1->2 (2 paxes), 3->5 (4 paxes)
+			case 1: 	// search table 1->2 (2 paxes)
+				for (int id=1; id<=2; id++) {
+					boolean isValid = true;
+					Table table = this.findTableByNo(id);
+					if (table.getSeats() < noPax) continue;
+					for (Reservation res : table.getReservations()) {
+						Date temp_date = res.getDate();
+						long time_diff = res_date.getTime() - temp_date.getTime();
+						if (time_diff >= 8.64e7) continue; 				// 1 day
+						if (time_diff <= 60000) isValid = false;		// 1 min
+					}
+					if (isValid) {
+						tableNo = id;
+						break;
+					}
+				}
+				break; 
+			case 2, 3:	// search table 1->2 (2 paxes), 3->5 (4 paxes)
 				for (int id=1; id<=5; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
@@ -385,7 +402,7 @@ public class TableController {
 		new_res_params[1] = copied.getTime();
 		new_res_params[2] = String.valueOf(noPax);
 		String new_res_id = this.reserveTable(new_res_params);
-
+		
 		if (new_res_id == "false") this.findTableByNo(Integer.parseInt(res_id_params[0])).addReservation(copied);
 		return new_res_id;
 	}

@@ -205,13 +205,11 @@ public class RestaurantController {
 	 * @return the tableNo and cust_id that for this reservation
 	 */
 	public int[] checkinReservation(String res_id) {
-		if (!res_id.contains("-")) return new int[]{-1, -1};
+		if (!checkReservation(res_id)) return new int[]{-1, -1};
+
 		String[] res_id_params = res_id.split("-");
 		int tableNo = Integer.parseInt(res_id_params[0]);
-		int id = Integer.parseInt(res_id_params[1]);
-		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15) return new int[]{-1, -1};
 		Reservation res = this.tableController.findReservation(res_id);
-		if (res == null) return new int[]{-1, -1};
 		int cust_id = res.getCustId();
 		this.tableController.clearReservation(res_id);
 		return new int[]{tableNo, cust_id};
@@ -341,6 +339,16 @@ public class RestaurantController {
 
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
 
+	public boolean checkReservation(String res_id) {
+		if (!res_id.contains("-")) return false;
+		String[] res_id_params = res_id.split("-");
+		int tableNo = Integer.parseInt(res_id_params[0]);
+		int id = Integer.parseInt(res_id_params[1]);
+		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15) return false;
+		Reservation res = this.tableController.findReservation(res_id);
+		if (res == null) return false;
+		return true;
+	}
 	/**
 	 * for debugging purpose only when add register new Customer
 	 * show all customers in memory
