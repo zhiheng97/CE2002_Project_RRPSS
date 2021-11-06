@@ -684,7 +684,7 @@ public class RRPSSApp {
 						System.out.println("1. Add 10 minutes");
 						System.out.println("2. Add 1 hour");
 						System.out.println("3. Add 1 day");
-						System.out.println("4. Add custom minutes");
+						System.out.println("4. Add 1 month");
 						System.out.println("-9. Return");
 						System.out.print("Enter your choice: ");
 						option_sub = reader.readLine();
@@ -699,6 +699,9 @@ public class RRPSSApp {
 							break;
 						case "3":
 							c.add(Calendar.DAY_OF_MONTH, 1);
+							break;
+						case "4":
+							c.add(Calendar.MONTH, 1);
 							break;
 						case ESCAPE_STRING:
 							System.out.println("Returning....\n");
