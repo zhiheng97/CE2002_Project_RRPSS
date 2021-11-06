@@ -249,19 +249,23 @@ public class RestaurantController {
 	}
 
 	/**
-	 * remove item or promotion from the order of table tableNo
-	 * @param tableNo
-	 * @param itemId
-	 * @return
+	 * remove Item/Promotion objects from the order of table tableNo
+	 * 
+	 * @param tableNo 		the tableNo that has the order need to process
+	 * @param itemId 		id of the Item/Promotion to be removed
+	 * @param quantity 		number of Promotion object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity >= current quantity in order (remove all anw)
+	 * @return 0 if there is no Item/Promotion in this order
 	 */
-	public boolean removeFromOrder(int tableNo, int itemId) {
+	public int removeFromOrder(int tableNo, int itemId, int quantity) {
 		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
 		if (promoToRemove != null) {
 			Promotion copied = this.promotionController.copyPromotion(itemId);
-			return this.tableController.removeFromOrder(tableNo, copied);
+			return this.tableController.removeFromOrder(tableNo, copied, quantity);
 		} else {
 			Item copied = this.categoryController.copyItem(itemId);
-			return this.tableController.removeFromOrder(tableNo, copied);
+			return this.tableController.removeFromOrder(tableNo, copied, quantity);
 		}
 	}
 
@@ -280,8 +284,8 @@ public class RestaurantController {
 	 * view the current order of the table tableNo
 	 * @param tableNo
 	 */
-	public void viewOrder(int tableNo) {
-		this.tableController.viewOrder(tableNo);
+	public void printOrder(int tableNo, boolean withPrice) {
+		this.tableController.printOrder(tableNo, withPrice);
 	}
 
 	/**

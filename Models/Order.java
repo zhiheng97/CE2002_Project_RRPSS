@@ -109,51 +109,84 @@ public class Order {
 	}
 
 	/**
-	 * Removes item from order
+	 * remove Item objects from the order of table tableNo
 	 * 
 	 * @param item Item to be removed
-	 * @return True if item removed successfuly, False if otherwise
+	 * @param quantity number of Item object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity >= current quantity in order (remove all anw)
+	 * @return 0 if there is no Item in this order
 	 */
-	public boolean removeFromOrder(Item item) {
-		// update invoice items
+	public int removeFromOrder(Item item, int quantity) {
 		int id = item.getId();
 		if (!this.item2quantity.containsKey(id))
-			return false;
+			return 0;
 
 		int curQuantity = this.item2quantity.get(id);
-		if (curQuantity == 1) {
-			this.items.remove(item);
+		if (curQuantity <= quantity) {
+			for (Item x : this.items) {
+				if (x.getId() == item.getId()) {
+					this.items.remove(x);
+					break;
+				}
+			}
 			this.item2quantity.remove(id);
-		} else
-			this.item2quantity.replace(id, curQuantity, curQuantity - 1);
-
-		// update price
-		this.total -= item.getPrice();
-		return true;
+			this.total -= item.getPrice() * curQuantity;
+			return 1;
+		} 
+		
+		this.item2quantity.replace(id, curQuantity, curQuantity - quantity);
+		this.total -= item.getPrice() * quantity;
+		return 2;
 	}
 
 	/**
-	 * Removes promotion from order
+	 * remove Promotion objects from the order of table tableNo
 	 * 
-	 * @param promotion Promotion to be removed
-	 * @return True if promotion removed successfuly, False if otherwise
+	 * @param promotion 	Promotion to be removed
+	 * @param quantity 		number of Promotion object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity is more than current quantity in order (remove all anw)
+	 * @return 0 if there is no Promotion in this order
 	 */
-	public boolean removeFromOrder(Promotion promotion) {
-		// update invoice items
+	public int removeFromOrder(Promotion promotion, int quantity) {
 		int id = promotion.getId();
 		if (!this.promo2quantity.containsKey(id))
-			return false;
+			return 0;
 
 		int curQuantity = this.promo2quantity.get(id);
-		if (curQuantity == 1) {
-			this.promotions.remove(promotion);
+		if (curQuantity <= quantity) {
+			for (Promotion x : this.promotions) {
+				if (x.getId() == promotion.getId()) {
+					this.promotions.remove(x);
+					break;
+				}
+			}
 			this.promo2quantity.remove(id);
-		} else
-			this.promo2quantity.replace(id, curQuantity, curQuantity - 1);
+			this.total -= promotion.getPrice() * curQuantity;
+			return 1;
+		} 
+		
+		this.promo2quantity.replace(id, curQuantity, curQuantity - quantity);
+		this.total -= promotion.getPrice() * quantity;
+		return 2;
+	}
 
-		// update price
-		this.total -= promotion.getPrice();
-		return true;
+	/**
+	 * print the current order of the table
+	 */
+	public void printOrder(boolean withPrice) {
+		System.out.println("The current order:");
+		if (this.items.isEmpty() && this.promotions.isEmpty()) System.out.println("There is nothing in this order!");
+		else {
+			System.out.printf("  %2s  %-20s   %6s%n", "Id", "Name", "Qty");
+			for (Item item : this.items) 
+				System.out.printf(" %2d %-20s   %6d%n", item.getId(), item.getName(), item2quantity.get(item.getId()));
+			for (Promotion promo : this.promotions) 
+				System.out.printf(" %2d %-20s   %6d%n", promo.getId(), promo.getName(), promo2quantity.get(promo.getId()));
+		}
+		
+		if (withPrice) System.out.printf("Total amount:  %.2f SGD%n", this.getTotal());
 	}
 
 	/**

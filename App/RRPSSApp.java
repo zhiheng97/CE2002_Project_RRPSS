@@ -324,8 +324,10 @@ public class RRPSSApp {
 								break;
 							}
 							while (true) {
+								System.out.println("\n(type -9 to return to previous menu)");
 								System.out.print("Enter the table number you want to update: ");
 								tableNo = sc.nextInt();
+								if (tableNo == Integer.parseInt(ESCAPE_STRING)) break;
 								if (tableNo < 1 || tableNo > 12) System.out.println("Invalid table!");
 								else if (!restaurantController.isTableOccupied(tableNo)) System.out.println("This table is not occupied!");
 								else break;
@@ -400,13 +402,16 @@ public class RRPSSApp {
 						}
 					} while (!(choice == 1 || choice == 2));
 					if (back) break;
-
+					if (tableNo == Integer.parseInt(ESCAPE_STRING)) break;
+					
 					do {
+						int itemId, quantity;
 						System.out.println();
 						System.out.println("1. Add item to your order");
-						System.out.println("2. Remove item from your order");
-						System.out.println("3. View your current order");
-						System.out.println("4. Checkout and/or return");
+						System.out.println("2. Add promotion to your order");
+						System.out.println("3. Remove item from your order");
+						System.out.println("4. View your current order");
+						System.out.println("5. Checkout and/or return");
 						System.out.println("-9. Return to main menu");
 						System.out.print("Enter your choice: ");
 						option_sub = reader.readLine();
@@ -414,35 +419,53 @@ public class RRPSSApp {
 
 						switch (option_sub) {
 						case "1":
+							restaurantController.printMenu();
 							System.out.println("(type -9 to return to previous menu)");
 							System.out.print("Enter the item id: ");
-							int itemIdToAdd = sc.nextInt();
-							if (itemIdToAdd == Integer.parseInt(ESCAPE_STRING))
+							itemId = sc.nextInt();
+							if (itemId == Integer.parseInt(ESCAPE_STRING))
 								break;
 							System.out.print("Enter the quantity you want: ");
-							int quantityToAdd = sc.nextInt();
-							restaurantController.addToOrder(tableNo, itemIdToAdd, quantityToAdd);
+							quantity = sc.nextInt();
+							restaurantController.addToOrder(tableNo, itemId, quantity);
 							System.out.println();
 							break;
 						case "2":
+							restaurantController.printPromotion();
 							System.out.println("(type -9 to return to previous menu)");
-							System.out.print("Enter the item id: ");
-							int itemIdToRemove = sc.nextInt();
-							if (itemIdToRemove == Integer.parseInt(ESCAPE_STRING))
+							System.out.print("Enter the promotion id: ");
+							itemId = sc.nextInt();
+							if (itemId == Integer.parseInt(ESCAPE_STRING))
 								break;
-							boolean isValid = restaurantController.removeFromOrder(tableNo, itemIdToRemove);
-							if (isValid)
-								System.out.println("Successfully removed the item");
-							else
-								System.out.println("Unsuccessfully removed the item because it is not in your order\n");
+							System.out.print("Enter the quantity you want: ");
+							quantity = sc.nextInt();
+							restaurantController.addToOrder(tableNo, itemId, quantity);
 							System.out.println();
 							break;
 						case "3":
-							System.out.println();
-							restaurantController.viewOrder(tableNo);
+							restaurantController.printOrder(tableNo, false);
+							System.out.println("(type -9 to return to previous menu)");
+							System.out.print("Enter the item/promotion id to remove: ");
+							itemId = sc.nextInt();
+							if (itemId == Integer.parseInt(ESCAPE_STRING))
+								break;
+							System.out.print("Enter the quantity you want to remove: ");
+							quantity = sc.nextInt();
+							int temp = restaurantController.removeFromOrder(tableNo, itemId, quantity);
+							if (temp == 2)
+								System.out.printf("Successfully removed %d items/promotions with id %d!%n", quantity, itemId);
+							else if (temp == 1)
+								System.out.printf("All items/promotions with id %d are removed from this order!%n", itemId);
+							else 
+								System.out.printf("Cannot find any item/promotion with id %d in this order!%n", itemId);
 							System.out.println();
 							break;
 						case "4":
+							System.out.println();
+							restaurantController.printOrder(tableNo, true);
+							System.out.println();
+							break;
+						case "5":
 							restaurantController.printInvoice(tableNo);
 							System.out.println("Returning....\n");
 							System.out.println();
@@ -456,7 +479,7 @@ public class RRPSSApp {
 							System.out.println();
 							break;
 						}
-					} while (!option_sub.equals("4") && !option_sub.equals(ESCAPE_STRING));
+					} while (!option_sub.equals("5") && !option_sub.equals(ESCAPE_STRING));
 					break;
 				/////////////////// RESERVATIONS ///////////////////
 				case "4":

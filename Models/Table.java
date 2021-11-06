@@ -3,6 +3,7 @@ package Models;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Table {
 
@@ -46,21 +47,36 @@ public class Table {
 	}
 
 	/**
-	 * remove Item object from this table's order
-	 * @param item
-	 * @return
+	 * remove Item objects from the order of table tableNo
+	 * 
+	 * @param item Item to be removed
+	 * @param quantity number of Item object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity >= current quantity in order (remove all anw)
+	 * @return 0 if there is no Item in this order
 	 */
-	public boolean removeFromOrder(Item item) {
-		return this.invoice.removeFromOrder(item);
+	public int removeFromOrder(Item item, int quantity) {
+		return this.invoice.removeFromOrder(item, quantity);
 	}
 
 	/**
-	 * remove Promotion object from this table's order
-	 * @param promotion
-	 * @return
+	 * remove Promotion objects from the order of table tableNo
+	 * 
+	 * @param promotion 	Promotion to be removed
+	 * @param quantity 		number of Promotion object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity is more than current quantity in order (remove all anw)
+	 * @return 0 if there is no Promotion in this order
 	 */
-	public boolean removeFromOrder(Promotion promotion) {
-		return this.invoice.removeFromOrder(promotion);
+	public int removeFromOrder(Promotion promotion, int quantity) {
+		return this.invoice.removeFromOrder(promotion, quantity);
+	}
+
+	/**
+	 * print the current order of the table
+	 */
+	public void printOrder(boolean withPrice) {
+		this.invoice.printOrder(withPrice);
 	}
 
 	/**
