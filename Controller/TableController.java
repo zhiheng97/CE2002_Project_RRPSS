@@ -140,42 +140,39 @@ public class TableController {
 	}
 
 	/**
-	 * remove Item object from the order of table tableNo
-	 * @param tableNo
-	 * @param item
-	 * @return true/false
+	 * remove Item objects from the order of table tableNo
+	 * 
+	 * @param tableNo 		the tableNo that has the order need to process
+	 * @param item 			Item to be removed
+	 * @param quantity 		number of Item object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity >= current quantity in order (remove all anw)
+	 * @return 0 if there is no Item in this order
 	 */
-	public boolean removeFromOrder(int tableNo, Item item) {
-		return this.findTableByNo(tableNo).removeFromOrder(item);
+	public int removeFromOrder(int tableNo, Item item, int quantity) {
+		return this.findTableByNo(tableNo).removeFromOrder(item, quantity);
 	}
 
 	/**
-	 * remove Promotion object from the order of table tableNo
-	 * @param tableNo
-	 * @param promotion
-	 * @return true/false
+	 * remove Promotion objects from the order of table tableNo
+	 * 
+	 * @param tableNo 		the tableNo that has the order need to process
+	 * @param promotion 	Promotion to be removed
+	 * @param quantity 		number of Promotion object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity >= current quantity in order (remove all anw)
+	 * @return 0 if there is no Promotion in this order
 	 */
-	public boolean removeFromOrder(int tableNo, Promotion promotion) {
-		return this.findTableByNo(tableNo).removeFromOrder(promotion);
+	public int removeFromOrder(int tableNo, Promotion promotion, int quantity) {
+		return this.findTableByNo(tableNo).removeFromOrder(promotion, quantity);
 	}
 
 	/**
 	 * view the current order of the table tableNo
 	 * @param tableNo
 	 */
-	public void viewOrder(int tableNo) {
-		Order invoice = this.findTableByNo(tableNo).getInvoice();
-		List<Item> items = invoice.getItems();
-		List<Promotion> promotions = invoice.getPromo();
-		Map<Integer, Integer> item2quant = invoice.getOrderItems();
-		Map<Integer, Integer> promo2quant = invoice.getOrderPromos();
-
-		System.out.println("Your current order is:");
-		for (Promotion promotion : promotions)
-			System.out.println(promo2quant.get(promotion.getId()) + " x " + promotion.getName() + "[PROMO]");
-		for (Item item : items)
-			System.out.println(item2quant.get(item.getId()) + " x " + item.getName() + "[ITEM]");
-		System.out.printf("-> The current price for this order is: %.2f\n\n", invoice.getTotal());
+	public void printOrder(int tableNo, boolean withPrice) {
+		this.findTableByNo(tableNo).printOrder(withPrice);
 	}
 
 	/**
