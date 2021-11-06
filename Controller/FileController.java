@@ -49,7 +49,7 @@ public class FileController {
         try{
             FileWriter fw = new FileWriter(path, false);
             for(String item : params) {
-                fw.write(item + ",");
+                fw.write(item);
             }
             fw.flush();
             fw.close();

@@ -154,11 +154,12 @@ public class CategoryController {
 		List<String> records = new ArrayList<String>();
 		for(Category category : categories)
 			for(Item item : category.getItems()){
-				records.add(String.valueOf(item.getId()));
-				records.add(item.getName());
-				records.add(item.getDescription());
-				records.add(String.valueOf(item.getPrice()));
+				records.add(String.valueOf(item.getId()).concat(","));
+				records.add(item.getName().concat(","));
+				records.add(item.getDescription().concat(","));
+				records.add(String.valueOf(item.getPrice()).concat(","));
 				records.add(category.getCategory().toString());
+				records.add(System.getProperty("line.separator"));
 			}
 		if(fileController.writeFile(records.toArray(new String[records.size()]), PATH_TO_MENU_FILE))
 			res = true;

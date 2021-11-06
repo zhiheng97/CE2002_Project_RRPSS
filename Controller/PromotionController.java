@@ -51,17 +51,20 @@ public class PromotionController {
 		boolean res = false;
 		List<String> records = new ArrayList<String>();
 		for(Promotion promotion : promotions){
-			records.add(String.valueOf(promotion.getId()));
-			records.add(promotion.getName());
-			records.add(promotion.getDescription());
+			records.add(String.valueOf(promotion.getId()).concat(","));
+			records.add(promotion.getName().concat(","));
+			records.add(promotion.getDescription().concat(","));
 			records.add(String.valueOf(promotion.getPrice()));
+			records.add(System.getProperty("line.separator"));
 			for(Item item : promotion.getItems()){
-				records.add(String.valueOf(item.getId()));
-				records.add(item.getName());
-				records.add(item.getDescription());
+				records.add(String.valueOf(item.getId()).concat(","));
+				records.add(item.getName().concat(","));
+				records.add(item.getDescription().concat(","));
 				records.add(String.valueOf(item.getPrice()));
+				records.add(System.getProperty("line.separator"));
 			}
 			records.add("ENDLINE");
+			records.add(System.getProperty("line.separator"));
 		}
 		records.add("ENDFILE");
 		if(fileController.writeFile(records.toArray(new String[records.size()]), PATH_TO_PROMOTIONS_FILE))
