@@ -1,6 +1,8 @@
 package Models;
 
 
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,21 +12,22 @@ public class Order {
 
 	private Staff placedBy;
 	private Customer cust;
-	private String timestamp;
+	private Date dateTime;
 	private List<Item> items;
 	private List<Promotion> promotions;
 	private Map<Integer, Integer> item2quantity;
 	private Map<Integer, Integer> promo2quantity;
 	private double total = 0.0;
-
+	SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+	
 	/**
 	 * Constructor for Order Object
 	 * 
 	 * @param createdBy Indicates staff which created order, Staff Object
-	 * @param dateTime  Indicates time which order is created, String Object
+	 * @param date  Indicates time which order is created, Date Object
 	 */
-	public Order(Staff createdBy, Customer cust, String dateTime) {
-		this.timestamp = dateTime;
+	public Order(Staff createdBy, Customer cust, Date date) {
+		this.dateTime = date;
 		this.cust = cust;
 		this.placedBy = createdBy;
 		this.items = new ArrayList<Item>();
@@ -48,7 +51,7 @@ public class Order {
 		System.out.printf("%-18s %s%n", "Customer:", this.cust.getName());
 		System.out.printf("%-18s %d%n", "Customer contact:", this.cust.getMobileNo());
 		System.out.printf("%-18s %s%n", "Staff:", this.placedBy.getName());
-		System.out.printf("%-18s %s%n", "Date & Time:", this.timestamp);
+		System.out.printf("%-18s %s%n", "Date & Time:", this.getTimeStamp());
 		System.out.println(line);
 		System.out.printf("%-25s   %6s   %6s%n", "Promotion/Item Name", "Qty", "Amount");
 
@@ -235,12 +238,20 @@ public class Order {
 	}
 
 	/**
-	 * Gets timestamp of order creation
+	 * Gets String timestamp of order creation
 	 * 
 	 * @return Timestamp of order
 	 */
 	public String getTimeStamp() {
-		return this.timestamp;
+		return sdf.format(this.dateTime);
+	}
+
+	/**
+	 * Gets Date object
+	 * @return
+	 */
+	public Date getDatetime() {
+		return this.dateTime;
 	}
 
 	/**

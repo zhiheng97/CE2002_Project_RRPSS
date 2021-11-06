@@ -76,7 +76,7 @@ public class RestaurantController {
 					new Order(
 						this.staffList.get(rand.nextInt(this.staffList.size())),
 						this.customerList.get(rand.nextInt(this.customerList.size())),
-						sdf.format(now)
+						now
 					)
 				);
 			}
@@ -222,7 +222,7 @@ public class RestaurantController {
 	 * @param staffID
 	 * @param date
 	 */
-	public void createOrder(int tableNo, int cust_id, int staff_id, String date) {
+	public void createOrder(int tableNo, int cust_id, int staff_id, Date date) {
 		Staff staff = this.staffList.get(staff_id);
 		Customer cust = this.customerList.get(cust_id);
 		this.tableController.findTableByNo(tableNo).setIsOccupied(true);

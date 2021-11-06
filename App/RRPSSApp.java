@@ -411,7 +411,7 @@ public class RRPSSApp {
 							}
 							Date now = c.getTime();
 							sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-							restaurantController.createOrder(tableNo, cust_id, staff_id, sdf.format(now));
+							restaurantController.createOrder(tableNo, cust_id, staff_id, c.getTime());
 							break;
 						default:
 							System.out.println("Invalid option!");

@@ -1,5 +1,6 @@
 package Models;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class Report {
 	private List<Promotion> promotions = new ArrayList<Promotion>();;
 	private Map<Integer, Integer> item2quantity = new HashMap<Integer, Integer>();
 	private Map<Integer, Integer> promo2quantity = new HashMap<Integer, Integer>();
-
+	
 	/**
 	 * Constructor for Report Object
 	 * 
@@ -162,7 +163,7 @@ public class Report {
 	 * 
 	 * @return Date of current report as a string
 	 */
-	public String getDate() {
+	public String getDateTime() {
 		return this.date;
 	}
 
@@ -174,5 +175,9 @@ public class Report {
 	public double getSalesRevenue() {
 		return this.salesRevenue;
 	}
+
+    public String getTimeStamp() {
+        return null;
+    }
 
 }

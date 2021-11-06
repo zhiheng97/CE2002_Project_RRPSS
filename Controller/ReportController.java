@@ -99,8 +99,8 @@ public class ReportController {
 				start_index = end_index - 30 + 1;
 			}
 
-			String start_date = reports.get(start_index).getDate();
-			String end_date = reports.get(end_index).getDate();
+			String start_date = reports.get(start_index).getTimeStamp();
+			String end_date = reports.get(end_index).getTimeStamp();
 
 			for (int i = 0; i < end_index + 1; i++) {
 				tmpReport = reports.get(i);
