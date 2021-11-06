@@ -321,9 +321,9 @@ public class RRPSSApp {
 					do {
 						switch (choice) {
 						case 1:
-							boolean check = restaurantController.printUnavailableTables();
-							if (!check) {
-								System.out.println("All the tables are available, please checkin to create new order.");
+							boolean isAnyOccupied = restaurantController.printUnavailableTables();
+							if (!isAnyOccupied) {
+								back = true;
 								break;
 							}
 							while (true) {
@@ -356,6 +356,11 @@ public class RRPSSApp {
 								cust_id = res_info[1];
 								System.out.printf("Customer ID %d is allocated with table %d.\n", cust_id, tableNo);
 							} else {
+								boolean isAnyAvail = restaurantController.printAvailableTables();
+								if (!isAnyAvail) {
+									back = true;
+									break;
+								}
 								while (true) {
 									System.out.print("Enter the number of pax: ");
 									noPax = sc.nextInt();
@@ -443,7 +448,8 @@ public class RRPSSApp {
 								break;
 							System.out.print("Enter the quantity you want: ");
 							quantity = sc.nextInt();
-							restaurantController.addToOrder(tableNo, itemId, quantity);
+							if (!restaurantController.addToOrder(tableNo, itemId, quantity).equals("item")) 
+								System.out.println("Invalid item id!");
 							System.out.println();
 							break;
 						case "2":
@@ -455,7 +461,8 @@ public class RRPSSApp {
 								break;
 							System.out.print("Enter the quantity you want: ");
 							quantity = sc.nextInt();
-							restaurantController.addToOrder(tableNo, itemId, quantity);
+							if (!restaurantController.addToOrder(tableNo, itemId, quantity).equals("promo"))
+								System.out.println("Invalid promotion id!");
 							System.out.println();
 							break;
 						case "3":
@@ -472,10 +479,11 @@ public class RRPSSApp {
 								System.out.printf("Successfully removed %d items/promotions with id %d!%n", quantity,
 										itemId);
 							else if (temp == 1)
-								System.out.printf("All items/promotions with id %d are removed from this order!%n",
-										itemId);
-							else
+								System.out.printf("All items/promotions with id %d are removed from this order!%n", itemId);
+							else if (temp == 0)
 								System.out.printf("Cannot find any item/promotion with id %d in this order!%n", itemId);
+							else 
+								System.out.println("Invalid item/promotion id!");
 							System.out.println();
 							break;
 						case "4":

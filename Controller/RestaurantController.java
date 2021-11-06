@@ -235,17 +235,23 @@ public class RestaurantController {
 	 * @param tableNo
 	 * @param itemId
 	 * @param quantity
+	 * @return "promo" if successfully add a Promotion
+	 * @return "item"  if successfully add an Item
+	 * @return "false" if invalid itemId 
 	 */
-	public void addToOrder(int tableNo, int itemId, int quantity) {
+	public String addToOrder(int tableNo, int itemId, int quantity) {
 		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
 		Item itemToAdd = this.categoryController.searchForItem(itemId);
 		if (promoToAdd != null) {
 			Promotion copied = this.promotionController.copyPromotion(itemId);
 			this.tableController.addToOrder(tableNo, copied, quantity);
+			return "promo";
 		} else if (itemToAdd != null) {
 			Item copied = this.categoryController.copyItem(itemId);
 			this.tableController.addToOrder(tableNo, copied, quantity);
-		}
+			return "item";
+		} 
+		return "false";
 	}
 
 	/**
@@ -254,19 +260,22 @@ public class RestaurantController {
 	 * @param tableNo 		the tableNo that has the order need to process
 	 * @param itemId 		id of the Item/Promotion to be removed
 	 * @param quantity 		number of Promotion object to remove
-	 * @return 2 if they are removed normally
-	 * @return 1 if quantity >= current quantity in order (remove all anw)
-	 * @return 0 if there is no Item/Promotion in this order
+	 * @return 2  if they are removed normally
+	 * @return 1  if quantity >= current quantity in order (remove all anw)
+	 * @return 0  if there is no Item/Promotion in this order
+	 * @return -1 if invalid itemId
 	 */
 	public int removeFromOrder(int tableNo, int itemId, int quantity) {
 		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
+		Item itemToRemove = this.categoryController.searchForItem(itemId);
 		if (promoToRemove != null) {
 			Promotion copied = this.promotionController.copyPromotion(itemId);
 			return this.tableController.removeFromOrder(tableNo, copied, quantity);
-		} else {
+		} else if (itemToRemove != null) {
 			Item copied = this.categoryController.copyItem(itemId);
 			return this.tableController.removeFromOrder(tableNo, copied, quantity);
 		}
+		return -1;
 	}
 
 	/**
@@ -317,8 +326,8 @@ public class RestaurantController {
 	/**
 	 * print all unoccupied tables
 	 */
-	public void printAvailableTables() {
-		this.tableController.printAvailableTables();
+	public boolean printAvailableTables() {
+		return this.tableController.printAvailableTables();
 	}
 
 	/**

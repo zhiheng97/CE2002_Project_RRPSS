@@ -65,24 +65,33 @@ public class TableController {
 		for (Table table : tables) {
 			if (table.getIsOccupied()) {
 				System.out.printf("Table %d is occupied, staff: %s\n", table.getTableNo(), table.getInvoice().getPlacedBy());
-			} else num_occupied++;
+				num_occupied++;
+			}  
 		}
-		if (num_occupied == 0) return false;
+		if (num_occupied == 0) {
+			System.out.println("There is no occupied table at the moment, please checkin to create a new order."); 
+			return false;
+		}
 		return true;
 	}
 
 	/**
 	 * print all unoccupied tables
+	 * @return false if all tables are occupied
 	 */
-	public void printAvailableTables() {
-		int num_occupied = 0;
+	public boolean printAvailableTables() {
+		int num_avail = 0;
 		for (Table table : tables) {
 			if (!table.getIsOccupied()) {
 				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
-			} else num_occupied++;
+				num_avail++;
+			}
 		}
-		if (num_occupied == this.noOfTables) 
-			System.out.println("All the tables are occupied!");
+		if (num_avail == 0) {
+			System.out.println("There is no available table at the moment, please comeback later or make reservation!");
+			return false;
+		}
+		return true;
 	}
 
 	/**
