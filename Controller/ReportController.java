@@ -144,7 +144,7 @@ public class ReportController {
 			String Itemformat = "  %-25s  ".concat(" %3d  ").concat("   %3$.2f %n");
 
 			System.out.println(
-					"\n\n(Monthly Report " + "(" + reports.size() + ") ) Start: " + start_date + " / End: " + end_date);
+					"\n\nMonthly Report " + "(" + reports.size() + ")\nStart: " + start_date + " / End: " + end_date);
 			System.out.println("Monthly Sales: " + salesRevenue);
 			System.out.println("--------------------------");
 			System.out.println("Items:");
