@@ -279,7 +279,7 @@ public class RestaurantController {
 	 */
 	public void printInvoice(int tableNo) {
 		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
-		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
+		// this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
 		this.tableController.printInvoice(tableNo);
 	}
 

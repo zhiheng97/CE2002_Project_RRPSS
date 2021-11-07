@@ -40,8 +40,7 @@ public class ReportController {
 		}
 		// Case 2: Checks whether order matches the date of latest report
 		else if (reports.get(report_size - 1).addInvoice(invoice)) {
-			System.out.println(
-					"(Match Latest Date) Order of timestamp " + invoice.getTimeStamp() + " added successfully");
+			System.out.println("(Match Latest Date) Order of timestamp " + invoice.getTimeStamp() + " added successfully");
 		}
 		// Case 3: Order date does not match.
 		else {

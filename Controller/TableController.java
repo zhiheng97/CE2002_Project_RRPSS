@@ -82,7 +82,7 @@ public class TableController {
 		int num_avail = 0;
 		for (Table table : tables) {
 			if (!table.getIsOccupied()) {
-				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
+				System.out.printf("Table %d (max %d pax)\n", table.getTableNo(), table.getSeats());
 				num_avail++;
 			}
 		}
@@ -101,7 +101,7 @@ public class TableController {
 		int num_occupied = 0;
 		for (Table table : tables) {
 			if (!table.getIsOccupied() && table.getSeats() >= noPax) {
-				System.out.printf("Table %d (max %d paxes)\n", table.getTableNo(), table.getSeats());
+				System.out.printf("Table %d (max %d pax)\n", table.getTableNo(), table.getSeats());
 			} else num_occupied++;
 		}
 		if (num_occupied == this.noOfTables) 
@@ -209,7 +209,7 @@ public class TableController {
 		
 		int tableNo = -1;
 		switch (noPax) { 
-			case 1: 	// search table 1->2 (2 paxes)
+			case 1: 	// search table 1->2 (2 pax)
 				for (int id=1; id<=2; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
@@ -226,7 +226,7 @@ public class TableController {
 					}
 				}
 				break; 
-			case 2, 3:	// search table 1->2 (2 paxes), 3->5 (4 paxes)
+			case 2, 3:				// search table 1->2 (2 pax), 3->5 (4 pax)
 				for (int id=1; id<=5; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
@@ -243,7 +243,7 @@ public class TableController {
 					}
 				}
 				break;
-			case 4, 5:		// search table 3->5 (4 paxes), 6->8 (6 paxes)
+			case 4, 5, 6:	// search table 3->5 (4 pax), 6->8 (6 pax)
 				for (int id=3; id<=8; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
@@ -260,7 +260,7 @@ public class TableController {
 					}
 				}
 				break;
-			case 6, 7:		// search table 6->8 (6 paxes), 9->10 (8 paxes)
+			case 7:		// search table 6->8 (6 pax), 9->10 (8 pax)
 				for (int id=6; id<=10; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
@@ -277,7 +277,7 @@ public class TableController {
 					}
 				}
 				break;
-			case 8, 9, 10:	// search table 9->10 (8 paxes), 11->12 (10 paxes)
+			case 8, 9, 10:	// search table 9->10 (8 pax), 11->12 (10 pax)
 				for (int id=9; id<=12; id++) {
 					boolean isValid = true;
 					Table table = this.findTableByNo(id);
@@ -424,7 +424,7 @@ public class TableController {
 	 */
 	public void printReservations() {
 		for(Table table : this.tables){
-			System.out.printf("- Table %d: %d resevation(s).\n", table.getTableNo(), table.getNoOfReseravtions());
+			System.out.printf("- Table %d: %d reservation(s).\n", table.getTableNo(), table.getNoOfReseravtions());
 			for (Reservation reservation : table.getReservations())
 				reservation.print();
 		}
