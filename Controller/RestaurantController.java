@@ -27,7 +27,7 @@ public class RestaurantController {
 	private PromotionController promotionController;
 	private FileController fileController;
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
-	
+
 	private List<Staff> staffList;
 	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
 
@@ -44,46 +44,31 @@ public class RestaurantController {
 		this.customerList = new ArrayList<Customer>();
 		List<String> custParams = fileController.readFile(PATH_TO_CUSTOMERS_FILE);
 		for (int i = 4; i < custParams.size(); i += 4) {
-			this.customerList.add(
-				new Customer(
-					Integer.parseInt(custParams.get(i)), 
-					custParams.get(i + 1), 
-					Boolean.parseBoolean(custParams.get(i + 2)),
-					Integer.parseInt(custParams.get(i + 3))
-				)
-			);
+			this.customerList.add(new Customer(Integer.parseInt(custParams.get(i)), custParams.get(i + 1),
+					Boolean.parseBoolean(custParams.get(i + 2)), Integer.parseInt(custParams.get(i + 3))));
 		}
 
 		this.staffList = new ArrayList<Staff>();
 		List<String> staffParams = fileController.readFile(PATH_TO_STAFFS_FILE);
 		for (int i = 3; i < staffParams.size(); i += 3) {
 			this.staffList.add(
-				new Staff(
-					Integer.parseInt(staffParams.get(i)), 
-					staffParams.get(i + 1), 
-					staffParams.get(i + 2)
-				)
-			);
+					new Staff(Integer.parseInt(staffParams.get(i)), staffParams.get(i + 1), staffParams.get(i + 2)));
 		}
 
 		// initialize order for occupied tables
 		Random rand = new Random();
 		Date now = new Date();
-		for (int id=1; id<=12; id++) {
-			if (this.tableController.findTableByNo(id).getIsOccupied()){
-				this.tableController.findTableByNo(id).setInvoice(
-					new Order(
-						this.staffList.get(rand.nextInt(this.staffList.size())),
-						this.customerList.get(rand.nextInt(this.customerList.size())),
-						now
-					)
-				);
+		for (int id = 1; id <= 12; id++) {
+			if (this.tableController.findTableByNo(id).getIsOccupied()) {
+				this.tableController.findTableByNo(id)
+						.setInvoice(new Order(this.staffList.get(rand.nextInt(this.staffList.size())),
+								this.customerList.get(rand.nextInt(this.customerList.size())), now));
 			}
 		}
 	}
-	
-////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
-	
+
+	////////////////////// ITEM, PROMOTION FUNCTIONS ///////////////////
+
 	/**
 	 * Prints the menu
 	 */
@@ -190,33 +175,36 @@ public class RestaurantController {
 	public void printPromotion() {
 		promotionController.print();
 	}
-	
-////////////////////// ORDER FUNCTIONS ///////////////////
+
+	////////////////////// ORDER FUNCTIONS ///////////////////
 
 	public boolean isRegisteredCustomer(int cust_id) {
-		if (cust_id < 0 || cust_id >= this.customerList.size()) return false;
+		if (cust_id < 0 || cust_id >= this.customerList.size())
+			return false;
 		return true;
 	}
 
 	/**
 	 * TODO: handle the mismatch input
-	 *  
+	 * 
 	 * @param res_id
 	 * @return the tableNo and cust_id that for this reservation
 	 */
 	public int[] checkinReservation(String res_id) {
-		if (!checkReservation(res_id)) return new int[]{-1, -1};
+		if (!checkReservation(res_id))
+			return new int[] { -1, -1 };
 
 		String[] res_id_params = res_id.split("-");
 		int tableNo = Integer.parseInt(res_id_params[0]);
 		Reservation res = this.tableController.findReservation(res_id);
 		int cust_id = res.getCustId();
 		this.tableController.clearReservation(res_id);
-		return new int[]{tableNo, cust_id};
+		return new int[] { tableNo, cust_id };
 	}
 
 	/**
 	 * create new order for new customer
+	 * 
 	 * @param tableNo
 	 * @param staffID
 	 * @param date
@@ -231,12 +219,13 @@ public class RestaurantController {
 
 	/**
 	 * add a quantity of item/promotion to the order of table tableNo
+	 * 
 	 * @param tableNo
 	 * @param itemId
 	 * @param quantity
 	 * @return "promo" if successfully add a Promotion
-	 * @return "item"  if successfully add an Item
-	 * @return "false" if invalid itemId 
+	 * @return "item" if successfully add an Item
+	 * @return "false" if invalid itemId
 	 */
 	public String addToOrder(int tableNo, int itemId, int quantity) {
 		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
@@ -249,19 +238,19 @@ public class RestaurantController {
 			Item copied = this.categoryController.copyItem(itemId);
 			this.tableController.addToOrder(tableNo, copied, quantity);
 			return "item";
-		} 
+		}
 		return "false";
 	}
 
 	/**
 	 * remove Item/Promotion objects from the order of table tableNo
 	 * 
-	 * @param tableNo 		the tableNo that has the order need to process
-	 * @param itemId 		id of the Item/Promotion to be removed
-	 * @param quantity 		number of Promotion object to remove
-	 * @return 2  if they are removed normally
-	 * @return 1  if quantity >= current quantity in order (remove all anw)
-	 * @return 0  if there is no Item/Promotion in this order
+	 * @param tableNo  the tableNo that has the order need to process
+	 * @param itemId   id of the Item/Promotion to be removed
+	 * @param quantity number of Promotion object to remove
+	 * @return 2 if they are removed normally
+	 * @return 1 if quantity >= current quantity in order (remove all anw)
+	 * @return 0 if there is no Item/Promotion in this order
 	 * @return -1 if invalid itemId
 	 */
 	public int removeFromOrder(int tableNo, int itemId, int quantity) {
@@ -278,8 +267,9 @@ public class RestaurantController {
 	}
 
 	/**
-	 * print the final invoice of table tableNo
-	 * add the invoice to the reportController and clear the table
+	 * print the final invoice of table tableNo add the invoice to the
+	 * reportController and clear the table
+	 * 
 	 * @param tableNo
 	 */
 	public void printInvoice(int tableNo) {
@@ -290,6 +280,7 @@ public class RestaurantController {
 
 	/**
 	 * view the current order of the table tableNo
+	 * 
 	 * @param tableNo
 	 */
 	public void printOrder(int tableNo, boolean withPrice) {
@@ -298,6 +289,7 @@ public class RestaurantController {
 
 	/**
 	 * find first availabe table for noPax
+	 * 
 	 * @param noPax
 	 * @return
 	 */
@@ -307,6 +299,7 @@ public class RestaurantController {
 
 	/**
 	 * check whether table tableNo is occupied or not
+	 * 
 	 * @param tableNo
 	 * @return
 	 */
@@ -316,6 +309,7 @@ public class RestaurantController {
 
 	/**
 	 * print all occupied tables to let the staff choose which table to udpate order
+	 * 
 	 * @return false if all tables are unoccupied
 	 */
 	public boolean printUnavailableTables() {
@@ -330,31 +324,36 @@ public class RestaurantController {
 	}
 
 	/**
-	 * print all unoccupied tables that has number of seats >= noPax 
+	 * print all unoccupied tables that has number of seats >= noPax
+	 * 
 	 * @param noPax
 	 */
 	public void printAvailableTables(int noPax) {
 		this.tableController.printAvailableTables(noPax);
 	}
 
-////////////////////// RESERVATION FUNCTIONS ///////////////////
+	////////////////////// RESERVATION FUNCTIONS ///////////////////
 
 	public boolean checkReservation(String res_id) {
-		if (!res_id.contains("-")) return false;
+		if (!res_id.contains("-"))
+			return false;
 		String[] res_id_params = res_id.split("-");
 		int tableNo = Integer.parseInt(res_id_params[0]);
 		int id = Integer.parseInt(res_id_params[1]);
-		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15) return false;
+		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15)
+			return false;
 		Reservation res = this.tableController.findReservation(res_id);
-		if (res == null) return false;
+		if (res == null)
+			return false;
 		return true;
 	}
+
 	/**
-	 * for debugging purpose only when add register new Customer
-	 * show all customers in memory
+	 * for debugging purpose only when add register new Customer show all customers
+	 * in memory
 	 */
-	public void showCustomers() { 		// for debug
-		for (Customer cust : this.customerList) 
+	public void showCustomers() { // for debug
+		for (Customer cust : this.customerList)
 			System.out.printf("%d %s\n", cust.getId(), cust.getName());
 	}
 
@@ -385,8 +384,7 @@ public class RestaurantController {
 	}
 
 	/**
-	 * @param res_id
-	 * return true/false
+	 * @param res_id return true/false
 	 */
 	public boolean clearReservation(String res_id) {
 		return this.tableController.clearReservation(res_id);
@@ -417,8 +415,7 @@ public class RestaurantController {
 	}
 
 	/**
-	 * @param tableNo
-	 * print all reservations of a specified table 
+	 * @param tableNo print all reservations of a specified table
 	 */
 	public void printReservations(int tableNo) {
 		this.tableController.printReservations(tableNo);
@@ -431,17 +428,15 @@ public class RestaurantController {
 		this.tableController.printReservations();
 	}
 
-	
-
-
-////////////////////// REPORT FUNCTIONS ///////////////////
+	////////////////////// REPORT FUNCTIONS ///////////////////
 
 	/**
 	 *
-	 * @param byMonth
+	 * @param byMonth Determines whether print monthly or daily report
+	 * @param timeNow Current time as a string
 	 */
-	public void printSalesReport(boolean byMonth) {
-		this.reportController.print(byMonth);
+	public void printSalesReport(boolean byMonth, String timeNow) {
+		this.reportController.print(byMonth, timeNow);
 	}
 
 	/**
