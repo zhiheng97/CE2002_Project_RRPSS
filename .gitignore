@@ -2,7 +2,7 @@ tmp/*
 .lock
 *.lck
 .vpprefdata/*
-untitled.vpp.*
+Diagrams.vpp.*
 *.class
 Controller/*.class
 Models/*.class
