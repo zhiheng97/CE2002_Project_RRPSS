@@ -10,21 +10,21 @@ public class Table {
 	private int tableNo;
 	private boolean isOccupied;
 	private List<Reservation> reservations;
+	private int noOfReseravtions = 0;
 	private int seats = 2;
 	private Order invoice;
-	private int noOfReseravtions = 0;
 	
 	/**
 	 * 
 	 * @param table
 	 * @param occupied
-	 * @param seatAvail
+	 * @param noPax
 	 */
-	public Table(int tableNo, boolean occupied, int seatAvail) {
+	public Table(int tableNo, boolean occupied, int noPax) {
 		this.tableNo = tableNo;
 		this.isOccupied = occupied;
 		this.reservations = new ArrayList<Reservation>(15);
-		this.seats = seatAvail;
+		this.seats = noPax;
 		this.invoice = new Order(null, null, null);
 	}
 

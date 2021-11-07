@@ -9,16 +9,16 @@ public class Customer {
 
 	/**
 	 * Constructor for customer object
-	 * @param custId identifier for customer object
-	 * @param custName customer name
-	 * @param cusIsMember a flag indicating if the customer is a member
-	 * @param cusMobile customer mobile number
+	 * @param cust_id identifier for customer object
+	 * @param name customer name
+	 * @param isMember a flag indicating if the customer is a member
+	 * @param contact customer mobile number
 	 */
-	public Customer(int custId, String custName, boolean cusIsMember, int cusMobile) {
-		this.id = custId;
-		this.name = custName;
-		this.isMember = cusIsMember;
-		this.mobileNo = cusMobile;
+	public Customer(int cust_id, String name, boolean isMember, int contact) {
+		this.id = cust_id;
+		this.name = name;
+		this.isMember = isMember;
+		this.mobileNo = contact;
 	}
 
 	/**

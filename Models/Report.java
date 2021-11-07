@@ -15,7 +15,7 @@ public class Report {
 	private List<Promotion> promotions = new ArrayList<Promotion>();;
 	private Map<Integer, Integer> item2quantity = new HashMap<Integer, Integer>();
 	private Map<Integer, Integer> promo2quantity = new HashMap<Integer, Integer>();
-	
+
 	/**
 	 * Constructor for Report Object
 	 * 
@@ -32,7 +32,7 @@ public class Report {
 	 * @return True if invoice added, False if otherwise
 	 */
 	public boolean addInvoice(Order invoice) {
-		String[] timestamp = invoice.getTimeStamp().split(" "); // .split(" ")[0]; // Get new date from order
+		String[] timestamp = invoice.getDatetime().toString().split(" "); // .split(" ")[0]; // Get new date from order
 		String invoiceDate = timestamp[0] + " " + timestamp[1] + " " + timestamp[2]; // Saves day month year
 
 		if (!invoiceDate.equals(this.date)) {
@@ -55,8 +55,6 @@ public class Report {
 			}
 
 			// Updates item quantity in report
-			System.out.println("Quantity added " + this.item2quantity.get(id) + tmpItem2quantity.get(id)
-					+ "adding to report items");
 			this.item2quantity.put(id, this.item2quantity.get(id) + tmpItem2quantity.get(id));
 		}
 
@@ -74,8 +72,6 @@ public class Report {
 			}
 
 			// Updates promo quantity in report
-			System.out.println("Quantity added " + this.promo2quantity.get(id) + tmpPromo2quantity.get(id)
-					+ "adding to report promos");
 			this.promo2quantity.put(id, this.promo2quantity.get(id) + tmpPromo2quantity.get(id));
 		}
 
@@ -175,9 +171,5 @@ public class Report {
 	public double getSalesRevenue() {
 		return this.salesRevenue;
 	}
-
-    public String getTimeStamp() {
-        return null;
-    }
 
 }

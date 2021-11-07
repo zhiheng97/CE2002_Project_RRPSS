@@ -9,14 +9,14 @@ public class Staff {
 	/**
 	 * Constructor for Staff Object
 	 * 
-	 * @param staffId       Id of the staff
-	 * @param staffName     Name of the staff
-	 * @param staffPosition Position held by staff
+	 * @param id       	Id of the staff
+	 * @param name     	Name of the staff
+	 * @param position 	Position held by staff
 	 */
-	public Staff(int staffId, String staffName, String staffPosition) {
-		this.id = staffId;
-		this.name = staffName;
-		this.position = staffPosition;
+	public Staff(int id, String name, String position) {
+		this.id = id;
+		this.name = name;
+		this.position = position;
 	}
 
 	/**

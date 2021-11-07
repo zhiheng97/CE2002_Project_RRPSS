@@ -27,12 +27,10 @@ public class ReportController {
 	 */
 	public void addInvoice(Order invoice) {
 		Report currentReport;
-		String[] timestamp = invoice.getTimeStamp().split(" "); // .split(" ")[0]; // Get new date from order
-		String orderDate = timestamp[0] + " " + timestamp[1] + " " + timestamp[2]; // Saves day month year
-		System.out.println("Timestamp of date only: " + orderDate);
-		int report_size = reports.size();
+		String[] timestamp = invoice.getDatetime().toString().split(" ");
+		String orderDate = timestamp[0] + " " + timestamp[1] + " " + timestamp[2];
 
-		System.out.println("(Report Controller) Order date received: " + orderDate);
+		int report_size = reports.size();
 
 		// Case 1: If no reports we create new report and add directly
 		if (report_size == 0) {
@@ -70,40 +68,51 @@ public class ReportController {
 	 * @param byMonth Indicates whether report to be generated is latest month or
 	 *                latest day
 	 */
-	public void print(boolean byMonth) {
-		int reports_size = reports.size();
+	public void print(boolean byMonth, String timeNow) {
 
 		if (reports.size() == 0) {
-			System.out.println("No reports exist currently. Exiting");
+			System.out.println("No reports exists at all currently.");
 			return;
-		} else if (!byMonth || reports_size == 1)
-			// Prints latest daily report if byMonth not specified
-			reports.get(reports.size() - 1).print();
-		else {
+		}
+
+		int reports_size = reports.size();
+		String[] timestamp = timeNow.split(" ");
+		String currentDate = timestamp[0] + " " + timestamp[1] + " " + timestamp[2];
+		Report latestReport = reports.get(reports.size() - 1);
+
+		// If not byMonth, we assume the user is looking for DAILY report
+		if (!byMonth) {
+			String latestReportDate = latestReport.getDateTime();
+			// Compare latest report date against current date
+			if (latestReportDate.equals(currentDate))
+				reports.get(reports.size() - 1).print();
+			else {
+				System.out.println("Last report date: '" + latestReportDate + "'");
+				System.out.println("No report available today: '" + currentDate + "'");
+			}
+
+			return;
+		} else {
 			double salesRevenue = 0;
+			int number_of_valid_reports = 0;
 			Map<Integer, Integer> item2quantity = new HashMap<Integer, Integer>();
 			Map<Integer, Integer> promo2quantity = new HashMap<Integer, Integer>();
 			List<Item> items = new ArrayList<Item>();
 			List<Promotion> promotions = new ArrayList<Promotion>();
-			// Get last 30 reports
 
-			int start_index = reports_size - 1;
-			int end_index;
+			// Gets month of latest report
+			String month = timeNow.split(" ")[1];
 			Report tmpReport;
-
-			if (reports_size < 30) {
-				end_index = reports_size - 1; // End will always point to latest date
-				start_index = 0;
-			} else {
-				end_index = reports_size - 1;
-				start_index = end_index - 30 + 1;
-			}
-
-			String start_date = reports.get(start_index).getTimeStamp();
-			String end_date = reports.get(end_index).getTimeStamp();
-
-			for (int i = 0; i < end_index + 1; i++) {
+			String tmpMonth;
+			// We start searching from most recent
+			for (int i = reports_size - 1; i > -1; i--) {
 				tmpReport = reports.get(i);
+				tmpMonth = tmpReport.getDateTime().split(" ")[1];
+
+				if (!tmpMonth.equals(month))
+					break;
+
+				number_of_valid_reports++;
 				salesRevenue += tmpReport.getSalesRevenue(); // Update sales revenue
 				int id;
 
@@ -138,14 +147,20 @@ public class ReportController {
 					// Updates promo quantity in report
 					promo2quantity.put(id, promo2quantity.get(id) + tmpPromo2quantity.get(id));
 				}
-
 			}
+
+			if (number_of_valid_reports == 0) {
+				System.out.println("No reports for the current month found");
+				System.out.println("Last report is found in the month of " + latestReport.getDateTime().split(" ")[1]);
+				return;
+			}
+
 			int quantity;
 			String Itemformat = "  %-25s  ".concat(" %3d  ").concat("   %3$.2f %n");
 
-			System.out.println(
-					"\n\nMonthly Report " + "(" + reports.size() + ")\nStart: " + start_date + " / End: " + end_date);
-			System.out.println("Monthly Sales: " + salesRevenue);
+			System.out
+					.println("\n\nMonthly Report: " + month + "\nNumber of reports: " + number_of_valid_reports + "\n");
+			System.out.println("Monthly Sales: $" + salesRevenue);
 			System.out.println("--------------------------");
 			System.out.println("Items:");
 
