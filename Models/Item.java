@@ -1,6 +1,6 @@
 package Models;
 
-public class Item {
+public class Item implements MenuEntry{
 
 	private int id;
 	private String name;

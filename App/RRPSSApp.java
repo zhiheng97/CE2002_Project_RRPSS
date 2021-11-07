@@ -51,15 +51,15 @@ public class RRPSSApp {
 								option_sub = reader.readLine();
 								if (option_sub.equals(ESCAPE_STRING))
 									break;
-								itemParams[4] = String.valueOf(option_sub);
+								itemParams[4] = option_sub;
 								System.out.print("Enter the item id: ");
-								itemParams[1] = String.valueOf(sc.nextInt());
+								itemParams[1] = reader.readLine();
 								System.out.print("Enter the item name: ");
 								itemParams[0] = reader.readLine();
 								System.out.print("Enter the item description: ");
 								itemParams[2] = reader.readLine();
 								System.out.print("Enter the price of the item: ");
-								itemParams[3] = String.valueOf(sc.nextDouble());
+								itemParams[3] = reader.readLine();
 							} catch (InputMismatchException e) {
 								System.out.println("Invalid input, returning to previous menu.");
 								System.out.println();
@@ -79,7 +79,7 @@ public class RRPSSApp {
 								option_sub = reader.readLine();
 								if (option_sub.equals(ESCAPE_STRING))
 									break;
-								itemParams[1] = String.valueOf(option_sub);
+								itemParams[1] = option_sub;
 								System.out.print("Enter the item name [Enter \\ if you do not intend to modify]: ");
 								itemParams[0] = reader.readLine();
 								System.out.print(
@@ -87,7 +87,7 @@ public class RRPSSApp {
 								itemParams[2] = reader.readLine();
 								System.out.print(
 										"Enter the price of the item [Enter -1 if you do not intend to modify]: ");
-								itemParams[3] = String.valueOf(sc.nextDouble());
+								itemParams[3] = reader.readLine();
 							} catch (InputMismatchException e) {
 								System.out.println("Invalid input, returning to previous menu.");
 								System.out.println();

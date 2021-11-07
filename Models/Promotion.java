@@ -3,7 +3,7 @@ package Models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Promotion extends Item{
+public class Promotion extends Item {
 	private List<Item> items = new ArrayList<Item>();
 
 	/**
