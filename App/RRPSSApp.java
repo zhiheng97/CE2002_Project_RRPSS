@@ -16,8 +16,7 @@ import Controller.RestaurantController;
 public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; // use an integer, if we use a string, we cannot use try catch
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
-	private static final String DATETIME_FORMAT_PATTERN_2 = "dd-MMM-yy HH:mm";
+	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm";
 
 	public static void main(String[] args) throws NumberFormatException, ParseException {
 
@@ -152,8 +151,7 @@ public class RRPSSApp {
 						case "1":
 							restaurantController.printPromotion();
 							try {
-								System.out.println("(type -9 to return to previous menu)");							if (escape_check.equals(ESCAPE_STRING))
-								break;
+								System.out.println("(type -9 to return to previous menu)");
 								System.out.print("Enter the promotion id: ");
 								promoParams.add(reader.readLine());
 								System.out.print("Enter the promotion name: ");
@@ -202,7 +200,7 @@ public class RRPSSApp {
 							System.out.print(
 									"Enter the new price of the promotion [Enter -1 if you do not intend to modify]: ");
 							promoParams.add(reader.readLine());
-							if (escape_check.equals(ESCAPE_STRING))
+							if (promoParams.contains(ESCAPE_STRING))
 								break;
 							restaurantController.updatePromotion(promoParams);
 							System.out.println();
@@ -438,12 +436,7 @@ public class RRPSSApp {
 						}
 					} while (!(option_sub.equals("1") || option_sub.equals("2")));
 
-<<<<<<< HEAD
 					if (backToMenu || tableNo == Integer.parseInt(ESCAPE_STRING)) break;
-=======
-					if (backToMenu || tableNo == Integer.parseInt(ESCAPE_STRING))
-						break;
->>>>>>> 7e8f10de4e923ca07873d77d10545b5962e07fc8
 
 					do {
 						int itemId, quantity;
@@ -584,7 +577,7 @@ public class RRPSSApp {
 								String time = reader.readLine();
 								System.out.print("Enter the time of reservation [HH:mm]: ");
 								time = time.concat(" " + reader.readLine());
-								sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
+								sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 								resParams[1] = sdf.parse(time).toString();
 								System.out.println(resParams[1]);
 								System.out.print("Enter the number of guest: ");
@@ -662,7 +655,7 @@ public class RRPSSApp {
 										break;
 									System.out.print("Enter the time of reservation [HH:mm]: ");
 									time = time.concat(" " + reader.readLine());
-									sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN_2);
+									sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 									time = sdf.parse(time).toString();
 									res_id = restaurantController.updateReservation(res_id, time);
 									if (!res_id.equals("false"))

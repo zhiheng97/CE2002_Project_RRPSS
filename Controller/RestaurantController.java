@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,6 @@ public class RestaurantController {
 	private CategoryController categoryController;
 	private PromotionController promotionController;
 	private FileController fileController;
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 
 	private List<Staff> staffList;
 	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
@@ -168,6 +166,13 @@ public class RestaurantController {
 		return promotionController.updatePromotion(promoParams);
 	}
 
+	/**
+	 * Removes a specific promotion
+	 *
+	 * @param promoId, the promotion id which is used to search for a specific
+	 *                 promotion
+	 * @return true or false based on success/error
+	 */
 	public boolean removePromotion(int promoId) {
 		return promotionController.removePromotion(promoId);
 	}
@@ -438,13 +443,5 @@ public class RestaurantController {
 	public void printSalesReport(boolean byMonth, String timeNow) {
 		this.reportController.print(byMonth, timeNow);
 	}
-
-	/**
-	 * Removes a specific promotion
-	 *
-	 * @param promoId, the promotion id which is used to search for a specific
-	 *                 promotion
-	 * @return true or false based on success/error
-	 */
 
 }
