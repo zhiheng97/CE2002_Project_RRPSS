@@ -152,8 +152,7 @@ public class RRPSSApp {
 						case "1":
 							restaurantController.printPromotion();
 							try {
-								System.out.println("(type -9 to return to previous menu)");							if (escape_check.equals(ESCAPE_STRING))
-								break;
+								System.out.println("(type -9 to return to previous menu)");
 								System.out.print("Enter the promotion id: ");
 								promoParams.add(reader.readLine());
 								System.out.print("Enter the promotion name: ");
@@ -202,7 +201,7 @@ public class RRPSSApp {
 							System.out.print(
 									"Enter the new price of the promotion [Enter -1 if you do not intend to modify]: ");
 							promoParams.add(reader.readLine());
-							if (escape_check.equals(ESCAPE_STRING))
+							if (promoParams.contains(ESCAPE_STRING))
 								break;
 							restaurantController.updatePromotion(promoParams);
 							System.out.println();
@@ -438,12 +437,8 @@ public class RRPSSApp {
 						}
 					} while (!(option_sub.equals("1") || option_sub.equals("2")));
 
-<<<<<<< HEAD
-					if (backToMenu || tableNo == Integer.parseInt(ESCAPE_STRING)) break;
-=======
 					if (backToMenu || tableNo == Integer.parseInt(ESCAPE_STRING))
 						break;
->>>>>>> 7e8f10de4e923ca07873d77d10545b5962e07fc8
 
 					do {
 						int itemId, quantity;
