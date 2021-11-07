@@ -10,21 +10,21 @@ public class Reservation {
 	private Date dateTime;
 	private String time;
 	private int noPax = 2;
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 
 	/**
 	 * res_id,table_id,cust_id,res_datetime,pax
 	 * Constructor for Reservation Class
-	 * @param res_id identifier for reservation object
-	 * @param resDate Date of reservation, Date Object
-	 * @param pax Number of guests the reservation was made for
+	 * @param res_id 	identifier for reservation object
+	 * @param cust_id 	identifier for the customer 
+	 * @param date 		Date of reservation, Date Object
+	 * @param pax 		Number of guests the reservation was made for
 	 */
-	public Reservation(String res_id, int cust_id, Date resDate, int pax) {
-		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
+	public Reservation(String res_id, int cust_id, Date date, int pax) {
+		SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
 		this.res_id = res_id;
 		this.cust_id = cust_id;
-		this.dateTime = resDate;
-		this.time = sdf.format(resDate);
+		this.dateTime = date;
+		this.time = sdf.format(date);
 		this.noPax = pax;
 	}
 

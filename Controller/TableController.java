@@ -117,7 +117,7 @@ public class TableController {
 	 * @param noPax
 	 * @return tableNo, -1 if there is no available tables
 	 */
-	public int findValidTable(int noPax) {
+	public int findValidTableToCheckin(int noPax) {
 		for (Table table : this.tables) {
 			if (!table.getIsOccupied() && noPax <= table.getSeats() &&
 				!table.isReserved())
@@ -203,7 +203,7 @@ public class TableController {
 	 * @param details[3]: cust_id, res_datetime, pax
 	 * @return tableNo that is allocated for reservation, -1 if not found
 	 */
-	public int findValidTable(String[] details) throws ParseException {
+	public int findValidTableToReserve(String[] details) throws ParseException {
 		int noPax = Integer.parseInt(details[2]);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		Date res_date = sdf.parse(details[1]);
@@ -322,7 +322,7 @@ public class TableController {
 					)
 				);
 			} else {
-				tableNo = this.findValidTable(details);
+				tableNo = this.findValidTableToReserve(details);
 				if (tableNo == -1) return "false";
 				return this.findTableByNo(tableNo).addReservation(
 					Integer.parseInt(details[0]), 		// cust_id
@@ -364,7 +364,7 @@ public class TableController {
 	 * @throws NumberFormatException
 	 * @throws ParseException
 	 */
-	public String updateReservation(String res_id, String datetime) throws NumberFormatException, ParseException {
+	public String updateReservation(String res_id, String dateTime) throws NumberFormatException, ParseException {
 		String[] res_id_params = res_id.split("-");
 		
 		Reservation copied = this.findTableByNo(Integer.parseInt(res_id_params[0]))
@@ -374,7 +374,7 @@ public class TableController {
 
 		String[] new_res_params = new String[3];
 		new_res_params[0] = String.valueOf(copied.getCustId());
-		new_res_params[1] = datetime;
+		new_res_params[1] = dateTime;
 		new_res_params[2] = String.valueOf(copied.getNoPax());
 		String new_res_id = this.reserveTable(new_res_params);
 

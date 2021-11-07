@@ -302,7 +302,7 @@ public class RestaurantController {
 	 * @return
 	 */
 	public int findValidTable(int noPax) {
-		return this.tableController.findValidTable(noPax);
+		return this.tableController.findValidTableToCheckin(noPax);
 	}
 
 	/**
