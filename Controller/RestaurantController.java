@@ -73,7 +73,12 @@ public class RestaurantController {
 	public void printMenu() {
 		categoryController.print();
 	}
-
+	/**
+	 * Prints all the promotions
+	 */
+	public void printPromotion() {
+		promotionController.print();
+	}
 	/**
 	 * Adds item to the menu
 	 *
@@ -177,10 +182,6 @@ public class RestaurantController {
 		return promotionController.removePromotion(promoId);
 	}
 
-	public void printPromotion() {
-		promotionController.print();
-	}
-
 	////////////////////// ORDER FUNCTIONS ///////////////////
 
 	public boolean isRegisteredCustomer(int cust_id) {
@@ -191,7 +192,7 @@ public class RestaurantController {
 
 	/**
 	 * TODO: handle the mismatch input
-	 * 
+	 *
 	 * @param res_id
 	 * @return the tableNo and cust_id that for this reservation
 	 */
@@ -209,7 +210,7 @@ public class RestaurantController {
 
 	/**
 	 * create new order for new customer
-	 * 
+	 *
 	 * @param tableNo
 	 * @param staffID
 	 * @param date
@@ -224,7 +225,7 @@ public class RestaurantController {
 
 	/**
 	 * add a quantity of item/promotion to the order of table tableNo
-	 * 
+	 *
 	 * @param tableNo
 	 * @param itemId
 	 * @param quantity
@@ -249,7 +250,7 @@ public class RestaurantController {
 
 	/**
 	 * remove Item/Promotion objects from the order of table tableNo
-	 * 
+	 *
 	 * @param tableNo  the tableNo that has the order need to process
 	 * @param itemId   id of the Item/Promotion to be removed
 	 * @param quantity number of Promotion object to remove
@@ -274,7 +275,7 @@ public class RestaurantController {
 	/**
 	 * print the final invoice of table tableNo add the invoice to the
 	 * reportController and clear the table
-	 * 
+	 *
 	 * @param tableNo
 	 */
 	public void printInvoice(int tableNo) {
@@ -285,7 +286,7 @@ public class RestaurantController {
 
 	/**
 	 * view the current order of the table tableNo
-	 * 
+	 *
 	 * @param tableNo
 	 */
 	public void printOrder(int tableNo, boolean withPrice) {
@@ -294,7 +295,7 @@ public class RestaurantController {
 
 	/**
 	 * find first availabe table for noPax
-	 * 
+	 *
 	 * @param noPax
 	 * @return
 	 */
@@ -304,7 +305,7 @@ public class RestaurantController {
 
 	/**
 	 * check whether table tableNo is occupied or not
-	 * 
+	 *
 	 * @param tableNo
 	 * @return
 	 */
@@ -314,7 +315,7 @@ public class RestaurantController {
 
 	/**
 	 * print all occupied tables to let the staff choose which table to udpate order
-	 * 
+	 *
 	 * @return false if all tables are unoccupied
 	 */
 	public boolean printUnavailableTables() {
@@ -330,7 +331,7 @@ public class RestaurantController {
 
 	/**
 	 * print all unoccupied tables that has number of seats >= noPax
-	 * 
+	 *
 	 * @param noPax
 	 */
 	public void printAvailableTables(int noPax) {
