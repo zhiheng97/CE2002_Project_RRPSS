@@ -377,6 +377,7 @@ public class RestaurantController {
 		int contactNo = sc.nextInt();
 		int new_id = this.customerList.size();
 		this.customerList.add(new Customer(new_id, cust_name, false, contactNo));
+		sc.close();
 		return new_id;
 	}
 
