@@ -308,33 +308,35 @@ public class TableController {
 	 */
 	public String reserveTable(String[] details) {
 		int tableNo = -1;
+		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		try {
-			if (details.length == 5) {
-				tableNo = Integer.parseInt(details[3]);
-				this.findTableByNo(tableNo).addReservation(
-					new Reservation (
-						details[4],						// res_id
-						Integer.parseInt(details[0]), 	// cust_id
-						sdf.parse(details[1]), 			// date
-						Integer.parseInt(details[2]) 	// pax
-					)
-				);
-			} else {
-				tableNo = this.findValidTableToReserve(details);
-				if (tableNo == -1) return "false";
-				return this.findTableByNo(tableNo).addReservation(
-					Integer.parseInt(details[0]), 		// cust_id
-					sdf.parse(details[1]), 				// date
-					Integer.parseInt(details[2]) 		// pax
-				);
-			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			if(sdf.parse(details[1]).getTime() - date.getTime() >= (60000 * 5)) {
+				if (details.length == 5) {
+					tableNo = Integer.parseInt(details[3]);
+					this.findTableByNo(tableNo).addReservation(
+						new Reservation (
+							details[4],						// res_id
+							Integer.parseInt(details[0]), 	// cust_id
+							sdf.parse(details[1]), 			// date
+							Integer.parseInt(details[2]) 	// pax
+						)
+					);
+				} else {
+					tableNo = this.findValidTableToReserve(details);
+					if (tableNo == -1) return "false 1";
+					return this.findTableByNo(tableNo).addReservation(
+						Integer.parseInt(details[0]), 		// cust_id
+						sdf.parse(details[1]), 				// date
+						Integer.parseInt(details[2]) 		// pax
+					);
+				}
+			} else return "false 2";
 		} catch (ParseException e) {
-			e.printStackTrace();
+			System.out.println("Error Occured! \nPlease contact RRPSS Support Team for assistance.");
+			System.out.println("");
 		}
-		return "false";
+		return "false 1";
 	}
 
 	/**
@@ -369,16 +371,21 @@ public class TableController {
 		Reservation copied = this.findTableByNo(Integer.parseInt(res_id_params[0]))
 								.getReservations()
 								.get(Integer.parseInt(res_id_params[1]));
-		this.clearReservation(res_id);
 
 		String[] new_res_params = new String[3];
 		new_res_params[0] = String.valueOf(copied.getCustId());
 		new_res_params[1] = dateTime;
 		new_res_params[2] = String.valueOf(copied.getNoPax());
 		String new_res_id = this.reserveTable(new_res_params);
+		if(!new_res_id.equals("false 1") && !new_res_id.equals("false 2")) {
+			this.clearReservation(res_id);
+			if (new_res_id == "false") this.findTableByNo(Integer.parseInt(res_id_params[0])).addReservation(copied);
+			return new_res_id;
+		}
+		else
+			return res_id;
 
-		if (new_res_id == "false") this.findTableByNo(Integer.parseInt(res_id_params[0])).addReservation(copied);
-		return new_res_id;
+		
 	}
 
 	/**

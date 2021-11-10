@@ -84,7 +84,7 @@ public class Table {
 	 * @return res_id
 	 */
 	public String addReservation(int cust_id, Date date, int pax) {
-		if(this.noOfReseravtions == 15) return "false";
+		if(this.noOfReseravtions == 15) return "false 1";
 		
 		this.noOfReseravtions++;
 		int id=0;
