@@ -15,6 +15,8 @@ public class Item implements MenuEntry{
 	 * @param itemPrice The price of the object to create
 	 */
 	public Item(int itemId, String itemName, String itemDesc, double itemPrice) {
+		if(itemPrice < 0)
+			throw new IllegalArgumentException();
 		this.id = itemId;
 		this.name = itemName;
 		this.description = itemDesc;
@@ -74,7 +76,10 @@ public class Item implements MenuEntry{
 	 * @param price Price to be assigned
 	 */
 	public void setPrice(double price) {
-		this.price = price;
+		if(price < 0){
+			throw new IllegalArgumentException();
+		}
+			this.price = price;
 	}
 
 	/**

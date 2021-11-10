@@ -729,8 +729,8 @@ public class RRPSSApp {
 							break;
 					}
 				} catch (InputMismatchException e) {
-						System.out.println("Invalid input, returning to previous menu.");
-						System.out.println();
+					System.out.println("Invalid input, returning to previous menu.");
+					System.out.println();
 				} catch (NumberFormatException e) {
 					System.out.println("Unable to parse input, please check your input. Returning to previous menu.");
 					System.out.println();
@@ -739,6 +739,9 @@ public class RRPSSApp {
 					e.printStackTrace();
 				} catch (ParseException e) {
 					System.out.println("Unable to parse date / time input. Returning to previous menu.");
+					System.out.println();
+				} catch (IllegalArgumentException e) {
+					System.out.println("Price of item / promotion cannot be negative, returning to previous menu.");
 					System.out.println();
 				}
 			} while (!option_main.equals(ESCAPE_STRING));

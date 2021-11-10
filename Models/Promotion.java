@@ -57,15 +57,8 @@ public class Promotion extends Item {
 	* @param itemParams, the items' parameters in the order, id; name; description and price in string list
 	*/
 	public boolean addItem(List<String> itemParams){
-		try{
-			items.add(new Item(Integer.parseInt(itemParams.get(0)), itemParams.get(1), itemParams.get(2), Double.parseDouble(itemParams.get(3))));
-			return true;
-		}
-		catch(Exception error){
-			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
-			System.out.println(error);
-			return false;
-		}
+		items.add(new Item(Integer.parseInt(itemParams.get(0)), itemParams.get(1), itemParams.get(2), Double.parseDouble(itemParams.get(3))));
+		return true;
 	}
 
 	/**
@@ -124,6 +117,8 @@ public class Promotion extends Item {
 	 * @param cost, new price
 	 */
 	public void setPrice(double cost) {
+		if(cost < 0)
+			throw new IllegalArgumentException();
 		super.setPrice(cost);
 	}
 
