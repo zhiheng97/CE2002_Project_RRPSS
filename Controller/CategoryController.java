@@ -173,24 +173,19 @@ public class CategoryController {
 	 * @return True if item was updated, false otherwise
 	 */
 	public boolean updateItem(String[] itemParams) {
-		try{
-			Item toUpdate = searchForItem(Integer.parseInt(itemParams[1]));
+		Item toUpdate = searchForItem(Integer.parseInt(itemParams[1]));
+		if(toUpdate != null) {
 			if(toUpdate != null) {
-				if(toUpdate != null) {
-					if(!itemParams[0].equals(ESCAPE_STRING_1))
-						toUpdate.setName(itemParams[0]);
-					if(!itemParams[2].equals(ESCAPE_STRING_1))
-						toUpdate.setDescription(itemParams[2]);
-					if(!itemParams[3].equals(ESCAPE_STRING_2))
-						toUpdate.setPrice(Double.parseDouble(itemParams[3]));
-					return updateMenuFile();
-				}
+				if(!itemParams[0].equals(ESCAPE_STRING_1))
+					toUpdate.setName(itemParams[0]);
+				if(!itemParams[2].equals(ESCAPE_STRING_1))
+					toUpdate.setDescription(itemParams[2]);
+				if(!itemParams[3].equals(ESCAPE_STRING_2))
+					toUpdate.setPrice(Double.parseDouble(itemParams[3]));
+				return updateMenuFile();
 			}
-		} catch(NumberFormatException e){
-			System.out.println("Error Occured!\nYou've entered a parameter value that cannot be parsed as a number");
-		} catch (Exception e) {
-			System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
 		}
+		System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
 		return false;
 	}
 

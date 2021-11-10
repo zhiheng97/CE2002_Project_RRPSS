@@ -1,15 +1,12 @@
 package Controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
-import java.util.Scanner;
 
 import Models.Customer;
 import Models.Item;
@@ -32,7 +29,7 @@ public class RestaurantController {
 	private List<Customer> customerList;
 	private static final String PATH_TO_CUSTOMERS_FILE = Path.of("./Data/customers.txt").toString();
 
-	public RestaurantController() throws NumberFormatException, ParseException {
+	public RestaurantController() {
 		this.tableController = new TableController(12);
 		this.reportController = new ReportController();
 		this.categoryController = new CategoryController();
@@ -280,7 +277,7 @@ public class RestaurantController {
 	 */
 	public void printInvoice(int tableNo) {
 		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
-		// this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
+		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
 		this.tableController.printInvoice(tableNo);
 	}
 
@@ -369,13 +366,7 @@ public class RestaurantController {
 	 * @return cust_id for the new Customer
 	 * @throws IOException
 	 */
-	public int registerCustomer() throws IOException {
-		Scanner sc = new Scanner(System.in);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Enter the customer name: ");
-		String cust_name = reader.readLine();
-		System.out.print("Enter the customer's contact number: ");
-		int contactNo = sc.nextInt();
+	public int registerCustomer(String cust_name, int contactNo) throws IOException {
 		int new_id = this.customerList.size();
 		this.customerList.add(new Customer(new_id, cust_name, false, contactNo));
 		return new_id;

@@ -79,21 +79,14 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean addPromotion(List<String> promoParams, List<String> items) {
-		try{
-			if(this.findPromotionById(Integer.parseInt(promoParams.get(0))) != null){
-				System.out.println("Promotion is already in the system!");
-				return false;
-			}
-			else{
-				promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
-				this.updatePromotionFile();
-				return true;
-			}
-		}
-		catch(Exception error){
-			System.out.println("Error Occured!\nPlease contact RRPSS Support Team for assistance.");
-			System.out.println(error);
+		if(this.findPromotionById(Integer.parseInt(promoParams.get(0))) != null){
+			System.out.println("Promotion is already in the system!");
 			return false;
+		}
+		else{
+			promotions.add(new Promotion(Integer.parseInt(promoParams.get(0)), promoParams.get(1), promoParams.get(2), Double.parseDouble(promoParams.get(3)), items));
+			this.updatePromotionFile();
+			return true;
 		}
 	}
 
@@ -152,23 +145,16 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean removePromotion(int promoId) {
-		try{
-			int i;
-			for(i = 0; i < promotions.size(); i++){
-				if(promotions.get(i).getId() == promoId){
-					promotions.remove(i);
-					this.updatePromotionFile();
-					return true;
-				}
+		int i;
+		for(i = 0; i < promotions.size(); i++){
+			if(promotions.get(i).getId() == promoId){
+				promotions.remove(i);
+				this.updatePromotionFile();
+				return true;
 			}
-			System.out.println("Promotion " + promoId + " does not exist!");
-			return false;
 		}
-		catch(Exception error){
-			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
-			System.out.println(error);
-			return false;
-		}
+		System.out.println("Promotion " + promoId + " does not exist!");
+		return false;
 	}
 
 	/**
@@ -178,15 +164,9 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean addItem(int promoId, List<String> itemParams) {
-		try{
-			this.findPromotionById(promoId).addItem(itemParams);
-			this.updatePromotionFile();
-			return true;
-		}
-		catch(Exception error){
-			System.out.println("Promotion " + promoId + " does not exist!");
-			return false;
-		}
+		this.findPromotionById(promoId).addItem(itemParams);
+		this.updatePromotionFile();
+		return true;
 	}
 
 	/**
@@ -197,21 +177,15 @@ public class PromotionController {
 	 */
 	public boolean removeItem(int promoId, int itemId) {
 		int i;
-		try{
-			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
-				if(this.findPromotionById(promoId).getItems().get(i).getId() == itemId){
-					this.findPromotionById(promoId).getItems().remove(i);
-					this.updatePromotionFile();
-					return true;
-				}
+		for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
+			if(this.findPromotionById(promoId).getItems().get(i).getId() == itemId){
+				this.findPromotionById(promoId).getItems().remove(i);
+				this.updatePromotionFile();
+				return true;
 			}
-			System.out.println("Item " + itemId + " does not exist!");
-			return false;
 		}
-		catch(Exception error){
-			System.out.println("Promotion " + promoId + " does not exist!");
-			return false;
-		}
+		System.out.println("Item " + itemId + " does not exist!");
+		return false;
 	}
 
 	/**
@@ -221,23 +195,17 @@ public class PromotionController {
 	 */
 	public boolean updateItem(int promoId, List<String> itemParams) {
 		int i;
-		try{
-			for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
-				if(this.findPromotionById(promoId).getItems().get(i).getId() == Integer.parseInt(itemParams.get(0))){
-					if(!itemParams.get(1).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setName(itemParams.get(1));
-					if(!itemParams.get(2).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams.get(2));
-					if(!itemParams.get(3).equals(ESCAPE_STRING_2)) this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams.get(3)));
-					this.updatePromotionFile();
-					return true;
-				}
+		for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
+			if(this.findPromotionById(promoId).getItems().get(i).getId() == Integer.parseInt(itemParams.get(0))){
+				if(!itemParams.get(1).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setName(itemParams.get(1));
+				if(!itemParams.get(2).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams.get(2));
+				if(!itemParams.get(3).equals(ESCAPE_STRING_2)) this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams.get(3)));
+				this.updatePromotionFile();
+				return true;
 			}
-			System.out.println("Item " + itemParams.get(0) + " does not exist!");
-			return false;
 		}
-		catch(Exception error){
-			System.out.println("Promotion " + promoId + " does not exist!");
-			return false;
-		}
+		System.out.println("Item " + itemParams.get(0) + " does not exist!");
+		return false;
 	}
 
 	/**
@@ -246,26 +214,19 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean updatePromotion(List<String> promoParams) {
-		try{
-			int i;
-			for(i = 0; i < promotions.size(); i++){
-				if(promotions.get(i).getId() == Integer.parseInt(promoParams.get(0))){
-					if(!promoParams.get(1).equals(ESCAPE_STRING_1)) promotions.get(i).setName(promoParams.get(1));
-					if(!promoParams.get(2).equals(ESCAPE_STRING_1)) promotions.get(i).setDescription(promoParams.get(2));
-					if(!promoParams.get(3).equals(ESCAPE_STRING_2)) promotions.get(i).setPrice(Double.parseDouble(promoParams.get(3)));
-					this.updatePromotionFile();
-					// doesn't change items
-					return true;
-				}
+		int i;
+		for(i = 0; i < promotions.size(); i++){
+			if(promotions.get(i).getId() == Integer.parseInt(promoParams.get(0))){
+				if(!promoParams.get(1).equals(ESCAPE_STRING_1)) promotions.get(i).setName(promoParams.get(1));
+				if(!promoParams.get(2).equals(ESCAPE_STRING_1)) promotions.get(i).setDescription(promoParams.get(2));
+				if(!promoParams.get(3).equals(ESCAPE_STRING_2)) promotions.get(i).setPrice(Double.parseDouble(promoParams.get(3)));
+				this.updatePromotionFile();
+				// doesn't change items
+				return true;
 			}
-			System.out.println("Promotion " + promoParams.get(0) + " does not exist!");
-			return false;
 		}
-		catch(Exception error){
-			System.out.println("Error Occured!\nPlease contact RRPCS Support Team for assistance.");
-			System.out.println(error);
-			return false;
-		}
+		System.out.println("Promotion " + promoParams.get(0) + " does not exist!");
+		return false;
 	}
 
 }

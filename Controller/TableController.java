@@ -22,7 +22,7 @@ public class TableController {
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
 	private FileController fileController = new FileController();
 
-	public TableController(int noOfTables) throws NumberFormatException, ParseException {
+	public TableController(int noOfTables) {
 		this.noOfTables = noOfTables;
 		this.tables = new ArrayList<Table>(noOfTables);
 		// this.initializeTables();
@@ -306,7 +306,7 @@ public class TableController {
 	 * @param details[5]: cust_id, res_datetime, pax, table_id, res_id
 	 * @return nothing, does not matter
 	 */
-	public String reserveTable(String[] details) throws NumberFormatException, ParseException {
+	public String reserveTable(String[] details) {
 		int tableNo = -1;
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		try {
