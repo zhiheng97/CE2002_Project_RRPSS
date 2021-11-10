@@ -1,6 +1,5 @@
 package Controller;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -364,9 +363,8 @@ public class RestaurantController {
 	 * @param cust_name
 	 * @param contactNo
 	 * @return cust_id for the new Customer
-	 * @throws IOException
 	 */
-	public int registerCustomer(String cust_name, int contactNo) throws IOException {
+	public int registerCustomer(String cust_name, int contactNo) {
 		int new_id = this.customerList.size();
 		this.customerList.add(new Customer(new_id, cust_name, false, contactNo));
 		return new_id;
@@ -376,7 +374,7 @@ public class RestaurantController {
 	 * @param details
 	 * @return res_id if reserve successfully, "false" otherwise
 	 */
-	public String reserveTable(String[] details) throws NumberFormatException, ParseException {
+	public String reserveTable(String[] details) {
 		return this.tableController.reserveTable(details);
 	}
 
@@ -393,7 +391,7 @@ public class RestaurantController {
 	 * @throws ParseException
 	 * @throws NumberFormatException
 	 */
-	public String updateReservation(String res_id, String datetime) throws NumberFormatException, ParseException {
+	public String updateReservation(String res_id, String datetime) {
 		return this.tableController.updateReservation(res_id, datetime);
 	}
 
@@ -403,7 +401,7 @@ public class RestaurantController {
 	 * @throws ParseException
 	 * @throws NumberFormatException
 	 */
-	public String updateReservation(String res_id, int noPax) throws NumberFormatException, ParseException {
+	public String updateReservation(String res_id, int noPax) {
 		return this.tableController.updateReservation(res_id, noPax);
 	}
 

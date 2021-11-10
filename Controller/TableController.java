@@ -362,10 +362,8 @@ public class TableController {
 	 * @param res_id
 	 * @param datetime
 	 * @return String new_res_id or "false"
-	 * @throws NumberFormatException
-	 * @throws ParseException
 	 */
-	public String updateReservation(String res_id, String dateTime) throws NumberFormatException, ParseException {
+	public String updateReservation(String res_id, String dateTime) {
 		String[] res_id_params = res_id.split("-");
 		
 		Reservation copied = this.findTableByNo(Integer.parseInt(res_id_params[0]))
@@ -392,10 +390,8 @@ public class TableController {
 	 * @param res_id
 	 * @param noPax
 	 * @return
-	 * @throws NumberFormatException
-	 * @throws ParseException
 	 */
-	public String updateReservation(String res_id, int noPax) throws NumberFormatException, ParseException {
+	public String updateReservation(String res_id, int noPax) {
 		String[] res_id_params = res_id.split("-");
 		
 		Reservation copied = this.findTableByNo(Integer.parseInt(res_id_params[0]))
