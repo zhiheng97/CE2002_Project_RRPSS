@@ -29,13 +29,13 @@ public class Category {
 	 * @return True if item is added, false otherwise
 	 */
 	public boolean addItem(String[] itemParams) {
-		int itemId = Integer.parseInt(itemParams[1]); //Try to parse the input as an integer
+		int itemId = Integer.parseInt(itemParams[0]); //Try to parse the input as an integer
 		if(lookUp(itemId) == null) { /*Performs a check to see if the itemId exists in the menu.
 										If the item does not exist proceed to add it to the category*/
 			items.add(new Item
 				(
 					itemId, //Id
-					itemParams[0], //Name
+					itemParams[1], //Name
 					itemParams[2], //Description
 					Double.parseDouble(itemParams[3]) //Price
 				) //Adds the new item to the list of items in the category.

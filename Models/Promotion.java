@@ -25,7 +25,7 @@ public class Promotion extends Item {
 		do{
 			items.add(new Item(Integer.parseInt(itemsInc.get(i)), itemsInc.get(i+1), itemsInc.get(i+2), Double.parseDouble(itemsInc.get(i+3))));
 			i += 4;
-		}while(i < itemsInc.size() && !itemsInc.get(i).equals("ENDLINE"));
+		}while(i < itemsInc.size());
 	}
 
 	/**
