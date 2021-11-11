@@ -1,6 +1,11 @@
+/**
+ * A model that represents the items of the restaurant's menu that implement the interface IItem.
+ * @author  @ghotinggoad, @zhiheng97
+ * @since 10 October 2021
+ */
 package Models;
 
-public class Item implements MenuEntry{
+public class Item implements IItem{
 
 	private int id;
 	private String name;
@@ -15,8 +20,8 @@ public class Item implements MenuEntry{
 	 * @param itemPrice The price of the object to create
 	 */
 	public Item(int itemId, String itemName, String itemDesc, double itemPrice) {
-		if(itemPrice < 0)
-			throw new IllegalArgumentException();
+		if(itemPrice < 0) //Checks if price is negative
+			throw new IllegalArgumentException(); //Exception will be caught in main()
 		this.id = itemId;
 		this.name = itemName;
 		this.description = itemDesc;
@@ -76,8 +81,8 @@ public class Item implements MenuEntry{
 	 * @param price Price to be assigned
 	 */
 	public void setPrice(double price) {
-		if(price < 0){
-			throw new IllegalArgumentException();
+		if(price < 0){ //Checks if price is negative
+			throw new IllegalArgumentException(); //Exception will be caught in main()
 		}
 			this.price = price;
 	}
@@ -97,7 +102,7 @@ public class Item implements MenuEntry{
 	 * @return Item that has been copied
 	 */
 	public Item copyOf(){
-		return new Item(this.id, this.name, this.description, this.price);
+		return new Item(this.id, this.name, this.description, this.price); //Returns a copy of the item
 	}
 
 }

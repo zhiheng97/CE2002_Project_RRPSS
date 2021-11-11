@@ -1,3 +1,8 @@
+/**
+ * A model that represents the sales reports.
+ * @author  @brianleect
+ * @since 10 October 2021
+ */
 package Models;
 
 import java.util.ArrayList;

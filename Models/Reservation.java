@@ -1,3 +1,8 @@
+/**
+ * A model that represents the reservations for each table.
+ * @author  @Henry-Hoang
+ * @since 10 October 2021
+ */
 package Models;
 
 import java.text.SimpleDateFormat;

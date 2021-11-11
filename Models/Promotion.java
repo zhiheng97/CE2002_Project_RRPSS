@@ -1,3 +1,8 @@
+/**
+ * A model that represents the promotion packages which extends the class Item.
+ * @author  @ghotinggoad
+ * @since 10 October 2021
+ */
 package Models;
 
 import java.util.ArrayList;

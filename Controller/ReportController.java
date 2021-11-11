@@ -1,3 +1,8 @@
+/**
+ * A controller that is responsible for managing the restaurant's reports.
+ * @author  @brianleect
+ * @since 10 October 2021
+ */
 package Controller;
 
 import java.util.ArrayList;

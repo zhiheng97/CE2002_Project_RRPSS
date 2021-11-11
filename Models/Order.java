@@ -1,5 +1,9 @@
+/**
+ * A model that represents the order/invoice of each table.
+ * @author  @Henry-Hoang
+ * @since 10 October 2021
+ */
 package Models;
-
 
 import java.util.Date;
 import java.text.SimpleDateFormat;

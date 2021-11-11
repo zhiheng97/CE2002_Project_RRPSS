@@ -1,3 +1,8 @@
+/**
+ * A model that represents the staff of the restaurant.
+ * @author @Henry-Hoang
+ * @since 10 October 2021
+ */
 package Models;
 
 public class Staff {

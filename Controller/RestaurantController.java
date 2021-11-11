@@ -1,3 +1,10 @@
+/**
+ * An intermediatory controller that calls respective controllers to perform actions.
+ * Acts as a bridge to other controllers, by passing messages to the appropriate controller.
+ * Performs some data cleaning.
+ * @author  @brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
+ * @since 10 October 2021
+ */
 package Controller;
 
 import java.nio.file.Path;
@@ -21,20 +28,20 @@ public class RestaurantController {
 	private CategoryController categoryController;
 	private PromotionController promotionController;
 	private FileController fileController;
-
 	private List<Staff> staffList;
-	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString();
-
+	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString(); //Holds resolved path to staff.txt
 	private List<Customer> customerList;
-	private static final String PATH_TO_CUSTOMERS_FILE = Path.of("./Data/customers.txt").toString();
+	private static final String PATH_TO_CUSTOMERS_FILE = Path.of("./Data/customers.txt").toString(); //Holds resolved path to customers.txt
+	private static final Integer NO_OF_TABLES = 12; //No of tables in restaurant
 
 	public RestaurantController() {
-		this.tableController = new TableController(12);
+		this.tableController = new TableController(NO_OF_TABLES);
 		this.reportController = new ReportController();
 		this.categoryController = new CategoryController();
 		this.promotionController = new PromotionController();
 		this.fileController = new FileController();
 
+		//Reading in of registered customers
 		this.customerList = new ArrayList<Customer>();
 		List<String> custParams = fileController.readFile(PATH_TO_CUSTOMERS_FILE);
 		for (int i = 4; i < custParams.size(); i += 4) {
@@ -42,6 +49,7 @@ public class RestaurantController {
 					Boolean.parseBoolean(custParams.get(i + 2)), Integer.parseInt(custParams.get(i + 3))));
 		}
 
+		//Reading in of staff
 		this.staffList = new ArrayList<Staff>();
 		List<String> staffParams = fileController.readFile(PATH_TO_STAFFS_FILE);
 		for (int i = 3; i < staffParams.size(); i += 3) {

@@ -1,3 +1,8 @@
+/**
+ * A controller that is responsible for performing read/write operations to the "database".
+ * @author  @brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
+ * @since 10 October 2021
+ */
 package Controller;
 
 import java.io.BufferedReader;
@@ -8,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileController {
+
+    private static final String DELIMITER = ",";
 
     /**
      * Constructor for the FileController Class
@@ -21,12 +28,12 @@ public class FileController {
      */
     public List<String> readFile(String path) {
         try{
-            List<String> list = new ArrayList<String>();
+            List<String> list = new ArrayList<String>(); //Dynamic String array to hold entire file
             String row = "";
             BufferedReader csvReader = new BufferedReader(new FileReader(path));
-            while((row = csvReader.readLine()) != null) {
-                for(String s : row.split(",")){
-                    list.add(s);
+            while((row = csvReader.readLine()) != null) { //Reads line while not null
+                for(String s : row.split(DELIMITER)){ //Splits the line based on DELIMITER
+                    list.add(s); //Adds each string into the list
                 }
             }
             csvReader.close();
@@ -47,7 +54,7 @@ public class FileController {
     public boolean writeFile(String[] params, String path) {
         boolean res = false;
         try{
-            FileWriter fw = new FileWriter(path, false);
+            FileWriter fw = new FileWriter(path, false); //Initialize FileWriter object with path to file and boolean flag to overwrite file
             for(String item : params) {
                 fw.write(item);
             }

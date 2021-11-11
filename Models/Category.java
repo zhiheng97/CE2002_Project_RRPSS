@@ -1,9 +1,14 @@
+/**
+ * A model of a category in the restaurant's menu.
+ * @author @zhiheng97
+ * @since 10 October 2021
+ */
 package Models;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import Enumerations.*;
+import Enumerations.Categories;
 
 public class Category {
 
@@ -24,15 +29,16 @@ public class Category {
 	 * @return True if item is added, false otherwise
 	 */
 	public boolean addItem(String[] itemParams) {
-		int itemId = Integer.parseInt(itemParams[1]);
-		if(lookUp(itemId) == null) {
+		int itemId = Integer.parseInt(itemParams[1]); //Try to parse the input as an integer
+		if(lookUp(itemId) == null) { /*Performs a check to see if the itemId exists in the menu.
+										If the item does not exist proceed to add it to the category*/
 			items.add(new Item
 				(
-					itemId,
-					itemParams[0],
-					itemParams[2],
-					Double.parseDouble(itemParams[3])
-				)
+					itemId, //Id
+					itemParams[0], //Name
+					itemParams[2], //Description
+					Double.parseDouble(itemParams[3]) //Price
+				) //Adds the new item to the list of items in the category.
 			);
 			return true;
 		}
@@ -61,13 +67,13 @@ public class Category {
 	 * @return Item that matches either the id or name
 	 */
 	public Item lookUp(String[] itemParams) {
-		return items.stream()
+		return items.stream() //Performs a iterative search for a match of the itemId or the item's name in the list of items in the category.
 			.filter(
 				item -> item.getId() == Integer.parseInt(itemParams[0]) || 
 				item.getName().equals(itemParams[1])
 			)
-			.findFirst()
-			.orElse(null);
+			.findFirst() //Finds the first match
+			.orElse(null); //If no match found, return null
 	}
 
 		/**
@@ -76,10 +82,10 @@ public class Category {
 	 * @return Item that matches the id
 	 */
 	public Item lookUp(int itemId) {
-		return items.stream()
+		return items.stream() //Performs a iterative search for a match of the itemId or the item's name in the list of items in the category.
 			.filter(item -> item.getId() == itemId)
-			.findFirst()
-			.orElse(null);
+			.findFirst() //Finds the first match
+			.orElse(null); //If no match found, return null
 	}
 
 	/**
@@ -87,7 +93,7 @@ public class Category {
 	 */
 	public void print() {
 		System.out.println("Category: " + this.category.toString());
-		for(Item item : this.items){
+		for(Item item : this.items){ //Iterate through the list of items and call's the print method.
 			item.print();
 		}
 	}
@@ -98,10 +104,9 @@ public class Category {
 	 * @return True if item found and removed, false otherwise
 	 */
 	public boolean removeItem(int itemId) {
-		Item toRemove = lookUp(itemId);
-		if(toRemove != null) {
-			items.remove(toRemove);
-			return true;
+		Item toRemove = lookUp(itemId); //Calls lookUp to search for the item to remove
+		if(toRemove != null) { //If the lookUp was successful, proceed to remove the item
+			return items.remove(toRemove);
 		}
 		return false;
 	}
