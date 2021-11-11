@@ -1,6 +1,11 @@
+/**
+ * An interface class for the model Item.
+ * @author  @ghotinggoad
+ * @since 10 October 2021
+ */
 package Models;
 
-interface MenuEntry{
+interface IItem{
   public int getId();
   public String getName();
   public String getDescription();
