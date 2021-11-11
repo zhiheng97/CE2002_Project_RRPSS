@@ -61,9 +61,9 @@ public class RRPSSApp {
 												break;
 											itemParams[4] = option_sub;
 											System.out.print("Enter the item id: ");
-											itemParams[1] = reader.readLine();
-											System.out.print("Enter the item name: ");
 											itemParams[0] = reader.readLine();
+											System.out.print("Enter the item name: ");
+											itemParams[1] = reader.readLine();
 											System.out.print("Enter the item description: ");
 											itemParams[2] = reader.readLine();
 											System.out.print("Enter the price of the item: ");
