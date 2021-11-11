@@ -25,21 +25,25 @@ public class TableController {
 	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
 	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z yyyy";
+	private static final String DELIMITER = ",";
 	private FileController fileController = new FileController();
 
 	public TableController(int noOfTables) {
 		this.noOfTables = noOfTables;
 		this.tables = new ArrayList<Table>(noOfTables);
+		String[] params;
 		// this.initializeTables();
 		List<String> tableParams = fileController.readFile(PATH_TO_TABLES_FILE);
-		for (int i = 3; i < tableParams.size(); i += 3) {
-			tables.add(new Table(Integer.parseInt(tableParams.get(i)), Boolean.parseBoolean(tableParams.get(i + 1)),
-					Integer.parseInt(tableParams.get(i + 2))));
+		for (int i = 1; i < tableParams.size(); i++) {
+			params = tableParams.get(i).split(DELIMITER);
+			tables.add(new Table(Integer.parseInt(params[0]), Boolean.parseBoolean(params[1]),
+					Integer.parseInt(params[2])));
 		}
 
 		List<String> reserveParams = fileController.readFile(PATH_TO_RESERVATIONS_FILE);
-		for (int i = 5; i < reserveParams.size(); i += 5) {
-			this.reserveTable(reserveParams.subList(i, i + 5).toArray(new String[5]));
+		for (int i = 1; i < reserveParams.size(); i++) {
+			params = reserveParams.get(i).split(DELIMITER);
+			this.reserveTable(params);
 		}
 	}
 

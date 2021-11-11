@@ -21,6 +21,7 @@ public class CategoryController {
 	private final static String PATH_TO_MENU_FILE = Path.of("./Data/menu.txt").toString(); //Hold resolved path to menu.txt
 	private final static String ESCAPE_STRING_1 = "\\"; //Checked against parameter to see if user would like to update the following attribute
 	private final static String ESCAPE_STRING_2 = "-1.0"; //Checked against parameter to see if user would like to update the following attribute
+	private final static String DELIMITER = ",";
 
 	/**
 	 * Constructor of the CategoryController Class
@@ -90,10 +91,11 @@ public class CategoryController {
 	 */
 	private void initializeMenuItems() {
 		List<String> menuList = fileController.readFile(PATH_TO_MENU_FILE); //Calls fileController to read entire file into a List<String>
-		String[] itemParams = new String[4];
+		//String[] itemParams = new String[4];
 		String prevCat = "", curCat = "";
-		for(int i = 0; i < menuList.size(); i += 5){ //Iterate through menuList
-			curCat = menuList.get(i + 4);
+		for(int i = 0; i < menuList.size(); i++){ //Iterate through menuList
+			String[] itemParams= menuList.get(i).split(DELIMITER);
+			curCat = itemParams[4];
 			//Performs check to see if a new category is to be created
 			if(curCat.equals(Categories.MAINS.toString()) && !prevCat.equals(curCat)) 
 				addCategory(Categories.MAINS);
@@ -101,10 +103,6 @@ public class CategoryController {
 				addCategory(Categories.SIDES);
 			else if(curCat.equals(Categories.DRINKS.toString()) && !prevCat.equals(curCat))
 				addCategory(Categories.DRINKS);
-			itemParams[1] = menuList.get(i); //id
-			itemParams[0] = menuList.get(i + 1); //name
-			itemParams[2] = menuList.get(i + 2); //description
-			itemParams[3] = menuList.get(i + 3); //price
 			Category category = findCatByType(curCat); //Search for category to add item to
 			category.addItem(itemParams); //Adds item to the category
 			prevCat = curCat; //Updates parameter for next iteration
@@ -163,10 +161,10 @@ public class CategoryController {
 		for(Category category : categories) //Iterates through list of categories
 			for(Item item : category.getItems()){ //Iterates through the items of the category
 				//Adds each record to records
-				records.add(String.valueOf(item.getId()).concat(","));
-				records.add(item.getName().concat(","));
-				records.add(item.getDescription().concat(","));
-				records.add(String.valueOf(item.getPrice()).concat(","));
+				records.add(String.valueOf(item.getId()).concat(DELIMITER));
+				records.add(item.getName().concat(DELIMITER));
+				records.add(item.getDescription().concat(DELIMITER));
+				records.add(String.valueOf(item.getPrice()).concat(DELIMITER));
 				records.add(category.getCategory().toString());
 				records.add(System.getProperty("line.separator")); //Adds a line break in txt file
 			}

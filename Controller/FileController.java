@@ -14,8 +14,6 @@ import java.util.List;
 
 public class FileController {
 
-    private static final String DELIMITER = ",";
-
     /**
      * Constructor for the FileController Class
      */
@@ -32,9 +30,7 @@ public class FileController {
             String row = "";
             BufferedReader csvReader = new BufferedReader(new FileReader(path));
             while((row = csvReader.readLine()) != null) { //Reads line while not null
-                for(String s : row.split(DELIMITER)){ //Splits the line based on DELIMITER
-                    list.add(s); //Adds each string into the list
-                }
+                list.add(row); //Adds each line into the list
             }
             csvReader.close();
             return list;

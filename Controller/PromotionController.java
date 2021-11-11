@@ -19,6 +19,7 @@ public class PromotionController {
 	private final static String PATH_TO_PROMOTIONS_FILE = Path.of("./Data/promotion.txt").toString();
 	private final static String ESCAPE_STRING_1 = "\\";
 	private final static String ESCAPE_STRING_2 = "-1";
+	private final static String DELIMITER = ",";
 
 	/**
 	 * Constructor of the PromotionController Class
@@ -29,6 +30,32 @@ public class PromotionController {
 		List<String> tokens = fileController.readFile(PATH_TO_PROMOTIONS_FILE);
 		List<String> promoParams = new ArrayList<String>();
 		List<String> itemParams = new ArrayList<String>();
+		String next = "PROMO";
+		for(int i = 0; i < tokens.size(); i++){
+			if(!tokens.get(i).equals("ENDLINE") && !tokens.get(i).equals("ENDFILE")){
+				String[] params = tokens.get(i).split(DELIMITER);
+				if(next.equals("PROMO")){
+					promoParams.add(params[0]);
+					promoParams.add(params[1]);
+					promoParams.add(params[2]);
+					promoParams.add(params[3]);
+					next = "ITEM";
+				} else if (next.equals("ITEM")){
+					itemParams.add(params[0]);
+					itemParams.add(params[1]);
+					itemParams.add(params[2]);
+					itemParams.add(params[3]);
+					next = "ITEM";
+				}
+			} else if(tokens.get(i).equals("ENDFILE"))
+				next = "PROMO";
+			else {
+				addPromotion(promoParams, itemParams);
+				promoParams.clear();
+				itemParams.clear();
+				next = "PROMO";
+			}
+		}/* 
 		int i = 0;
 		do{
 			promoParams.add(tokens.get(i)); 		//id
@@ -45,7 +72,7 @@ public class PromotionController {
 			promoParams.clear();
 			itemParams.clear();
 			i++;
-		}while(i < tokens.size() && !tokens.get(i).equals("ENDFILE"));
+		}while(i < tokens.size() && !tokens.get(i).equals("ENDFILE")); */
 	}
 
 	/**
@@ -56,15 +83,15 @@ public class PromotionController {
 		boolean res = false;
 		List<String> records = new ArrayList<String>();
 		for(Promotion promotion : promotions){
-			records.add(String.valueOf(promotion.getId()).concat(","));
-			records.add(promotion.getName().concat(","));
-			records.add(promotion.getDescription().concat(","));
+			records.add(String.valueOf(promotion.getId()).concat(DELIMITER));
+			records.add(promotion.getName().concat(DELIMITER));
+			records.add(promotion.getDescription().concat(DELIMITER));
 			records.add(String.valueOf(promotion.getPrice()));
 			records.add(System.getProperty("line.separator"));
 			for(Item item : promotion.getItems()){
-				records.add(String.valueOf(item.getId()).concat(","));
-				records.add(item.getName().concat(","));
-				records.add(item.getDescription().concat(","));
+				records.add(String.valueOf(item.getId()).concat(DELIMITER));
+				records.add(item.getName().concat(DELIMITER));
+				records.add(item.getDescription().concat(DELIMITER));
 				records.add(String.valueOf(item.getPrice()));
 				records.add(System.getProperty("line.separator"));
 			}
