@@ -7,9 +7,7 @@
  */
 package Controller;
 
-import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -27,11 +25,8 @@ public class RestaurantController {
 	private ReportController reportController;
 	private CategoryController categoryController;
 	private PromotionController promotionController;
-	private FileController fileController;
-	private List<Staff> staffList;
-	private static final String PATH_TO_STAFFS_FILE = Path.of("./Data/staff.txt").toString(); //Holds resolved path to staff.txt
-	private List<Customer> customerList;
-	private static final String PATH_TO_CUSTOMERS_FILE = Path.of("./Data/customers.txt").toString(); //Holds resolved path to customers.txt
+	private CustomerController customerController;
+	private StaffController staffController;
 	private static final Integer NO_OF_TABLES = 12; //No of tables in restaurant
 
 	public RestaurantController() {
@@ -39,32 +34,19 @@ public class RestaurantController {
 		this.reportController = new ReportController();
 		this.categoryController = new CategoryController();
 		this.promotionController = new PromotionController();
-		this.fileController = new FileController();
-
-		//Reading in of registered customers
-		this.customerList = new ArrayList<Customer>();
-		List<String> custParams = fileController.readFile(PATH_TO_CUSTOMERS_FILE);
-		for (int i = 4; i < custParams.size(); i += 4) {
-			this.customerList.add(new Customer(Integer.parseInt(custParams.get(i)), custParams.get(i + 1),
-					Boolean.parseBoolean(custParams.get(i + 2)), Integer.parseInt(custParams.get(i + 3))));
-		}
-
-		//Reading in of staff
-		this.staffList = new ArrayList<Staff>();
-		List<String> staffParams = fileController.readFile(PATH_TO_STAFFS_FILE);
-		for (int i = 3; i < staffParams.size(); i += 3) {
-			this.staffList.add(
-					new Staff(Integer.parseInt(staffParams.get(i)), staffParams.get(i + 1), staffParams.get(i + 2)));
-		}
+		this.customerController = new CustomerController();
+		this.staffController = new StaffController();
 
 		// initialize order for occupied tables
 		Random rand = new Random();
 		Date now = new Date();
 		for (int id = 1; id <= 12; id++) {
 			if (this.tableController.findTableByNo(id).getIsOccupied()) {
+				List<Staff> staffList = staffController.getStaffList();
+				List<Customer> customerList = customerController.getCustomers();
 				this.tableController.findTableByNo(id)
-						.setInvoice(new Order(this.staffList.get(rand.nextInt(this.staffList.size())),
-								this.customerList.get(rand.nextInt(this.customerList.size())), now));
+						.setInvoice(new Order(staffList.get(rand.nextInt(staffList.size())),
+								customerList.get(rand.nextInt(customerList.size())), now));
 			}
 		}
 	}
@@ -189,7 +171,7 @@ public class RestaurantController {
 	////////////////////// ORDER FUNCTIONS ///////////////////
 
 	public boolean isRegisteredCustomer(int cust_id) {
-		if (cust_id < 0 || cust_id >= this.customerList.size())
+		if (cust_id < 0 || cust_id >= customerController.getCustomers().size())
 			return false;
 		return true;
 	}
@@ -220,8 +202,8 @@ public class RestaurantController {
 	 * @param date
 	 */
 	public void createOrder(int tableNo, int cust_id, int staff_id, Date date) {
-		Staff staff = this.staffList.get(staff_id);
-		Customer cust = this.customerList.get(cust_id);
+		Staff staff = staffController.getStaffList().get(staff_id);
+		Customer cust = customerController.getCustomers().get(cust_id);
 		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
 		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, cust, date));
 		System.out.printf("The new order is created for table %d. Enjoy!\n", tableNo);
@@ -363,7 +345,7 @@ public class RestaurantController {
 	 * in memory
 	 */
 	public void showCustomers() { // for debug
-		for (Customer cust : this.customerList)
+		for (Customer cust : customerController.getCustomers())
 			System.out.printf("%d %s\n", cust.getId(), cust.getName());
 	}
 
@@ -373,9 +355,7 @@ public class RestaurantController {
 	 * @return cust_id for the new Customer
 	 */
 	public int registerCustomer(String cust_name, int contactNo) {
-		int new_id = this.customerList.size();
-		this.customerList.add(new Customer(new_id, cust_name, false, contactNo));
-		return new_id;
+		return this.customerController.addCustomer(cust_name, contactNo);
 	}
 
 	/**
