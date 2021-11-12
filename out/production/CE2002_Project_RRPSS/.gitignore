@@ -1,0 +1,10 @@
+tmp/*
+.lock
+*.lck
+.vpprefdata/*
+Diagrams.vpp.*
+*.class
+Controller/*.class
+Models/*.class
+*.code-workspace
+~$signment_Report.docx

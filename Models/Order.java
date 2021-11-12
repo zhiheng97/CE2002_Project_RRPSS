@@ -116,7 +116,7 @@ public class Order {
 	}
 
 	/**
-	 * remove Item objects from the order of table tableNo
+	 * remove Item objects from the order of table tableId
 	 * 
 	 * @param item Item to be removed
 	 * @param quantity number of Item object to remove
@@ -148,7 +148,7 @@ public class Order {
 	}
 
 	/**
-	 * remove Promotion objects from the order of table tableNo
+	 * remove Promotion objects from the order of table tableId
 	 * 
 	 * @param promotion 	Promotion to be removed
 	 * @param quantity 		number of Promotion object to remove

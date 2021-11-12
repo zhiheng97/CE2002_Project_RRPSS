@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Table {
 
-	private int tableNo;
+	private int tableId;
 	private boolean isOccupied;
 	private List<Reservation> reservations;
 	private int noOfReseravtions = 0;
@@ -20,12 +20,12 @@ public class Table {
 	
 	/**
 	 * 
-	 * @param table
+	 * @param tableId
 	 * @param occupied
 	 * @param noPax
 	 */
-	public Table(int tableNo, boolean occupied, int noPax) {
-		this.tableNo = tableNo;
+	public Table(int tableId, boolean occupied, int noPax) {
+		this.tableId = tableId;
 		this.isOccupied = occupied;
 		this.reservations = new ArrayList<Reservation>(15);
 		this.seats = noPax;
@@ -51,7 +51,7 @@ public class Table {
 	}
 
 	/**
-	 * remove Item objects from the order of table tableNo
+	 * remove Item objects from the order of table tableId
 	 * 
 	 * @param item Item to be removed
 	 * @param quantity number of Item object to remove
@@ -64,7 +64,7 @@ public class Table {
 	}
 
 	/**
-	 * remove Promotion objects from the order of table tableNo
+	 * remove Promotion objects from the order of table tableId
 	 * 
 	 * @param promotion 	Promotion to be removed
 	 * @param quantity 		number of Promotion object to remove
@@ -99,7 +99,7 @@ public class Table {
 			id++;
 		}
 
-		String res_id = String.valueOf(this.tableNo) + "-" + String.valueOf(id);
+		String res_id = String.valueOf(this.tableId) + "-" + String.valueOf(id);
 		this.reservations.add(new Reservation(res_id, cust_id, date, pax));
 		return res_id;
 	}
@@ -132,7 +132,7 @@ public class Table {
 	
 	/**
 	 * 
-	 * @param reservation
+	 * @param res_id
 	 */
 	public Reservation findReservation(String res_id) {
 		for (Reservation res : this.reservations) {
@@ -188,16 +188,14 @@ public class Table {
 		return this.seats;
 	}
 
-	public int getTableNo() {
-		return this.tableNo;
-	}
+	public int getTableId() { return this.tableId; }
 
 	public int getNoOfReseravtions() {
 		return this.noOfReseravtions;
 	}
 	public void print() {
-		System.out.println("The bill of table number: " + this.tableNo);
-		this.invoice.print(this.tableNo);
+		System.out.println("The bill of table number: " + this.tableId);
+		this.invoice.print(this.tableId);
 	}
 
 	/**

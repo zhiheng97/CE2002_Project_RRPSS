@@ -5,6 +5,9 @@
  */
 package Enumerations;
 
+/**
+ * Three categories for each a la carte
+ */
 public enum Categories {
 	MAINS,
 	SIDES,

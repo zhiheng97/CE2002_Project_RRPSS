@@ -41,10 +41,10 @@ public class RestaurantController {
 		Random rand = new Random();
 		Date now = new Date();
 		for (int id = 1; id <= 12; id++) {
-			if (this.tableController.findTableByNo(id).getIsOccupied()) {
+			if (this.tableController.findTableById(id).getIsOccupied()) {
 				List<Staff> staffList = staffController.getStaffList();
 				List<Customer> customerList = customerController.getCustomers();
-				this.tableController.findTableByNo(id)
+				this.tableController.findTableById(id)
 						.setInvoice(new Order(staffList.get(rand.nextInt(staffList.size())),
 								customerList.get(rand.nextInt(customerList.size())), now));
 			}
@@ -177,67 +177,66 @@ public class RestaurantController {
 	}
 
 	/**
-	 * TODO: handle the mismatch input
 	 *
 	 * @param res_id
-	 * @return the tableNo and cust_id that for this reservation
+	 * @return the tableId and cust_id that for this reservation
 	 */
 	public int[] checkinReservation(String res_id) {
 		if (!checkReservation(res_id))
 			return new int[] { -1, -1 };
 
 		String[] res_id_params = res_id.split("-");
-		int tableNo = Integer.parseInt(res_id_params[0]);
+		int tableId = Integer.parseInt(res_id_params[0]);
 		Reservation res = this.tableController.findReservation(res_id);
 		int cust_id = res.getCustId();
 		this.tableController.clearReservation(res_id);
-		return new int[] { tableNo, cust_id };
+		return new int[] { tableId, cust_id };
 	}
 
 	/**
 	 * create new order for new customer
 	 *
-	 * @param tableNo
+	 * @param tableId
 	 * @param staffID
 	 * @param date
 	 */
-	public void createOrder(int tableNo, int cust_id, int staff_id, Date date) {
+	public void createOrder(int tableId, int cust_id, int staff_id, Date date) {
 		Staff staff = staffController.getStaffList().get(staff_id);
 		Customer cust = customerController.getCustomers().get(cust_id);
-		this.tableController.findTableByNo(tableNo).setIsOccupied(true);
-		this.tableController.findTableByNo(tableNo).setInvoice(new Order(staff, cust, date));
-		System.out.printf("The new order is created for table %d. Enjoy!\n", tableNo);
+		this.tableController.findTableById(tableId).setIsOccupied(true);
+		this.tableController.findTableById(tableId).setInvoice(new Order(staff, cust, date));
+		System.out.printf("The new order is created for table %d. Enjoy!\n", tableId);
 	}
 
 	/**
-	 * add a quantity of item/promotion to the order of table tableNo
+	 * add a quantity of item/promotion to the order of table tableId
 	 *
-	 * @param tableNo
+	 * @param tableId
 	 * @param itemId
 	 * @param quantity
 	 * @return "promo" if successfully add a Promotion
 	 * @return "item" if successfully add an Item
 	 * @return "false" if invalid itemId
 	 */
-	public String addToOrder(int tableNo, int itemId, int quantity) {
+	public String addToOrder(int tableId, int itemId, int quantity) {
 		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
 		Item itemToAdd = this.categoryController.searchForItem(itemId);
 		if (promoToAdd != null) {
 			Promotion copied = this.promotionController.copyPromotion(itemId);
-			this.tableController.addToOrder(tableNo, copied, quantity);
+			this.tableController.addToOrder(tableId, copied, quantity);
 			return "promo";
 		} else if (itemToAdd != null) {
 			Item copied = this.categoryController.copyItem(itemId);
-			this.tableController.addToOrder(tableNo, copied, quantity);
+			this.tableController.addToOrder(tableId, copied, quantity);
 			return "item";
 		}
 		return "false";
 	}
 
 	/**
-	 * remove Item/Promotion objects from the order of table tableNo
+	 * remove Item/Promotion objects from the order of table tableId
 	 *
-	 * @param tableNo  the tableNo that has the order need to process
+	 * @param tableId  the tableId that has the order need to process
 	 * @param itemId   id of the Item/Promotion to be removed
 	 * @param quantity number of Promotion object to remove
 	 * @return 2 if they are removed normally
@@ -245,58 +244,58 @@ public class RestaurantController {
 	 * @return 0 if there is no Item/Promotion in this order
 	 * @return -1 if invalid itemId
 	 */
-	public int removeFromOrder(int tableNo, int itemId, int quantity) {
+	public int removeFromOrder(int tableId, int itemId, int quantity) {
 		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
 		Item itemToRemove = this.categoryController.searchForItem(itemId);
 		if (promoToRemove != null) {
 			Promotion copied = this.promotionController.copyPromotion(itemId);
-			return this.tableController.removeFromOrder(tableNo, copied, quantity);
+			return this.tableController.removeFromOrder(tableId, copied, quantity);
 		} else if (itemToRemove != null) {
 			Item copied = this.categoryController.copyItem(itemId);
-			return this.tableController.removeFromOrder(tableNo, copied, quantity);
+			return this.tableController.removeFromOrder(tableId, copied, quantity);
 		}
 		return -1;
 	}
 
 	/**
-	 * print the final invoice of table tableNo add the invoice to the
+	 * print the final invoice of table tableId add the invoice to the
 	 * reportController and clear the table
 	 *
-	 * @param tableNo
+	 * @param tableId
 	 */
-	public void printInvoice(int tableNo) {
-		Order invoice = this.tableController.findTableByNo(tableNo).getInvoice();
+	public void printInvoice(int tableId) {
+		Order invoice = this.tableController.findTableById(tableId).getInvoice();
 		this.reportController.addInvoice(invoice); // Adds completed invoice to reportController to manage
-		this.tableController.printInvoice(tableNo);
+		this.tableController.printInvoice(tableId);
 	}
 
 	/**
-	 * view the current order of the table tableNo
+	 * view the current order of the table tableId
 	 *
-	 * @param tableNo
+	 * @param tableId
 	 */
-	public void printOrder(int tableNo, boolean withPrice) {
-		this.tableController.printOrder(tableNo, withPrice);
+	public void printOrder(int tableId, boolean withPrice) {
+		this.tableController.printOrder(tableId, withPrice);
 	}
 
 	/**
 	 * find first availabe table for noPax
 	 *
-	 * @param noPax
+	 * @param
 	 * @return
 	 */
-	public int findValidTable(int noPax) {
-		return this.tableController.findValidTableToCheckin(noPax);
+	public int findValidTable(String[] details) throws ParseException {
+		return this.tableController.findValidTable(details);
 	}
 
 	/**
-	 * check whether table tableNo is occupied or not
+	 * check whether table tableId is occupied or not
 	 *
-	 * @param tableNo
+	 * @param tableId
 	 * @return
 	 */
-	public boolean isTableOccupied(int tableNo) {
-		return this.tableController.findTableByNo(tableNo).getIsOccupied();
+	public boolean isTableOccupied(int tableId) {
+		return this.tableController.findTableById(tableId).getIsOccupied();
 	}
 
 	/**
@@ -330,9 +329,9 @@ public class RestaurantController {
 		if (!res_id.contains("-"))
 			return false;
 		String[] res_id_params = res_id.split("-");
-		int tableNo = Integer.parseInt(res_id_params[0]);
+		int tableId = Integer.parseInt(res_id_params[0]);
 		int id = Integer.parseInt(res_id_params[1]);
-		if (tableNo < 1 || tableNo > 12 || id < 0 || id >= 15)
+		if (tableId < 1 || tableId > 12 || id < 0 || id >= 15)
 			return false;
 		Reservation res = this.tableController.findReservation(res_id);
 		if (res == null)
@@ -398,10 +397,10 @@ public class RestaurantController {
 	}
 
 	/**
-	 * @param tableNo print all reservations of a specified table
+	 * @param tableId print all reservations of a specified table
 	 */
-	public void printReservations(int tableNo) {
-		this.tableController.printReservations(tableNo);
+	public void printReservations(int tableId) {
+		this.tableController.printReservations(tableId);
 	}
 
 	/**

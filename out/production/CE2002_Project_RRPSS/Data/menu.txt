@@ -2,7 +2,6 @@
 101,Roasted Chicken,Whole chicken roasted to perfection,8.0,MAINS
 102,Chicken Noodle Soup,Noodles served in clear chicken broth with chicken slices,6.5,MAINS
 103,Surf & Turf,Where the sea meets the land,10.0,MAINS
-123,nkajshdiqo1e2 1ujkjijkjkj,hjkashdiuy12 dashdi1,123.123,MAINS
 200,Fries,French fries served with sauce,4.0,SIDES
 201,Garden Vegetables,Fresh vegetable,3.0,SIDES
 300,Coffee,Freshly ground arabica coffee,2.0,DRINKS
