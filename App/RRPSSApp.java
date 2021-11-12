@@ -23,7 +23,7 @@ import Controller.RestaurantController;
 public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; //Added to maintain consistency of exit/escape codes
-	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm"; //Pattern used to parse date/time values
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z YYYY"; //Pattern used to parse date/time values
 
 	/**
 	 * main
@@ -130,7 +130,7 @@ public class RRPSSApp {
 											break;
 									}
 								} while (!option_sub.equals(ESCAPE_STRING));
-							
+
 							break;
 
 						/////////////////// PROMOTIONS ///////////////////
@@ -490,7 +490,7 @@ public class RRPSSApp {
 											System.out.printf("All items/promotions with ID %d are removed from this order!%n", itemId);
 										else if (temp == 0)
 											System.out.printf("Cannot find any item/promotion with ID %d in this order!%n", itemId);
-										else 
+										else
 											System.out.println("Invalid item/promotion ID!");
 										System.out.println();
 										break;
@@ -532,7 +532,7 @@ public class RRPSSApp {
 								System.out.print("Enter your choice: ");
 								option_sub = reader.readLine();
 								System.out.println();
-		
+
 								switch (option_sub) {
 									case "1":
 										/////////////////// ADD RESERVATION ///////////////////
@@ -574,7 +574,7 @@ public class RRPSSApp {
 										}
 										if (backToMenu)
 											continue;
-		
+
 										resParams[0] = String.valueOf(cust_id);
 										System.out.print("Enter the date of reservation [dd-MMM-yy]: ");
 										String time = reader.readLine();
@@ -584,7 +584,7 @@ public class RRPSSApp {
 										System.out.println(resParams[1]);
 										System.out.print("Enter the number of pax: ");
 										resParams[2] = reader.readLine();
-			
+
 										res_id = restaurantController.reserveTable(resParams);
 										if (!res_id.equals("false 1") && !res_id.equals("false 2"))
 											System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
@@ -632,7 +632,7 @@ public class RRPSSApp {
 										}
 										if (backToMenu || res_id.equals(ESCAPE_STRING))
 											break;
-			
+
 										System.out.println("(type anything else to return)");
 										System.out.println("1. Date and time of the reservation");
 										System.out.println("2. Number of pax");

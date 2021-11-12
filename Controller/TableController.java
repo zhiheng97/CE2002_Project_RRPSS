@@ -33,7 +33,7 @@ public class TableController {
 	private List<Table> tables = new ArrayList<Table>();
 	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
-	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm";
+	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z YYYY";
 	private static final String DELIMITER = ",";
 	private FileController fileController = new FileController();
 
@@ -89,10 +89,10 @@ public class TableController {
 			if (table.getIsOccupied()) {
 				System.out.printf("Table %d is occupied, staff: %s\n", table.getTableId(), table.getInvoice().getPlacedBy());
 				num_occupied++;
-			}  
+			}
 		}
 		if (num_occupied == 0) {
-			System.out.println("There is no occupied table at the moment, please checkin to create a new order."); 
+			System.out.println("There is no occupied table at the moment, please checkin to create a new order.");
 			return false;
 		}
 		return true;
@@ -128,7 +128,7 @@ public class TableController {
 				System.out.printf("Table %d (max %d pax)\n", table.getTableId(), table.getSeats());
 			} else num_occupied++;
 		}
-		if (num_occupied == this.noOfTables) 
+		if (num_occupied == this.noOfTables)
 			System.out.println("All the tables are occupied!");
 	}
 
@@ -160,7 +160,7 @@ public class TableController {
 
 	/**
 	 * Removes a quantity of Item objects from the order of the table tableId.
-	 * 
+	 *
 	 * @param 	tableId 	The id of the table that has the order needs to be processed.
 	 * @param 	item 		The Item object to be removed.
 	 * @param 	quantity 	The number of Item objects to be removed.
@@ -174,7 +174,7 @@ public class TableController {
 
 	/**
 	 * Removes a quantity of Promotion objects from the order of the table tableId.
-	 * 
+	 *
 	 * @param 	tableId 	The id of the table that has the order needs to be processed.
 	 * @param	promotion 	The Promotion object to be removed.
 	 * @param 	quantity 	The number of Promotion objects to be removed.
@@ -226,9 +226,9 @@ public class TableController {
 		int noPax = Integer.parseInt(details[2]);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		Date res_date = sdf.parse(details[1]);
-		
+
 		int tableId = -1;
-		switch (noPax) { 
+		switch (noPax) {
 			case 1, 2: 				// search tables 1->2 (2 pax), 3->5 (4 pax)
 				for (int id=1; id<=5; id++) {
 					boolean isValid = true;
@@ -245,7 +245,7 @@ public class TableController {
 						break;
 					}
 				}
-				break; 
+				break;
 			case 3, 4:				// search tables 3->5 (4 pax), 6->8 (6 pax)
 				for (int id=3; id<=8; id++) {
 					boolean isValid = true;
@@ -376,7 +376,7 @@ public class TableController {
 	 * Finds the reservation by its id.
 	 *
 	 * @param	res_id	The id of reservation that is needed to be found.
-	 * 
+	 *
 	 * @return			The corresponding Reservation object of this id, or null if the system cannot find this id.
 	 */
 	public Reservation findReservation(String res_id) {
@@ -386,14 +386,14 @@ public class TableController {
 
 	/**
 	 * Updates a reservation with a new date time.
-	 * 
+	 *
 	 * @param	res_id		The id of the reservation that is needed to be updated.
 	 * @param	dateTime	The new date time to update.
 	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */
 	public String updateReservation(String res_id, String dateTime) {
 		String[] res_id_params = res_id.split("-");
-		
+
 		Reservation copied = this.findTableById(Integer.parseInt(res_id_params[0]))
 								.getReservations()
 								.get(Integer.parseInt(res_id_params[1]));
@@ -413,14 +413,14 @@ public class TableController {
 
 	/**
 	 * Updates a reservation with a new number of pax.
-	 * 
+	 *
 	 * @param	res_id		The id of the reservation that is needed to be updated.
 	 * @param	noPax		The new number of pax.
 	 * @return	The new reservation id or "false" if the update cannot be made.
 	 */
 	public String updateReservation(String res_id, int noPax) {
 		String[] res_id_params = res_id.split("-");
-		
+
 		Reservation copied = this.findTableById(Integer.parseInt(res_id_params[0]))
 								.getReservations()
 								.get(Integer.parseInt(res_id_params[1]));
@@ -431,14 +431,14 @@ public class TableController {
 		new_res_params[1] = copied.getTime();
 		new_res_params[2] = String.valueOf(noPax);
 		String new_res_id = this.reserveTable(new_res_params);
-		
+
 		if (new_res_id == "false") this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
 		return new_res_id;
 	}
 
 	/**
 	 * Prints all of the reservations that are reserved with table tableId.
-	 * 
+	 *
 	 * @param	tableId		The id of table that is needed to find the resevations.
 	 */
 	public void printReservations(int tableId) {
@@ -484,7 +484,7 @@ public class TableController {
 		}
 		return fileController.writeFile(updatedRes.toArray(new String[updatedRes.size()]), PATH_TO_RESERVATIONS_FILE);
 	}
-	
+
 	public void expireReservations(Date date) {
 		do {
 			Reservation expired = tables.stream().flatMap(t -> t.getReservations().stream())
