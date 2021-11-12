@@ -591,7 +591,7 @@ public class RRPSSApp {
 										else if (res_id.equals("false 1"))
 											System.out.println("There is no available table for your time date and number of pax!");
 										else
-											System.out.println("Reservation to be made is in the past.");
+											System.out.println("The time date of this reservation is in the past.");
 										System.out.println();
 										break;
 									case "2":
@@ -603,7 +603,7 @@ public class RRPSSApp {
 										res_id = reader.readLine();
 										if (res_id.equals(ESCAPE_STRING))
 											break;
-										else if (restaurantController.clearReservation(res_id))
+										else if (restaurantController.removeReservation(res_id))
 											System.out.println("Reservation has been removed successfully!");
 										else
 											System.out.printf("Cannot find any reservation with ID %s to remove!\n", res_id);

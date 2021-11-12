@@ -189,7 +189,7 @@ public class RestaurantController {
 		int tableId = Integer.parseInt(res_id_params[0]);
 		Reservation res = this.tableController.findReservation(res_id);
 		int cust_id = res.getCustId();
-		this.tableController.clearReservation(res_id);
+		this.tableController.removeReservation(res_id);
 		return new int[] { tableId, cust_id };
 	}
 
@@ -368,8 +368,8 @@ public class RestaurantController {
 	/**
 	 * @param res_id return true/false
 	 */
-	public boolean clearReservation(String res_id) {
-		return this.tableController.clearReservation(res_id);
+	public boolean removeReservation(String res_id) {
+		return this.tableController.removeReservation(res_id);
 	}
 
 	/**
