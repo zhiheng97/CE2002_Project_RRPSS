@@ -24,6 +24,7 @@ public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; //Added to maintain consistency of exit/escape codes
 	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm"; //Pattern used to program date/time values
+	private static final String DATETIME_FORMAT_PATTERN2 = "dd-MMM-yy HH:mm"; //Pattern used to program date/time values
 
 	/**
 	 * main
@@ -580,7 +581,7 @@ public class RRPSSApp {
 										String time = reader.readLine();
 										System.out.print("Enter the time of reservation [HH:mm]: ");
 										time = time.concat(" " + reader.readLine());
-										resParams[1] = sdf.parse(time).toString();
+										resParams[1] = sdf.format(sdf.parse(time));
 										System.out.println(resParams[1]);
 										System.out.print("Enter the number of pax: ");
 										resParams[2] = reader.readLine();
@@ -690,6 +691,7 @@ public class RRPSSApp {
 										System.out.println();
 										break;
 									case ESCAPE_STRING:
+										restaurantController.updateReservationFile();
 										System.out.println("Returning....\n");
 										System.out.println();
 										break;

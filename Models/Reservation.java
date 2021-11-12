@@ -25,7 +25,7 @@ public class Reservation {
 	 * @param pax 		Number of guests the reservation was made for
 	 */
 	public Reservation(String res_id, int cust_id, Date date, int pax) {
-		SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy HH:mm");
 		this.res_id = res_id;
 		this.cust_id = cust_id;
 		this.dateTime = date;

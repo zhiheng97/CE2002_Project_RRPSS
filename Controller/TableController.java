@@ -469,35 +469,21 @@ public class TableController {
 			table.deleteExpiredReservations(date);
 		}
 	}
-/*
-	private boolean updateReservationFile() {
+
+	public boolean updateReservationFile() {
 		List<String> updatedRes = new ArrayList<String>();
 		for (Table t : tables) {
 			for (Reservation r : t.getReservations()) {
-				updatedRes.add(String.valueOf(r.getId()));
-				updatedRes.add(String.valueOf(t.getTableId()));
-				updatedRes.add(r.getCustomer().getName());
-				updatedRes.add(String.valueOf(r.getCustomer().getMobileNo()));
-				updatedRes.add(r.getDate().toString());
+				updatedRes.add(String.valueOf(r.getResId()).concat(DELIMITER));
+				updatedRes.add(String.valueOf(t.getTableId()).concat(DELIMITER));
+				updatedRes.add(r.getTime().toString().concat(DELIMITER));
 				updatedRes.add(String.valueOf(r.getNoPax()));
+				updatedRes.add(System.getProperty("line.separator"));
 			}
 		}
 		return fileController.writeFile(updatedRes.toArray(new String[updatedRes.size()]), PATH_TO_RESERVATIONS_FILE);
 	}
 
-	public void expireReservations(Date date) {
-		do {
-			Reservation expired = tables.stream().flatMap(t -> t.getReservations().stream())
-					.filter(r -> (r.getDate().getTime() + EXPIRE_BUFFER_MILLISECOND) - date.getTime() <= 0).findFirst()
-					.orElse(null);
-			if (expired == null)
-				return;
-			Table table = tables.stream().filter(t -> t.getReservations().contains(expired)).findFirst().orElse(null);
-			if (table.getReservations().remove(expired))
-				updateReservationFile();
-		} while (true);
-	}
-*/
 
 
 }

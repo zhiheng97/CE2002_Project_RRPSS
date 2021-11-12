@@ -410,6 +410,10 @@ public class RestaurantController {
 		this.tableController.printReservations();
 	}
 
+	public void updateReservationFile(){
+		this.tableController.updateReservationFile();
+	}
+
 	////////////////////// REPORT FUNCTIONS ///////////////////
 
 	/**
