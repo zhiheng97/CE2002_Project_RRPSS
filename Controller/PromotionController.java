@@ -55,7 +55,7 @@ public class PromotionController {
 				itemParams.clear();
 				next = "PROMO";
 			}
-		}/* 
+		}/*
 		int i = 0;
 		do{
 			promoParams.add(tokens.get(i)); 		//id
@@ -141,7 +141,6 @@ public class PromotionController {
 			items.add(promotions.get(i).getItems().get(j).getDescription());
 			items.add(Double.toString(promotions.get(i).getItems().get(j).getPrice()));
 		}
-		items.add("ENDLINE");
 		copy = new Promotion(promotions.get(i).getId(), promotions.get(i).getName(), promotions.get(i).getDescription(), promotions.get(i).getPrice(), items);
 		return copy;
 	}
