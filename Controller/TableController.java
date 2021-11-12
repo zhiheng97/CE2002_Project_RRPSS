@@ -33,7 +33,7 @@ public class TableController {
 	private List<Table> tables = new ArrayList<Table>();
 	private static final String PATH_TO_TABLES_FILE = Path.of("./Data/table.txt").toString();
 	private static final String PATH_TO_RESERVATIONS_FILE = Path.of("./Data/reservation.txt").toString();
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z YYYY";
+	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm";
 	private static final String DELIMITER = ",";
 	private FileController fileController = new FileController();
 

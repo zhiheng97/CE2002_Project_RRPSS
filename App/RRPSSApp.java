@@ -23,7 +23,7 @@ import Controller.RestaurantController;
 public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; //Added to maintain consistency of exit/escape codes
-	private static final String DATETIME_FORMAT_PATTERN = "EEE MMM dd HH:mm:ss z YYYY"; //Pattern used to parse date/time values
+	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm"; //Pattern used to program date/time values
 
 	/**
 	 * main
