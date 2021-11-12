@@ -166,7 +166,7 @@ public class TableController {
 	 * @param 	quantity 	The number of Item objects to be removed.
 	 * @return 	2 if a quantity of item is removed from the order,<br>
 	 * 			or 1 if all the occurrences of this item are removed from the order,<br>
-	 * 			or 0 if there is no occurrence of this item in the order.
+	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
 	 */
 	public int removeFromOrder(int tableId, Item item, int quantity) {
 		return this.findTableById(tableId).removeFromOrder(item, quantity);
@@ -180,7 +180,7 @@ public class TableController {
 	 * @param 	quantity 	The number of Promotion objects to be removed.
 	 * @return 	2 if a quantity of promotion is removed from the order,<br>
 	 * 			or 1 if all the occurrences of this promotion are removed from the order,<br>
-	 * 	  		or 0 if there is no occurrence of this promotion in the order.
+	 * 	  		or 0 if cannot remove because there is no occurrence of this promotion in the order.
 	 */
 	public int removeFromOrder(int tableId, Promotion promotion, int quantity) {
 		return this.findTableById(tableId).removeFromOrder(promotion, quantity);
@@ -189,7 +189,7 @@ public class TableController {
 	/**
 	 * Prints the current status of the order of table tableId.
 	 * @param 	tableId		The id of the table that has the order needs to be printed.
-	 * @param	withPrice	true when the customer checks out, false otherwise.
+	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
 	 */
 	public void printOrder(int tableId, boolean withPrice) {
 		this.findTableById(tableId).printOrder(withPrice);
@@ -319,7 +319,7 @@ public class TableController {
 	}
 
 	/**
-	 * Returns the id of the new reservation id if it is made successfully.
+	 * Returns the id of the new reservation if it is made successfully.
 	 *
 	 * @param	details	A string array to make new reservation (customer id, timestamp, number of pax),<br>
 	 *                 	or a string array from the constructor (customer id, timestamp, number of pax, table id, reservation id).
@@ -365,7 +365,7 @@ public class TableController {
 	 *
 	 * @param	res_id	The id of the reservation that is needed to be removed (e.g. 5-6 -> table 5, id 6).
 	 *
-	 * @return	true it is removed successfully, false if the cannot find the resevation id.
+	 * @return	true it is removed successfully, false if it cannot find the resevation id.
 	 */
 	public boolean removeReservation(String res_id) {
 		String[] res_id_params = res_id.split("-");
@@ -437,10 +437,9 @@ public class TableController {
 	}
 
 	/**
-	 * Prints all the reservations that is reserved with table tableId.
+	 * Prints all of the reservations that are reserved with table tableId.
 	 * 
 	 * @param	tableId		The id of table that is needed to find the resevations.
-	 * print all reservation of 1 table tableId
 	 */
 	public void printReservations(int tableId) {
 		System.out.println("Reservations for table " + this.findTableById(tableId));
@@ -451,7 +450,7 @@ public class TableController {
 	}
 
 	/**
-	 * Prints all reservation of all tables in this restaurant.
+	 * Prints all of the reservations in this restaurant.
 	 */
 	public void printReservations() {
 		for(Table table : this.tables){
@@ -462,7 +461,7 @@ public class TableController {
 	}
 
 	/**
-	 * Deletes all the resevations that are expired after 1 minute not checking in.
+	 * Deletes all of the resevations that are expired after 1 minute not checking in.
 	 */
 	public void deleteExpiredReservations() {
 		Date date = new Date();

@@ -60,7 +60,7 @@ public class Table {
 	 * @param 	quantity 	The number of Item objects to be removed.
 	 * @return 	2 if a quantity of item is removed from the order,<br>
 	 * 			or 1 if all the occurrences of this item are removed from the order,<br>
-	 * 			or 0 if there is no occurrence of this item in the order.
+	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
 	 */
 	public int removeFromOrder(Item item, int quantity) {
 		return this.invoice.removeFromOrder(item, quantity);
@@ -73,7 +73,7 @@ public class Table {
 	 * @param 	quantity 	The number of Promotion objects to be removed.
 	 * @return 	2 if a quantity of promotion is removed from the order,<br>
 	 * 			or 1 if all the occurrences of this promotion are removed from the order,<br>
-	 * 	  		or 0 if there is no occurrence of this promotion in the order.
+	 * 	  		or 0 if cannot remove because there is no occurrence of this promotion in the order.
 	 */
 	public int removeFromOrder(Promotion promotion, int quantity) {
 		return this.invoice.removeFromOrder(promotion, quantity);
@@ -82,7 +82,7 @@ public class Table {
 	/**
 	 * Prints the current status of the order of this table.
 	 * 
-	 * @param	withPrice	true when the customer checks out, false otherwise.
+	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
 	 */
 	public void printOrder(boolean withPrice) {
 		this.invoice.printOrder(withPrice);
@@ -99,7 +99,7 @@ public class Table {
 	}
 
 	/**
-	 * Returns the id of the new reservation id if it is made successfully.
+	 * Returns the id of the new reservation if it is made successfully.
 	 *
 	 * @param	cust_id		The id of the customer who makes this reservation.
 	 * @param 	date		The Date object of the reservation's time date.
@@ -129,7 +129,7 @@ public class Table {
 	 *
 	 * @param	res_id	The id of the reservation that is needed to be removed (e.g. 5-6 -> table 5, id 6).
 	 *
-	 * @return	true it is removed successfully, false if the cannot find the resevation id.
+	 * @return	true it is removed successfully, false if it cannot find the resevation id.
 	 */
 	public boolean removeReservation(String res_id) {
 		noOfReseravtions--;
