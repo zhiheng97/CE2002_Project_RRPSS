@@ -503,6 +503,10 @@ public class TableController {
 		}
 	}
 
+	/**
+	 * Updates the reseravtion.txt file
+	 * @return True if file was successfully updated, otherwise false
+	 */
 	public boolean updateReservationFile() {
 		this.deleteExpiredReservations();
 

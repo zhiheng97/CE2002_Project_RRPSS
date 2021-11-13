@@ -9,7 +9,6 @@ package Controller;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 
@@ -171,6 +170,11 @@ public class RestaurantController {
 
 	////////////////////// ORDER FUNCTIONS ///////////////////
 
+	/**
+	 * Checks if the customer Id provided is a valid registered customer
+	 * @param cust_id Id to be checked
+	 * @return True if customer is a registered customer, otherwise false
+	 */
 	public boolean isRegisteredCustomer(int cust_id) {
 		if (cust_id < 0 || cust_id >= customerController.getCustomers().size())
 			return false;
@@ -178,8 +182,8 @@ public class RestaurantController {
 	}
 
 	/**
-	 *
-	 * @param res_id
+	 * Checks in a customer that made a reservation
+	 * @param res_id Reservation id to check in
 	 * @return the tableId and cust_id that for this reservation
 	 */
 	public int[] checkinReservation(String res_id) {
@@ -325,6 +329,11 @@ public class RestaurantController {
 
 	////////////////////// RESERVATION FUNCTIONS ///////////////////
 
+	/**
+	 * Checks if the reservation is valid
+	 * @param res_id Reservation Id to check for
+	 * @return true if the reservation is valid
+	 */
 	public boolean checkReservation(String res_id) {
 		if (!res_id.contains("-")) return false;
 		String[] res_id_params = res_id.split("-");
@@ -392,12 +401,16 @@ public class RestaurantController {
 		return this.tableController.updateReservation(res_id, noPax);
 	}
 
+	/**
+	 * Deletes reservations that have expired.
+	 */
 	public void deleteExpiredReservations() {
 		this.tableController.deleteExpiredReservations();
 	}
 
 	/**
-	 * @param tableId print all reservations of a specified table
+	 * print all reservations of a specified table
+	 * @param tableId Table to print
 	 */
 	public void printReservations(int tableId) {
 		this.tableController.printReservations(tableId);
@@ -410,6 +423,9 @@ public class RestaurantController {
 		this.tableController.printReservations();
 	}
 
+	/**
+	 * Calls the update method to update reservation.txt
+	 */
 	public void updateReservationFile(){
 		this.tableController.updateReservationFile();
 	}

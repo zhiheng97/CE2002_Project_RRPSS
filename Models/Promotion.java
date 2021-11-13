@@ -32,6 +32,7 @@ public class Promotion extends Item {
 	* id getter
 	* @return id of this promotion
 	*/
+	@Override
 	public int getId() {
 		return super.getId();
 	}
@@ -83,6 +84,7 @@ public class Promotion extends Item {
 	* Description getter
 	* @return the description of this promotion
 	*/
+	@Override
 	public String getDescription() {
 		return super.getDescription();
 	}
@@ -91,6 +93,7 @@ public class Promotion extends Item {
 	* Price getter
 	* @return the price of this promotion
 	*/
+	@Override
 	public double getPrice() {
 		return super.getPrice();
 	}
@@ -98,6 +101,7 @@ public class Promotion extends Item {
 	/**
 	* Prints the attributes of the promotion as well as all its items'
 	*/
+	@Override
 	public void print() {
 		int i;
 		System.out.println("Promotion Id: " + super.getId());
@@ -113,6 +117,7 @@ public class Promotion extends Item {
 	 * Updates the description of this promotion
 	 * @param desc, new description string
 	 */
+	@Override
 	public void setDescription(String desc) {
 		super.setDescription(desc);
 	}
@@ -121,6 +126,7 @@ public class Promotion extends Item {
 	 * Updates the price of this promotion
 	 * @param cost, new price
 	 */
+	@Override
 	public void setPrice(double cost) {
 		if(cost < 0)
 			throw new IllegalArgumentException();
