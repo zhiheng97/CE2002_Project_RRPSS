@@ -1,8 +1,3 @@
-/**
- * A controller that is responsible for managing the restaurant's staff
- * @author  @Henry-Hoang
- * @since 10 October 2021
- */
 package Controller;
 
 import java.nio.file.Path;
@@ -11,6 +6,11 @@ import java.util.List;
 
 import Models.Staff;
 
+/**
+ * A controller that is responsible for managing the staffs of the restaurant.
+ * @author  @Henry-Hoang
+ * @since   10 October 2021
+ */
 public class StaffController {
     
 	private List<Staff> staffList = new ArrayList<Staff>();
@@ -19,10 +19,9 @@ public class StaffController {
     private FileController fileController = new FileController();
 
     /**
-     * Constructor of StaffController object
+     * Constructs the StaffController object
      */
     public StaffController() {
-        //Reading in of staff
 		List<String> staffParams = fileController.readFile(PATH_TO_STAFFS_FILE);
 		for (int i = 1; i < staffParams.size(); i++) {
             String[] params = staffParams.get(i).split(DELIMITER);
@@ -32,8 +31,9 @@ public class StaffController {
     }
     
     /**
-     * Get staffList
-     * @return List of staff
+     * Gets the list of the staff in this restaurant.
+     * 
+     * @return  The list of the staff in this restaurant.
      */
     public List<Staff> getStaffList() {
         return this.staffList;

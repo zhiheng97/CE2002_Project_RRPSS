@@ -1,8 +1,3 @@
-/**
- * A controller that is responsible for managing the restaurant's reports.
- * @author  @brianleect
- * @since 10 October 2021
- */
 package Controller;
 
 import java.util.ArrayList;
@@ -15,12 +10,18 @@ import Models.Report;
 import Models.Item;
 import Models.Promotion;
 
+/**
+ * A controller that is responsible for managing the reports of the restaurant.
+ * 
+ * @author  @brianleect
+ * @since 10 October 2021
+ */
 public class ReportController {
 
 	private List<Report> reports = new ArrayList<Report>();
 
 	/**
-	 * Constructor for the ReportController Class
+	 * Constructs the ReportController object
 	 */
 	public ReportController() {
 	}

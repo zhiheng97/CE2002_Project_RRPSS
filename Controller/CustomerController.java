@@ -1,8 +1,3 @@
-/**
- * A controller that is responsible for managing the restaurant's registered customers
- * @author  @Henry-Hoang
- * @since 10 October 2021
- */
 package Controller;
 
 import java.nio.file.Path;
@@ -11,6 +6,11 @@ import java.util.List;
 
 import Models.Customer;
 
+/**
+ * A controller that is responsible for managing the registered customers of the restaurant.
+ * @author  @Henry-Hoang
+ * @since   10 October 2021
+ */
 public class CustomerController {
 
     private List<Customer> customers = new ArrayList<Customer>();
@@ -19,7 +19,7 @@ public class CustomerController {
     private FileController fileController = new FileController();
 
     /**
-     * Constructor for CustomerController object
+     * Constructs the CustomerController object
      */
     public CustomerController() {
         //Reading in of registered customers
@@ -32,18 +32,11 @@ public class CustomerController {
     }
 
     /**
-     * Get all registered customers
-     * @return List of customers
-     */
-    public List<Customer> getCustomers() {
-        return this.customers;
-    }
-
-    /**
-     * Registers a new customer
-     * @param cust_name Name of the customer
-     * @param contactNo Contact number of the customer
-     * @return new customer id, or -1 if duplicate registration
+     * Registers a new customer.
+     * 
+     * @param   cust_name   The name of the new customer.
+     * @param   contactNo   The contact number of the new customer.
+     * @return  A new customer id, or -1 if this customer is registered.
      */
     public int addCustomer(String cust_name, int contactNo){
         if(searchByCustName(cust_name) == null && searchByContact(contactNo) == null){
@@ -55,25 +48,35 @@ public class CustomerController {
     }
 
     /**
-     * Searches for a customer by their name
-     * @param cust_name Name of customer
-     * @return Customer object if found, null otherwise
+     * Gets all of the registered customers.
+     * 
+     * @return  The list of registered customers.
      */
-    private Customer searchByCustName(String cust_name) {
-        return customers.stream()
-            .filter(c -> c.getName().equals(cust_name))
-            .findFirst()
-            .orElse(null);
+    public List<Customer> getCustomers() {
+        return this.customers;
     }
 
     /**
-     * Searches for a customer by their contactNo
-     * @param contactNo Contact number of customer
-     * @return Customer object if found, null otherwise
+     * Searches for a customer by their contact number.
+     * @param   contactNo   The contact number of the customer that is needed to be searched.
+     * @return  A Customer object if found, null otherwise.
      */
     private Customer searchByContact(int contactNo) {
         return customers.stream()
             .filter(c -> c.getMobileNo() == contactNo)
+            .findFirst()
+            .orElse(null);
+    }
+
+     /**
+     * Searches for a customer by their name.
+     * 
+     * @param   contactNo   The name of the customer that is needed to be searched.
+     * @return  A Customer object if found, null otherwise.
+     */
+    private Customer searchByCustName(String cust_name) {
+        return customers.stream()
+            .filter(c -> c.getName().equals(cust_name))
             .findFirst()
             .orElse(null);
     }

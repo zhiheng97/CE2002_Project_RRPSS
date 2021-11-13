@@ -1,13 +1,13 @@
-/**
- * A model that represents the promotion packages which extends the class Item.
- * @author  @ghotinggoad
- * @since 10 October 2021
- */
 package Models;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A model that represents the promotion packages which extends the class Item.
+ * @author  @ghotinggoad
+ * @since 	10 October 2021
+ */
 public class Promotion extends Item {
 	private List<Item> items = new ArrayList<Item>();
 

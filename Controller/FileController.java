@@ -1,8 +1,3 @@
-/**
- * A controller that is responsible for performing read/write operations to the "database".
- * @author  @brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
- * @since 10 October 2021
- */
 package Controller;
 
 import java.io.BufferedReader;
@@ -12,15 +7,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A controller that is responsible for performing read/write operations to the "database".
+ * 
+ * @author  @brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
+ * @since 10 October 2021
+ */
 public class FileController {
 
     /**
-     * Constructor for the FileController Class
+     * Constructs the FileController object.
      */
     public FileController() {}
     
     /**
-     * CSV File reader. Reads the contents of a file and returns the contents as a List<String> object
+     * CSV File reader. Reads the contents of a file and returns the contents as a List<String> object.
+     * 
      * @param path Path to file
      * @return List<String> if the file is valid and has contents, null otherwise
      */

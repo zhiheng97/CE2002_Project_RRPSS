@@ -1,10 +1,11 @@
+package Models;
+
 /**
- * A model that represents customers patronising the restaurant.
+ * A model that represents customers patronizing the restaurant.
+ * 
  * @author  @Henry-Hoang
  * @since 10 October 2021
  */
-package Models;
-
 public class Customer {
 
 	private int id;
@@ -13,11 +14,12 @@ public class Customer {
 	private int mobileNo;
 
 	/**
-	 * Constructor for customer object
-	 * @param cust_id identifier for customer object
-	 * @param name customer name
-	 * @param isMember a flag indicating if the customer is a member
-	 * @param contact customer mobile number
+	 * Constructs a Customer object by the ID, name, membership status, and contact number of this customer.
+	 * 
+	 * @param	cust_id		The ID of this customer.
+	 * @param 	name 		The name of this customer.
+	 * @param 	isMember 	A flag indicating if the customer has a membership.
+	 * @param 	contact 	The mobile number of this customer.
 	 */
 	public Customer(int cust_id, String name, boolean isMember, int contact) {
 		this.id = cust_id;
@@ -27,39 +29,43 @@ public class Customer {
 	}
 
 	/**
-	 * Gets the id of the customer object
-	 * @return id of the customer object
+	 * Gets the ID of this customer.
+	 * 
+	 * @return 	ID of this customer.
 	 */
 	public int getId() {
 		return this.id;
 	}
 
 	/**
-	 * Gets the membership flag of the customer object
-	 * @return true if customer is a member, otherwise false
+	 * Gets the membership flag of this customer.
+	 * 
+	 * @return	true if customer has a membership, false otherwise.
 	 */
 	public boolean getIsMember() {
 		return this.isMember;
 	}
 
 	/**
-	 * Gets the mobile number of the customer object
-	 * @return mobile number of the customer object
+	 * Gets the mobile number of this customer.
+	 * 
+	 * @return 	mobile number of this customer.
 	 */
 	public int getMobileNo() {
 		return this.mobileNo;
 	}
 
 	/**
-	 * Gets the customer's name
-	 * @return name of the customer
+	 * Gets the name of this customer.
+	 * 
+	 * @return 	The name of this customer.
 	 */
 	public String getName() {
 		return this.name;
 	}
 
 	/**
-	 * Prints the customer's information
+	 * Prints the information of this customer.
 	 */
 	public void print() {
 		System.out.println("Customer Name: " + this.name);

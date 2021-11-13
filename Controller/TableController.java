@@ -14,14 +14,10 @@ import Models.Reservation;
 import Models.Table;
 
 /**
- * The TableController class represents a controller that is responsible
- * for managing tables and queries that are related to:<br>
- * <ol>
- * 		<li>Order: let the staff update the status of any current order.</li>
- * 		<li>Reservation: let the staff add/remove/update any reservation.</li>
- * </ol>
+ * A controller that is responsible for managing tables and 
+ * queries that are related to the Order and Reservation.
  *
- * @author	Hoang Minh Nhat
+ * @author	@Henry-Hoang
  * @since 	10 October 2021
  */
 public class TableController {
@@ -502,7 +498,7 @@ public class TableController {
 	/**
 	 * Updates the reseravtion.txt file when app is closed.
 	 * 
-	 * @return true if the file was successfully updated, false otherwise 
+	 * @return true if the file was successfully updated, false otherwise.
 	 */
 	public boolean updateReservationFile() {
 		this.deleteExpiredReservations();

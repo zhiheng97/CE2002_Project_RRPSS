@@ -1,8 +1,3 @@
-/**
- * A model that represents the sales reports.
- * @author  @brianleect
- * @since 10 October 2021
- */
 package Models;
 
 import java.util.ArrayList;
@@ -10,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A model that represents the sales reports.
+ * @author  @brianleect
+ * @since 10 October 2021
+ */
 public class Report {
 
 	private List<Order> invoices = new ArrayList<Order>();

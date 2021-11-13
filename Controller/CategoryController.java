@@ -1,8 +1,3 @@
-/**
- * A controller that is responsible for managing the restaurant's menu.
- * @author @zhiheng97
- * @since 10 October 2021
- */
 package Controller;
 
 import java.nio.file.Path;
@@ -14,6 +9,11 @@ import Enumerations.Categories;
 import Models.Category;
 import Models.Item;
 
+/**
+ * A controller that is responsible for managing the menu of the restaurant.
+ * @author @zhiheng97
+ * @since 10 October 2021
+ */
 public class CategoryController {
 
 	private List<Category> categories = new ArrayList<Category>();

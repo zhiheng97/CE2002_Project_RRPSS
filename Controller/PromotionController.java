@@ -1,8 +1,3 @@
-/**
- * A controller that is responsible for managing the restaurant's promotion packages.
- * @author  @ghotinggoad
- * @since 10 October 2021
- */
 package Controller;
 
 import java.nio.file.Path;
@@ -12,6 +7,12 @@ import java.util.List;
 import Models.Promotion;
 import Models.Item;
 
+/**
+ * A controller that is responsible for managing the promotion packages of the restaurant.
+ * 
+ * @author  @ghotinggoad
+ * @since 10 October 2021
+ */
 public class PromotionController {
 
 	private List<Promotion> promotions = new ArrayList<Promotion>();

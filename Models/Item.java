@@ -1,10 +1,10 @@
-/**
- * A model that represents the items of the restaurant's menu that implement the interface IItem.
- * @author  @ghotinggoad, @zhiheng97
- * @since 10 October 2021
- */
 package Models;
 
+/**
+ * A model that represents the items of the restaurant's menu that implement the interface IItem.
+ * @author	@ghotinggoad, @zhiheng97
+ * @since 	10 October 2021
+ */
 public class Item implements IItem{
 
 	private int id;

@@ -1,8 +1,3 @@
-/**
- * A model of a category in the restaurant's menu.
- * @author @zhiheng97
- * @since 10 October 2021
- */
 package Models;
 
 import java.util.ArrayList;
@@ -10,6 +5,11 @@ import java.util.List;
 
 import Enumerations.Categories;
 
+/**
+ * A model of a category in the restaurant's menu.
+ * @author 	@zhiheng97
+ * @since 	10 October 2021
+ */
 public class Category {
 
 	private List<Item> items = new ArrayList<Item>();

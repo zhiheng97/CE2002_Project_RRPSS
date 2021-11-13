@@ -1,10 +1,3 @@
-/**
- * A console app that performs basic restaurant operations, such as updating/removing menu/promotions,
- * creating/updating/removing reservations, placing/updating/removing orders from tables, and printing of sales reports.
- * The application uses the Model-View-Controller (MVC) system.
- * @author  @brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
- * @since 10 October 2021
- */
 package App;
 
 import java.io.BufferedReader;
@@ -20,6 +13,13 @@ import java.util.List;
 
 import Controller.RestaurantController;
 
+/**
+ * A console app that performs basic restaurant operations, such as updating/removing menu/promotions,
+ * creating/updating/removing reservations, placing/updating/removing orders from tables, and printing of sales reports.
+ * The application uses the Model-View-Controller (MVC) system.
+ * @author	@brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
+ * @since 	10 October 2021
+ */
 public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; //Added to maintain consistency of exit/escape codes
