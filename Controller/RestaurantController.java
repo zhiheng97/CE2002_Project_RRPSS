@@ -1,10 +1,3 @@
-/**
- * An intermediatory controller that calls respective controllers to perform actions.
- * Acts as a bridge to other controllers, by passing messages to the appropriate controller.
- * Performs some data cleaning.
- * @author  @brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
- * @since 10 October 2021
- */
 package Controller;
 
 import java.text.ParseException;
@@ -19,6 +12,14 @@ import Models.Promotion;
 import Models.Reservation;
 import Models.Staff;
 
+/**
+ * An intermediatory controller that calls respective controllers to perform actions.
+ * Acts as a bridge to other controllers, by passing messages to the appropriate controller.
+ * Performs some data cleaning.
+ * 
+ * @author	@brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
+ * @since	10 October 2021
+ */
 public class RestaurantController {
 
 	private TableController tableController;

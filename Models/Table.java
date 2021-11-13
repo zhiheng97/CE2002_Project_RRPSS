@@ -1,15 +1,17 @@
-/**
- * A model that represents the tables of the restaurant.
- * @author  @Henry-Hoang
- * @since 10 October 2021
- */
-
 package Models;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * A model that represents the table in this restaurant. This table class consists of
+ * an ID, current availability, number of seats, list of reservations that are allocated 
+ * for this table, and an Order object.
+ * 
+ * @author	@Henry-Hoang
+ * @since 	10 October 2021
+ */
 public class Table {
 
 	private int tableId;
@@ -20,10 +22,10 @@ public class Table {
 	private Order invoice;
 	
 	/**
-	 * Constructs the Table object.
+	 * Constructs the Table object by its ID, availability of this table, and number of seats.
 	 * @param	tableId		The id of this table.
-	 * @param	occupied	The status of the table: occupid or not.
-	 * @param 	noPax		The maximum of seats of this table.
+	 * @param	occupied	The current availability of this table: occupied or unoccupied.
+	 * @param 	noPax		The maximum number of seats for this table.
 	 */
 	public Table(int tableId, boolean occupied, int noPax) {
 		this.tableId = tableId;
@@ -31,61 +33,6 @@ public class Table {
 		this.reservations = new ArrayList<Reservation>(15);
 		this.seats = noPax;
 		this.invoice = new Order(null, null, null);
-	}
-
-	/**
-	 * Adds a quantity of Item objects to the order of this table.
-	 * 
-	 * @param	item		The Item object to be added.
-	 * @param	quantity	The number of Item objects to be added.
-	 */
-	public void addToOrder(Item item, int quantity) {
-		this.invoice.addToOrder(item, quantity);
-	}
-
-	/**
-	 * Adds a quantity of Promotion objects to the order of this table.
-	 * 
-	 * @param 	promotion	The Promotion object to be added.
-	 * @param 	quantity	The number of Promotion objects to be added.
-	 */
-	public void addToOrder(Promotion promotion, int quantity) {
-		this.invoice.addToOrder(promotion, quantity);
-	}
-
-	/**
-	 * Removes a quantity of Item objects from the order of this table.
-	 * 
-	 * @param 	item 		The Item object to be removed.
-	 * @param 	quantity 	The number of Item objects to be removed.
-	 * @return 	2 if a quantity of item is removed from the order,<br>
-	 * 			or 1 if all the occurrences of this item are removed from the order,<br>
-	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
-	 */
-	public int removeFromOrder(Item item, int quantity) {
-		return this.invoice.removeFromOrder(item, quantity);
-	}
-
-	/**
-	 * Removes a quantity of Promotion objects from the order of this table.
-	 * 
-	 * @param	promotion 	The Promotion object to be removed.
-	 * @param 	quantity 	The number of Promotion objects to be removed.
-	 * @return 	2 if a quantity of promotion is removed from the order,<br>
-	 * 			or 1 if all the occurrences of this promotion are removed from the order,<br>
-	 * 	  		or 0 if cannot remove because there is no occurrence of this promotion in the order.
-	 */
-	public int removeFromOrder(Promotion promotion, int quantity) {
-		return this.invoice.removeFromOrder(promotion, quantity);
-	}
-
-	/**
-	 * Prints the current status of the order of this table.
-	 * 
-	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
-	 */
-	public void printOrder(boolean withPrice) {
-		this.invoice.printOrder(withPrice);
 	}
 
 	/**
@@ -124,49 +71,23 @@ public class Table {
 	}
 
 	/**
-	 * Removes a reservation by its id.
-	 *
-	 * @param	res_id	The id of the reservation that is needed to be removed (e.g. 5-6 -> table 5, id 6).
-	 *
-	 * @return	true it is removed successfully, false if it cannot find the resevation id.
-	 */
-	public boolean removeReservation(String res_id) {
-		noOfReseravtions--;
-		for (Reservation res : this.reservations) {
-			if (res.getResId().equals(res_id)) {
-				this.reservations.remove(res);
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
-	 * Finds the reservation by its id.
-	 *
-	 * @param	res_id	The id of reservation that is needed to be found.
+	 * Adds a quantity of Item objects to the order of this table.
 	 * 
-	 * @return			The corresponding Reservation object of this id, or null if the system cannot find this id.
+	 * @param	item		The Item object to be added.
+	 * @param	quantity	The number of Item objects to be added.
 	 */
-	public Reservation findReservation(String res_id) {
-		for (Reservation res : this.reservations) {
-			if (res.getResId().equals(res_id)) return res;
-		}
-		return null;
+	public void addToOrder(Item item, int quantity) {
+		this.invoice.addToOrder(item, quantity);
 	}
 
 	/**
-	 * Checkes whether this table is reserved in the next 5 mins
+	 * Adds a quantity of Promotion objects to the order of this table.
 	 * 
-	 * @return true if this table is reserved in the next 5 mins, false otherwise
+	 * @param 	promotion	The Promotion object to be added.
+	 * @param 	quantity	The number of Promotion objects to be added.
 	 */
-	public boolean isReserved() {
-		Date date = new Date();
-		for (Reservation res : this.reservations) {
-			long time_diff = res.getDate().getTime() - date.getTime();
-			if (time_diff < 60000 * 5) return true;	 
-		}
-		return false;
+	public void addToOrder(Promotion promotion, int quantity) {
+		this.invoice.addToOrder(promotion, quantity);
 	}
 
 	/**
@@ -188,6 +109,20 @@ public class Table {
 	}
 
 	/**
+	 * Finds the reservation by its id.
+	 *
+	 * @param	res_id	The id of reservation that is needed to be found.
+	 * 
+	 * @return			The corresponding Reservation object of this id, or null if the system cannot find this id.
+	 */
+	public Reservation findReservation(String res_id) {
+		for (Reservation res : this.reservations) {
+			if (res.getResId().equals(res_id)) return res;
+		}
+		return null;
+	}
+
+	/**
 	 * Gets the Order object of this table.
 	 * 
 	 * @return	The Order object of this table.
@@ -203,6 +138,15 @@ public class Table {
 	 */
 	public boolean getIsOccupied() {
 		return this.isOccupied;
+	}
+
+	/**
+	 * Gets the current number of reservations for this table.
+	 * 
+	 * @return	The current number of reservations for this table.
+	 */
+	public int getNoOfReseravtions() {
+		return this.noOfReseravtions;
 	}
 
 	/**
@@ -232,17 +176,62 @@ public class Table {
 		return this.tableId; 
 	}
 
-	/**
-	 * Gets the current number of reservations for this table.
-	 * 
-	 * @return	The current number of reservations for this table.
-	 */
-	public int getNoOfReseravtions() {
-		return this.noOfReseravtions;
-	}
-	public void print() {
+	public void printInvoice() {
 		System.out.println("The bill of table number: " + this.tableId);
-		this.invoice.print(this.tableId);
+		this.invoice.printInvoice(this.tableId);
+	}
+
+	/**
+	 * Prints the current status of the order of this table.
+	 * 
+	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
+	 */
+	public void printOrder(boolean withPrice) {
+		this.invoice.printOrder(withPrice);
+	}
+
+	/**
+	 * Removes a quantity of Item objects from the order of this table.
+	 * 
+	 * @param 	item 		The Item object to be removed.
+	 * @param 	quantity 	The number of Item objects to be removed.
+	 * @return 	2 if a quantity of item is removed from the order,<br>
+	 * 			or 1 if all the occurrences of this item are removed from the order,<br>
+	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
+	 */
+	public int removeFromOrder(Item item, int quantity) {
+		return this.invoice.removeFromOrder(item, quantity);
+	}
+
+	/**
+	 * Removes a quantity of Promotion objects from the order of this table.
+	 * 
+	 * @param	promotion 	The Promotion object to be removed.
+	 * @param 	quantity 	The number of Promotion objects to be removed.
+	 * @return 	2 if a quantity of promotion is removed from the order,<br>
+	 * 			or 1 if all the occurrences of this promotion are removed from the order,<br>
+	 * 	  		or 0 if cannot remove because there is no occurrence of this promotion in the order.
+	 */
+	public int removeFromOrder(Promotion promotion, int quantity) {
+		return this.invoice.removeFromOrder(promotion, quantity);
+	}
+
+	/**
+	 * Removes a reservation by its id.
+	 *
+	 * @param	res_id	The id of the reservation that is needed to be removed (e.g. 5-6 -> table 5, id 6).
+	 *
+	 * @return	true it is removed successfully, false if it cannot find the resevation id.
+	 */
+	public boolean removeReservation(String res_id) {
+		noOfReseravtions--;
+		for (Reservation res : this.reservations) {
+			if (res.getResId().equals(res_id)) {
+				this.reservations.remove(res);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
