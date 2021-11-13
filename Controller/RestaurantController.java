@@ -171,9 +171,10 @@ public class RestaurantController {
 	////////////////////// ORDER FUNCTIONS ///////////////////
 
 	/**
-	 * Checks if the customer Id provided is a valid registered customer
-	 * @param cust_id Id to be checked
-	 * @return True if customer is a registered customer, otherwise false
+	 * Returns true if this ID is a registered customer.
+	 * 
+	 * @param	cust_id		Customer ID to be checked.
+	 * @return 	true if this is a registered customer, false otherwise.
 	 */
 	public boolean isRegisteredCustomer(int cust_id) {
 		if (cust_id < 0 || cust_id >= customerController.getCustomers().size())
@@ -182,9 +183,10 @@ public class RestaurantController {
 	}
 
 	/**
-	 * Checks in a customer that made a reservation
-	 * @param res_id Reservation id to check in
-	 * @return the tableId and cust_id that for this reservation
+	 * Returns the table ID and customer ID of this reservation when the customer wants to check in.
+	 * 
+	 * @param	res_id	Reservation ID to check in.
+	 * @return	The table ID and customer ID of this reservation.
 	 */
 	public int[] checkinReservation(String res_id) {
 		if (!checkReservation(res_id)) return new int[] { -1, -1 };
@@ -197,11 +199,11 @@ public class RestaurantController {
 	}
 
 	/**
-	 * create new order for new customer
+	 * Creates a new order for this table and customer.
 	 *
-	 * @param tableId
-	 * @param staffID
-	 * @param date
+	 * @param	tableId		The ID of the table that has the customer is allocated to.
+	 * @param 	staffID		The ID of the staff who will be in charged for this order.
+	 * @param 	date		The time date when this order is created.
 	 */
 	public void createOrder(int tableId, int cust_id, int staff_id, Date date) {
 		Staff staff = staffController.getStaffList().get(staff_id);
@@ -211,15 +213,15 @@ public class RestaurantController {
 		System.out.printf("The new order is created for table %d. Enjoy!\n", tableId);
 	}
 
-	/**
-	 * add a quantity of item/promotion to the order of table tableId
+	 /**
+	 * Adds a quantity of Item objects to the order of the table tableId.
 	 *
-	 * @param tableId
-	 * @param itemId
-	 * @param quantity
-	 * @return "promo" if successfully add a Promotion
-	 * @return "item" if successfully add an Item
-	 * @return "false" if invalid itemId
+	 * @param	tableId		The ID of the table that has the order needs to be processed.
+	 * @param	item		The Item object to be added.
+	 * @param 	quantity	The number of Item objects to be added.
+	 * @return	"promo" if a quantity of Promotion objects is added successfully,<br>
+	 * 			or "item" if a quantity of Item objects is added successfully,<br>
+	 * 			or "false" if this is not a valid ID for any Item or Promotion.
 	 */
 	public String addToOrder(int tableId, int itemId, int quantity) {
 		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
@@ -239,15 +241,14 @@ public class RestaurantController {
 	}
 
 	/**
-	 * remove Item/Promotion objects from the order of table tableId
+	 * Removes a quantity of Item objects from the order of the table tableId.
 	 *
-	 * @param tableId  the tableId that has the order need to process
-	 * @param itemId   id of the Item/Promotion to be removed
-	 * @param quantity number of Promotion object to remove
-	 * @return 2 if they are removed normally
-	 * @return 1 if quantity >= current quantity in order (remove all anw)
-	 * @return 0 if there is no Item/Promotion in this order
-	 * @return -1 if invalid itemId
+	 * @param 	tableId 	The ID of the table that has the order needs to be processed.
+	 * @param 	item 		The Item object to be removed.
+	 * @param 	quantity 	The number of Item objects to be removed.
+	 * @return 	2 if a quantity of item is removed from the order,<br>
+	 * 			or 1 if all the occurrences of this item are removed from the order,<br>
+	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
 	 */
 	public int removeFromOrder(int tableId, int itemId, int quantity) {
 		Promotion promoToRemove = this.promotionController.findPromotionById(itemId);
@@ -263,10 +264,20 @@ public class RestaurantController {
 	}
 
 	/**
-	 * print the final invoice of table tableId add the invoice to the
-	 * reportController and clear the table
-	 *
-	 * @param tableId
+	 * Prints the current status of the order of table tableId.
+	 * 
+	 * @param 	tableId		The ID of the table that has the order needs to be printed.
+	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
+	 */
+	public void printOrder(int tableId, boolean withPrice) {
+		this.tableController.printOrder(tableId, withPrice);
+	}
+
+	/**
+	 * Prints the final invoice of the table tableId when the customer wants to check out.<br>
+	 * Clears the table tableId by setting it to unoccupied and removing the current order.
+	 * 
+	 * @param 	tableId		The ID of the table that has the order needs to be printed
 	 */
 	public void printInvoice(int tableId) {
 		Order invoice = this.tableController.findTableById(tableId).getInvoice();
@@ -275,54 +286,55 @@ public class RestaurantController {
 	}
 
 	/**
-	 * view the current order of the table tableId
+	 * Returns a valid table id to walk in dining or make reservation (based on the restaurant's policy):<br>
+	 * <ul>
+	 * 		<li>For 1 or 2 pax: 	Only allocates tables of 2 or 4 seats.</li>
+	 * 		<li>For 3 or 4 pax:		Only allocates tables of 4 or 6 seats.</li>
+	 * 		<li>For 5 or 6 pax:		Only allocates tables of 6 or 8 seats.</li>
+	 * 		<li>For 7 or 8 pax:		Only allocates tables of 8 or 10 seats.</li>
+	 * 		<li>For 9 or 10 pax:	Only allocates tables of 10 seats.</li>
+	 * </ul>
 	 *
-	 * @param tableId
-	 */
-	public void printOrder(int tableId, boolean withPrice) {
-		this.tableController.printOrder(tableId, withPrice);
-	}
-
-	/**
-	 * find first availabe table for noPax
-	 *
-	 * @param
-	 * @return
+	 * @param	details	A string array (customer id, timestamp, number of pax).
+	 * @return 	The tableId of a valid table, -1 if it cannot find any.
+	 * @exception	ParseException
 	 */
 	public int findValidTable(String[] details) throws ParseException {
 		return this.tableController.findValidTable(details);
 	}
 
 	/**
-	 * check whether table tableId is occupied or not
+	 * Return true if this table is occupied.
 	 *
-	 * @param tableId
-	 * @return
+	 * @param 	tableId		The ID of the table that is needed to be checked.
+	 * @return	true if this table is occupied, false otherwise.
 	 */
 	public boolean isTableOccupied(int tableId) {
 		return this.tableController.findTableById(tableId).getIsOccupied();
 	}
 
 	/**
-	 * print all occupied tables to let the staff choose which table to udpate order
-	 *
-	 * @return false if all tables are unoccupied
+	 * Prints all of the occupied tables.
+	 * 
+	 * @return 			true if there is at least 1 occupied table, false otherwise.
 	 */
 	public boolean printUnavailableTables() {
 		return this.tableController.printUnavailableTables();
 	}
 
 	/**
-	 * print all unoccupied tables
+	 * Prints all of the unoccupied tables.
+	 * 
+	 * @return			true if there is at least 1 unoccupied table, false otherwise.
 	 */
 	public boolean printAvailableTables() {
 		return this.tableController.printAvailableTables();
 	}
 
 	/**
-	 * print all unoccupied tables that has number of seats >= noPax
-	 *
-	 * @param noPax
+	 * Prints all of the unoccupied tables that has number of seats >= noPax.
+	 * 
+	 * @param 	noPax 	The number of pax.
 	 */
 	public void printAvailableTables(int noPax) {
 		this.tableController.printAvailableTables(noPax);
@@ -331,9 +343,9 @@ public class RestaurantController {
 	////////////////////// RESERVATION FUNCTIONS ///////////////////
 
 	/**
-	 * Checks if the reservation is valid
-	 * @param res_id Reservation Id to check for
-	 * @return true if the reservation is valid
+	 * Returns true if this reservation ID is valid.
+	 * @param 	res_id	The reservation ID that is needed to be checked.
+	 * @return 	true if this reservation ID valid
 	 */
 	public boolean checkReservation(String res_id) {
 		if (!res_id.contains("-")) return false;
@@ -350,81 +362,94 @@ public class RestaurantController {
 	}
 
 	/**
-	 * for debugging purpose only when add register new Customer show all customers
-	 * in memory
+	 * Prints the information of all of the registered customers.
 	 */
-	public void showCustomers() { // for debug
+	public void printCustomers() { // for debug
 		for (Customer cust : customerController.getCustomers())
 			System.out.printf("%d %s\n", cust.getId(), cust.getName());
 	}
 
 	/**
-	 * @param cust_name
-	 * @param contactNo
-	 * @return cust_id for the new Customer
+	 * Returns the new customer ID when he/she register one.
+	 * 
+	 * @param	cust_name	The name of this customer who wishes to register.
+	 * @param 	contactNo	The contact number of this customer who wishes to register.
+	 * @return	The new customer ID for this customer who wishes to register.
 	 */
 	public int registerCustomer(String cust_name, int contactNo) {
 		return this.customerController.addCustomer(cust_name, contactNo);
 	}
 
 	/**
-	 * @param details
-	 * @return res_id if reserve successfully, "false" otherwise
+	 * Returns the ID of the new reservation if it is made successfully.
+	 *
+	 * @param	details	A details string array to make new reservation (customer ID, timestamp, number of pax).
+	 * @return	The ID of reservation if it is allocated successfully,<br>
+	 * 			or "false 1" if there is no available table to reserve,<br>
+	 * 			or "false 2" if the time date of this reservation is in the past.
 	 */
 	public String reserveTable(String[] details) {
 		return this.tableController.reserveTable(details);
 	}
 
 	/**
-	 * @param res_id return true/false
+	 * Return true if the reservation of this ID is removed successfully.
+	 * 
+	 * @param	res_id	The ID of the reservation that is needed to be removed.
+	 * @return 	true if this reservation is removed succesfully, false otherwise.
 	 */
 	public boolean removeReservation(String res_id) {
 		return this.tableController.removeReservation(res_id);
 	}
 
 	/**
-	 * @params res_id, datetime
-	 * @return new_res_id or "false"
-	 * @throws ParseException
-	 * @throws NumberFormatException
+	 * Updates a reservation with a new date time.
+	 *
+	 * @param	res_id		The ID of the reservation that is needed to be updated.
+	 * @param	dateTime	The new date time to update.
+	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */
 	public String updateReservation(String res_id, String datetime) {
 		return this.tableController.updateReservation(res_id, datetime);
 	}
 
 	/**
-	 * @params res_id, noPax
-	 * @return new_res_id or "false"
-	 * @throws ParseException
-	 * @throws NumberFormatException
+	 * Updates a reservation with a new number of pax.
+	 *
+	 * @param	res_id		The ID of the reservation that is needed to be updated.
+	 * @param	noPax		The new number of pax.
+	 * @return	The new reservation id or "false" if the update cannot be made.
 	 */
 	public String updateReservation(String res_id, int noPax) {
 		return this.tableController.updateReservation(res_id, noPax);
 	}
 
 	/**
-	 * Deletes reservations that have expired.
-	 */
-	public void deleteExpiredReservations() {
-		this.tableController.deleteExpiredReservations();
-	}
-
-	/**
-	 * print all reservations of a specified table
-	 * @param tableId Table to print
+	 * Prints all of the reservations that are reserved with table tableId.
+	 *
+	 * @param	tableId		The id of table that is needed to find the resevations.
 	 */
 	public void printReservations(int tableId) {
 		this.tableController.printReservations(tableId);
 	}
 
 	/**
-	 * print all reservations of the restaurant
+	 * Prints all of the reservations in this restaurant.
 	 */
 	public void printReservations() {
 		this.tableController.printReservations();
 	}
 
+	/**
+	 * Deletes all of the resevations that are expired after 1 minute not checking in.
+	 */
+	public void deleteExpiredReservations() {
+		this.tableController.deleteExpiredReservations();
+	}
 	
+	/**
+	 * Updates the database files of the restaurant when the app is closed.
+	 */
 	public void updateRestaurantDatabase(){
 		this.tableController.updateReservationFile();
 	}

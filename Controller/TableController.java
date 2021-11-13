@@ -80,7 +80,8 @@ public class TableController {
 	}
 
 	/**
-	 * Prints all occupied tables.
+	 * Prints all of the occupied tables.
+	 * 
 	 * @return 			true if there is at least 1 occupied table, false otherwise.
 	 */
 	public boolean printUnavailableTables() {
@@ -99,7 +100,8 @@ public class TableController {
 	}
 
 	/**
-	 * Prints all unoccupied tables.
+	 * Prints all of the unoccupied tables.
+	 * 
 	 * @return			true if there is at least 1 unoccupied table, false otherwise.
 	 */
 	public boolean printAvailableTables() {
@@ -118,7 +120,8 @@ public class TableController {
 	}
 
 	/**
-	 * Prints all unoccupied tables that has number of seats >= noPax.
+	 * Prints all of the unoccupied tables that has number of seats >= noPax.
+	 * 
 	 * @param 	noPax 	The number of pax.
 	 */
 	public void printAvailableTables(int noPax) {
@@ -137,7 +140,7 @@ public class TableController {
 	/**
 	 * Adds a quantity of Item objects to the order of the table tableId.
 	 *
-	 * @param	tableId		The id of the table that has the order needs to be processed.
+	 * @param	tableId		The ID of the table that has the order needs to be processed.
 	 * @param	item		The Item object to be added.
 	 * @param 	quantity	The number of Item objects to be added.
 	 */
@@ -149,7 +152,7 @@ public class TableController {
 	/**
 	 * Adds a quantity of Promotion objects to the order of the table tableId.
 	 *
-	 * @param 	tableId		The id of the table that has the order needs to be processed.
+	 * @param 	tableId		The ID of the table that has the order needs to be processed.
 	 * @param 	promotion	The Promotion object to be added.
 	 * @param 	quantity	The number of Promotion objects to be added.
 	 */
@@ -161,7 +164,7 @@ public class TableController {
 	/**
 	 * Removes a quantity of Item objects from the order of the table tableId.
 	 *
-	 * @param 	tableId 	The id of the table that has the order needs to be processed.
+	 * @param 	tableId 	The ID of the table that has the order needs to be processed.
 	 * @param 	item 		The Item object to be removed.
 	 * @param 	quantity 	The number of Item objects to be removed.
 	 * @return 	2 if a quantity of item is removed from the order,<br>
@@ -175,7 +178,7 @@ public class TableController {
 	/**
 	 * Removes a quantity of Promotion objects from the order of the table tableId.
 	 *
-	 * @param 	tableId 	The id of the table that has the order needs to be processed.
+	 * @param 	tableId 	The ID of the table that has the order needs to be processed.
 	 * @param	promotion 	The Promotion object to be removed.
 	 * @param 	quantity 	The number of Promotion objects to be removed.
 	 * @return 	2 if a quantity of promotion is removed from the order,<br>
@@ -188,7 +191,8 @@ public class TableController {
 
 	/**
 	 * Prints the current status of the order of table tableId.
-	 * @param 	tableId		The id of the table that has the order needs to be printed.
+	 * 
+	 * @param 	tableId		The ID of the table that has the order needs to be printed.
 	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
 	 */
 	public void printOrder(int tableId, boolean withPrice) {
@@ -198,7 +202,8 @@ public class TableController {
 	/**
 	 * Prints the final invoice of the table tableId when the customer wants to check out.<br>
 	 * Clears the table tableId by setting it to unoccupied and removing the current order.
-	 * @param 	tableId		The id of the table that has the order needs to be printed
+	 * 
+	 * @param 	tableId		The ID of the table that has the order needs to be printed
 	 */
 	public void printInvoice(int tableId) {
 		Table table = this.findTableById(tableId);
@@ -350,11 +355,11 @@ public class TableController {
 	}
 
 	/**
-	 * Returns the id of the new reservation if it is made successfully.
+	 * Returns the ID of the new reservation if it is made successfully.
 	 *
-	 * @param	details	A string array to make new reservation (customer id, timestamp, number of pax),<br>
-	 *                 	or a string array from the constructor (customer id, timestamp, number of pax, table id, reservation id).
-	 * @return	The id of reservation if it is allocated successfully,<br>
+	 * @param	details	A details string array to make new reservation (customer ID, timestamp, number of pax),<br>
+	 *                 	or a string array from the constructor (customer ID, timestamp, number of pax, table ID, reservation ID).
+	 * @return	The ID of reservation if it is allocated successfully,<br>
 	 * 			or "false 1" if there is no available table to reserve,<br>
 	 * 			or "false 2" if the time date of this reservation is in the past.
 	 */
@@ -420,7 +425,7 @@ public class TableController {
 	/**
 	 * Updates a reservation with a new date time.
 	 *
-	 * @param	res_id		The id of the reservation that is needed to be updated.
+	 * @param	res_id		The ID of the reservation that is needed to be updated.
 	 * @param	dateTime	The new date time to update.
 	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */
@@ -446,7 +451,7 @@ public class TableController {
 	/**
 	 * Updates a reservation with a new number of pax.
 	 *
-	 * @param	res_id		The id of the reservation that is needed to be updated.
+	 * @param	res_id		The ID of the reservation that is needed to be updated.
 	 * @param	noPax		The new number of pax.
 	 * @return	The new reservation id or "false" if the update cannot be made.
 	 */
@@ -505,7 +510,8 @@ public class TableController {
 
 
 	/**
-	 * Updates the reseravtion.txt file
+	 * Updates the reseravtion.txt file when app is closed.
+	 * 
 	 * @return true if the file was successfully updated, false otherwise 
 	 */
 	public boolean updateReservationFile() {
