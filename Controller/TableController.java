@@ -210,12 +210,13 @@ public class TableController {
 ////////////////////// RESERVATION FUNCTIONS ///////////////////
 
 	/**
-	 * Returns a valid table id to check in or make reservation (based on the restaurant's policy):<br>
+	 * Returns a valid table id to walk in dining or make reservation (based on the restaurant's policy):<br>
 	 * <ul>
-	 * 		<li>For 1 or 2 pax: 	Only allocates tables of 2 or 4 pax.</li>
-	 * 		<li>For 3 or 4 pax:	Only allocates tables of 4 or 6 pax.</li>
-	 * 		<li>For 5 or 6 pax:	Only allocates tables of 6 or 8 pax.</li>
-	 * 		<li>For 9 or 10 pax:	Only allocates tables of 10 pax.</li>
+	 * 		<li>For 1 or 2 pax: 	Only allocates tables of 2 or 4 seats.</li>
+	 * 		<li>For 3 or 4 pax:		Only allocates tables of 4 or 6 seats.</li>
+	 * 		<li>For 5 or 6 pax:		Only allocates tables of 6 or 8 seats.</li>
+	 * 		<li>For 7 or 8 pax:		Only allocates tables of 8 or 10 seats.</li>
+	 * 		<li>For 9 or 10 pax:	Only allocates tables of 10 seats.</li>
 	 * </ul>
 	 *
 	 * @param	details	A string array (customer id, timestamp, number of pax).
@@ -225,22 +226,31 @@ public class TableController {
 	public int findValidTable(String[] details) throws ParseException {
 		int noPax = Integer.parseInt(details[2]);
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
-		Date res_date = sdf.parse(details[1]);
+		Date check_date = sdf.parse(details[1]);
+		Date cur_date = new Date();
 
+		// for design, table not valid if it is reserved in the next 15 minutes (60000 * 15)
+		//					or if another reservation is made in +- 2 hours (60000 * 120) from the check_date 
+		// for testing, table not valid if it is reserved in the next 1 minute (60000)
+		//					or if another reservation is made in +- 5 minutes (60000 * 5) from the check_date 
 		int tableId = -1;
 		switch (noPax) {
 			case 1, 2: 				// search tables 1->2 (2 pax), 3->5 (4 pax)
 				for (int id=1; id<=5; id++) {
-					boolean isValid = true;
 					Table table = this.findTableById(id);
-					if (table.getSeats() < noPax) continue;
+					if (table.getIsOccupied()) continue;
+
+					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
-						Date temp_date = res.getDate();
-						long time_diff = res_date.getTime() - temp_date.getTime();
-						if (time_diff >= 8.64e7) continue; 				// 1 day
-						if (time_diff <= 60000) isValid = false;		// 1 min
+						Date res_date = res.getDate();
+						if (check_date.after(cur_date)) {
+							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
+							if (time_diff < 60000 * 5) isValid = false;			
+						} else {
+							long time_diff = res_date.getTime() - check_date.getTime();
+							if (time_diff < 60000) isValid = false;
+						}
 					}
-					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -249,16 +259,20 @@ public class TableController {
 				break;
 			case 3, 4:				// search tables 3->5 (4 pax), 6->8 (6 pax)
 				for (int id=3; id<=8; id++) {
-					boolean isValid = true;
 					Table table = this.findTableById(id);
-					if (table.getSeats() < noPax) continue;
+					if (table.getIsOccupied()) continue;
+
+					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
-						Date temp_date = res.getDate();
-						long time_diff = res_date.getTime() - temp_date.getTime();
-						if (time_diff >= 8.64e7) continue; 				// 1 day
-						if (time_diff <= 60000) isValid = false;		// 1 min
+						Date res_date = res.getDate();
+						if (check_date.after(cur_date)) {
+							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
+							if (time_diff < 60000 * 5) isValid = false;			
+						} else {
+							long time_diff = res_date.getTime() - check_date.getTime();
+							if (time_diff < 60000) isValid = false;
+						}
 					}
-					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -267,16 +281,20 @@ public class TableController {
 				break;
 			case 5, 6:				// search tables 6->8 (6 pax), 9->10 (8 pax)
 				for (int id=6; id<=10; id++) {
-					boolean isValid = true;
 					Table table = this.findTableById(id);
-					if (table.getSeats() < noPax) continue;
+					if (table.getIsOccupied()) continue;
+
+					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
-						Date temp_date = res.getDate();
-						long time_diff = res_date.getTime() - temp_date.getTime();
-						if (time_diff >= 8.64e7) continue; 				// 1 day
-						if (time_diff <= 120000) isValid = false;		// 2 min
+						Date res_date = res.getDate();
+						if (check_date.after(cur_date)) {
+							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
+							if (time_diff < 60000 * 5) isValid = false;			
+						} else {
+							long time_diff = res_date.getTime() - check_date.getTime();
+							if (time_diff < 60000) isValid = false;
+						}
 					}
-					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -285,16 +303,20 @@ public class TableController {
 				break;
 			case 7, 8:				// search tables 9->10 (8 pax), 11->12 (10 pax)
 				for (int id=9; id<=12; id++) {
-					boolean isValid = true;
 					Table table = this.findTableById(id);
-					if (table.getSeats() < noPax) continue;
+					if (table.getIsOccupied()) continue;
+
+					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
-						Date temp_date = res.getDate();
-						long time_diff = res_date.getTime() - temp_date.getTime();
-						if (time_diff >= 8.64e7) continue; 				// 1 day
-						if (time_diff <= 120000) isValid = false;		// 2 min
+						Date res_date = res.getDate();
+						if (check_date.after(cur_date)) {
+							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
+							if (time_diff < 60000 * 5) isValid = false;			
+						} else {
+							long time_diff = res_date.getTime() - check_date.getTime();
+							if (time_diff < 60000) isValid = false;
+						}
 					}
-					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -303,16 +325,20 @@ public class TableController {
 				break;
 			case 9, 10:				// search tables 11->12 (10 pax)
 				for (int id=11; id<=12; id++) {
-					boolean isValid = true;
 					Table table = this.findTableById(id);
-					if (table.getSeats() < noPax) continue;
+					if (table.getIsOccupied()) continue;
+
+					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
-						Date temp_date = res.getDate();
-						long time_diff = res_date.getTime() - temp_date.getTime();
-						if (time_diff >= 8.64e7) continue; 				// 1 day
-						if (time_diff <= 120000) isValid = false;		// 2 min
+						Date res_date = res.getDate();
+						if (check_date.after(cur_date)) {
+							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
+							if (time_diff < 60000 * 5) isValid = false;			
+						} else {
+							long time_diff = res_date.getTime() - check_date.getTime();
+							if (time_diff < 60000) isValid = false;
+						}
 					}
-					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -334,10 +360,12 @@ public class TableController {
 	 */
 	public String reserveTable(String[] details) {
 		int tableId = -1;
-		Date date = new Date();
+		Date cur_date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		try {
-			if(sdf.parse(details[1]).getTime() - date.getTime() < (60000 * 5)) return "false 2"; 	// 5 mins
+			// for design, can only reserve at least 2 hours (60000 * 120) in advance
+			// for testing, can only reserve at least 5 minutes (60000 * 5) in advance
+			if(sdf.parse(details[1]).getTime() - cur_date.getTime() < (60000 * 5)) return "false 2"; 	
 			if (details.length == 5) {
 				tableId = Integer.parseInt(details[3]);
 				this.findTableById(tableId).addReservation(
@@ -358,6 +386,7 @@ public class TableController {
 				);
 			}
 		} catch (ParseException e) {
+			System.out.println(e);
 			System.out.println("Error Occured! \nPlease contact RRPSS Support Team for assistance.");
 			System.out.println("");
 		}
@@ -475,13 +504,19 @@ public class TableController {
 	}
 
 	public boolean updateReservationFile() {
+		this.deleteExpiredReservations();
+
 		List<String> updatedRes = new ArrayList<String>();
+		updatedRes.add("cust_id,res_datetime,pax,table_id,res_id");
+		updatedRes.add(System.getProperty("line.separator"));
+
 		for (Table t : tables) {
 			for (Reservation r : t.getReservations()) {
-				updatedRes.add(String.valueOf(r.getResId()).concat(DELIMITER));
-				updatedRes.add(String.valueOf(t.getTableId()).concat(DELIMITER));
+				updatedRes.add(String.valueOf(r.getCustId()).concat(DELIMITER));
 				updatedRes.add(r.getTime().toString().concat(DELIMITER));
-				updatedRes.add(String.valueOf(r.getNoPax()));
+				updatedRes.add(String.valueOf(t.getTableId()).concat(DELIMITER));
+				updatedRes.add(String.valueOf(r.getNoPax()).concat(DELIMITER));
+				updatedRes.add(String.valueOf(r.getResId()));
 				updatedRes.add(System.getProperty("line.separator"));
 			}
 		}

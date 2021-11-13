@@ -592,7 +592,9 @@ public class RRPSSApp {
 										else if (res_id.equals("false 1"))
 											System.out.println("There is no available table for your time date and number of pax!");
 										else
-											System.out.println("The time date of this reservation is in the past.");
+											System.out.println("Reservation can only be made at least 5 minutes in advance.");
+										// for design, use 60000 * 120 (2 hours = 120 minutes)
+										// for testing, use 60000 * 5 (5 minutes)
 										System.out.println();
 										break;
 									case "2":
@@ -650,14 +652,16 @@ public class RRPSSApp {
 													break;
 												System.out.print("Enter the time of reservation [HH:mm]: ");
 												time = time.concat(" " + reader.readLine());
-												// time = sdf.parse(time).toString();
+
 												String new_res_id = restaurantController.updateReservation(res_id, time);
 												if (!new_res_id.equals("false 1") && !new_res_id.equals("false 2"))
 													System.out.println("Reservation has been made successfully with reservation ID: " + new_res_id);
 												else if(res_id.equals("false 1"))
 													System.out.println("There is no available table for the new time date and the current number of pax!");
 												else
-													System.out.println("Reservation to be made is in the past. Reservation is not updated.");
+													System.out.println("Reservation can only be made at least 5 minutes in advance. Reservation is not updated.");
+												// for design, use 60000 * 120 (2 hours = 120 minutes)
+												// for testing, use 60000 * 5 (5 minutes)
 												break;
 											case "2":
 												/////////////////// UPDATE NO OF PAX IN RESERVATION ///////////////////
@@ -691,7 +695,6 @@ public class RRPSSApp {
 										System.out.println();
 										break;
 									case ESCAPE_STRING:
-										restaurantController.updateReservationFile();
 										System.out.println("Returning....\n");
 										System.out.println();
 										break;
@@ -779,6 +782,7 @@ public class RRPSSApp {
 							System.out.println("Exit time: " + c.getTime());
 							break;
 						case ESCAPE_STRING:
+							restaurantController.updateReservationFile();
 							System.out.println("Exiting....");
 							break;
 						default:
