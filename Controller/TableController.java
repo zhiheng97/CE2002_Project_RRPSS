@@ -240,6 +240,7 @@ public class TableController {
 						if (time_diff >= 8.64e7) continue; 				// 1 day
 						if (time_diff <= 60000) isValid = false;		// 1 min
 					}
+					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -257,6 +258,7 @@ public class TableController {
 						if (time_diff >= 8.64e7) continue; 				// 1 day
 						if (time_diff <= 60000) isValid = false;		// 1 min
 					}
+					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -274,6 +276,7 @@ public class TableController {
 						if (time_diff >= 8.64e7) continue; 				// 1 day
 						if (time_diff <= 120000) isValid = false;		// 2 min
 					}
+					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -291,6 +294,7 @@ public class TableController {
 						if (time_diff >= 8.64e7) continue; 				// 1 day
 						if (time_diff <= 120000) isValid = false;		// 2 min
 					}
+					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -308,6 +312,7 @@ public class TableController {
 						if (time_diff >= 8.64e7) continue; 				// 1 day
 						if (time_diff <= 120000) isValid = false;		// 2 min
 					}
+					if (table.getIsOccupied()) isValid = false;
 					if (isValid) {
 						tableId = id;
 						break;
@@ -332,27 +337,26 @@ public class TableController {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat(DATETIME_FORMAT_PATTERN);
 		try {
-			if(sdf.parse(details[1]).getTime() - date.getTime() >= (60000 * 5)) {		// 5 mins
-				if (details.length == 5) {
-					tableId = Integer.parseInt(details[3]);
-					this.findTableById(tableId).addReservation(
-						new Reservation (
-							details[4],						// res_id
-							Integer.parseInt(details[0]), 	// cust_id
-							sdf.parse(details[1]), 			// date
-							Integer.parseInt(details[2]) 	// pax
-						)
-					);
-				} else {
-					tableId = this.findValidTable(details);
-					if (tableId == -1) return "false 1";
-					return this.findTableById(tableId).addReservation(
-						Integer.parseInt(details[0]), 		// cust_id
-						sdf.parse(details[1]), 				// date
-						Integer.parseInt(details[2]) 		// pax
-					);
-				}
-			} else return "false 2";
+			if(sdf.parse(details[1]).getTime() - date.getTime() < (60000 * 5)) return "false 2"; 	// 5 mins
+			if (details.length == 5) {
+				tableId = Integer.parseInt(details[3]);
+				this.findTableById(tableId).addReservation(
+					new Reservation (
+						details[4],						// res_id
+						Integer.parseInt(details[0]), 	// cust_id
+						sdf.parse(details[1]), 			// date
+						Integer.parseInt(details[2]) 	// pax
+					)
+				);
+			} else {
+				tableId = this.findValidTable(details);
+				if (tableId == -1) return "false 1";
+				return this.findTableById(tableId).addReservation(
+					Integer.parseInt(details[0]), 		// cust_id
+					sdf.parse(details[1]), 				// date
+					Integer.parseInt(details[2]) 		// pax
+				);
+			}
 		} catch (ParseException e) {
 			System.out.println("Error Occured! \nPlease contact RRPSS Support Team for assistance.");
 			System.out.println("");
@@ -397,18 +401,17 @@ public class TableController {
 		Reservation copied = this.findTableById(Integer.parseInt(res_id_params[0]))
 								.getReservations()
 								.get(Integer.parseInt(res_id_params[1]));
+		this.removeReservation(res_id);
 
 		String[] new_res_params = new String[3];
 		new_res_params[0] = String.valueOf(copied.getCustId());
 		new_res_params[1] = dateTime;
 		new_res_params[2] = String.valueOf(copied.getNoPax());
 		String new_res_id = this.reserveTable(new_res_params);
-		if(!new_res_id.equals("false 1") && !new_res_id.equals("false 2")) {
-			this.removeReservation(res_id);
-			if (new_res_id == "false") this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
-			return new_res_id;
-		}
-		else return res_id;
+
+		if(new_res_id.equals("false 1") || new_res_id.equals("false 2")) 
+			this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
+		return new_res_id;
 	}
 
 	/**
@@ -432,7 +435,8 @@ public class TableController {
 		new_res_params[2] = String.valueOf(noPax);
 		String new_res_id = this.reserveTable(new_res_params);
 
-		if (new_res_id == "false") this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
+		if(new_res_id.equals("false 1") || new_res_id.equals("false 2")) 
+			this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
 		return new_res_id;
 	}
 

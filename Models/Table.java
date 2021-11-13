@@ -105,8 +105,7 @@ public class Table {
 	 * @param 	date		The Date object of the reservation's time date.
 	 * @param	pax			The number of pax for this reservation.
 	 * @return	The id of reservation if it is allocated successfully,<br>
-	 * 			or "false 1" if there is no available table to reserve,<br>
-	 * 			or "false 2" if the time date of this reservation is in the past.
+	 * 			or "false 1" if there is no available table to reserve.
 	 */
 	public String addReservation(int cust_id, Date date, int pax) {
 		if(this.noOfReseravtions == 15) return "false 1";

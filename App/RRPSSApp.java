@@ -24,7 +24,6 @@ public class RRPSSApp {
 
 	private static final String ESCAPE_STRING = "-9"; //Added to maintain consistency of exit/escape codes
 	private static final String DATETIME_FORMAT_PATTERN = "dd-MMM-yy HH:mm"; //Pattern used to program date/time values
-	private static final String DATETIME_FORMAT_PATTERN2 = "dd-MMM-yy HH:mm"; //Pattern used to program date/time values
 
 	/**
 	 * main
@@ -384,11 +383,12 @@ public class RRPSSApp {
 
 											tableId = restaurantController.findValidTable(checkInParams);
 											if (tableId == -1) {
-												System.out.printf("There are no available tables for %d!\n", tableId);
+												System.out.printf("There are no available tables for %d pax at the moment!\n", noPax);
 												backToMenu = true;
 												break; // no available table for noPax, maybe ask to reserve for future meal(?)
 											}
 										}
+										if (backToMenu) break;
 
 										while (true) {
 											System.out.print("Enter your staff ID: ");
@@ -414,7 +414,7 @@ public class RRPSSApp {
 											if (tableId == Integer.parseInt(ESCAPE_STRING))
 												break;
 											if (tableId < 1 || tableId > 12)
-												System.out.println("Invalid table!");
+												System.out.println("Invalid table ID!");
 											else if (!restaurantController.isTableOccupied(tableId))
 												System.out.println("This table is not occupied!");
 											else
@@ -650,12 +650,12 @@ public class RRPSSApp {
 													break;
 												System.out.print("Enter the time of reservation [HH:mm]: ");
 												time = time.concat(" " + reader.readLine());
-												time = sdf.parse(time).toString();
+												// time = sdf.parse(time).toString();
 												String new_res_id = restaurantController.updateReservation(res_id, time);
-												if (!new_res_id.equals("false 1") && !new_res_id.equals("false 2") && !new_res_id.equals(res_id))
+												if (!new_res_id.equals("false 1") && !new_res_id.equals("false 2"))
 													System.out.println("Reservation has been made successfully with reservation ID: " + new_res_id);
 												else if(res_id.equals("false 1"))
-													System.out.println("There is no available table for your time date and number of pax!");
+													System.out.println("There is no available table for the new time date and the current number of pax!");
 												else
 													System.out.println("Reservation to be made is in the past. Reservation is not updated.");
 												break;
@@ -677,7 +677,7 @@ public class RRPSSApp {
 												if (!res_id.equals("false 1") && !res_id.equals("false 2"))
 													System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
 												else
-													System.out.println("There is no available table for your number of pax!");
+													System.out.println("There is no available table for the current time date and the new number of pax!");
 												break;
 											default:
 												break;
