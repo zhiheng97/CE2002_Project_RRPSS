@@ -439,7 +439,7 @@ public class RRPSSApp {
 								System.out.println("2. Add promotion to your order");
 								System.out.println("3. Remove item from your order");
 								System.out.println("4. View your current order");
-								System.out.println("5. Checkout and/or return");
+								System.out.println("5. Checkout and return");
 								System.out.println("-9. Return to main menu");
 								System.out.print("Enter your choice: ");
 								option_sub = reader.readLine();
@@ -484,15 +484,15 @@ public class RRPSSApp {
 											break;
 										System.out.print("Enter the quantity you want to remove: ");
 										quantity = Integer.parseInt(reader.readLine());
-										int temp = restaurantController.removeFromOrder(tableId, itemId, quantity);
-										if (temp == 2)
+										int res = restaurantController.removeFromOrder(tableId, itemId, quantity);
+										if (res == 2)
 											System.out.printf("Successfully removed %d items/promotions with ID %d!%n", quantity, itemId);
-										else if (temp == 1)
-											System.out.printf("All items/promotions with ID %d are removed from this order!%n", itemId);
-										else if (temp == 0)
+										else if (res == 1)
+											System.out.printf("All of the items/promotions with ID %d are removed from this order!%n", itemId);
+										else if (res == 0)
 											System.out.printf("Cannot find any item/promotion with ID %d in this order!%n", itemId);
 										else
-											System.out.println("Invalid item/promotion ID!");
+											System.out.println("This item/promotion ID is not in this order!");
 										System.out.println();
 										break;
 									case "4":
@@ -588,9 +588,9 @@ public class RRPSSApp {
 
 										res_id = restaurantController.reserveTable(resParams);
 										if (!res_id.equals("false 1") && !res_id.equals("false 2"))
-											System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
+											System.out.println("Reservation is made successfully with the reservation ID: " + res_id);
 										else if (res_id.equals("false 1"))
-											System.out.println("There is no available table for your time date and number of pax!");
+											System.out.println("There is no available table for this time, date and number of pax!");
 										else
 											System.out.println("Reservation can only be made at least 5 minutes in advance.");
 										// for design, use 60000 * 120 (2 hours = 120 minutes)
@@ -601,15 +601,27 @@ public class RRPSSApp {
 										/////////////////// REMOVE RESERVATION ///////////////////
 										restaurantController.deleteExpiredReservations();
 										restaurantController.printReservations();
-										System.out.println("(type -9 to return to previous menu)");
-										System.out.print("Enter the reservation ID that you wish to remove: ");
-										res_id = reader.readLine();
-										if (res_id.equals(ESCAPE_STRING))
+										while (true) {
+											System.out.println("(type -9 to return to previous menu)");
+											System.out.print("Enter the reservation ID you want to update: ");
+											res_id = reader.readLine();
+											if (res_id.equals(ESCAPE_STRING))
+												break;
+											if (!restaurantController.checkReservation(res_id)) {
+												System.out.printf("Cannot find any reservation with ID %s, enter [Y] if you want to try again: ", res_id);
+												String temp = reader.readLine();
+												if (!temp.toLowerCase().equals("y")) {
+													backToMenu = true;
+													break;
+												}
+											} else
+												break;
+										}
+										if (backToMenu || res_id.equals(ESCAPE_STRING))
 											break;
-										else if (restaurantController.removeReservation(res_id))
-											System.out.println("Reservation has been removed successfully!");
-										else
-											System.out.printf("Cannot find any reservation with ID %s to remove!\n", res_id);
+										
+										restaurantController.removeReservation(res_id);
+										System.out.println("Reservation has been removed successfully!");
 										System.out.println();
 										break;
 									case "3":
@@ -782,7 +794,7 @@ public class RRPSSApp {
 							System.out.println("Exit time: " + c.getTime());
 							break;
 						case ESCAPE_STRING:
-							restaurantController.updateReservationFile();
+							restaurantController.updateRestaurantDatabase();
 							System.out.println("Exiting....");
 							break;
 						default:

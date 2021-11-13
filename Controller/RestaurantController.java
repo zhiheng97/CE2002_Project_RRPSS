@@ -185,7 +185,6 @@ public class RestaurantController {
 	public int[] checkinReservation(String res_id) {
 		if (!checkReservation(res_id)) return new int[] { -1, -1 };
 		String[] res_id_params = res_id.split("-");
-		System.out.println(res_id_params);
 		int tableId = Integer.parseInt(res_id_params[0]);
 		Reservation res = this.tableController.findReservation(res_id);
 		int cust_id = res.getCustId();
@@ -220,12 +219,14 @@ public class RestaurantController {
 	 */
 	public String addToOrder(int tableId, int itemId, int quantity) {
 		Promotion promoToAdd = this.promotionController.findPromotionById(itemId);
-		Item itemToAdd = this.categoryController.searchForItem(itemId);
 		if (promoToAdd != null) {
 			Promotion copied = this.promotionController.copyPromotion(itemId);
 			this.tableController.addToOrder(tableId, copied, quantity);
 			return "promo";
-		} else if (itemToAdd != null) {
+		}
+		
+		Item itemToAdd = this.categoryController.searchForItem(itemId);
+		if (itemToAdd != null) {
 			Item copied = this.categoryController.copyItem(itemId);
 			this.tableController.addToOrder(tableId, copied, quantity);
 			return "item";
@@ -410,7 +411,8 @@ public class RestaurantController {
 		this.tableController.printReservations();
 	}
 
-	public void updateReservationFile(){
+
+	public void updateRestaurantDatabase(){
 		this.tableController.updateReservationFile();
 	}
 

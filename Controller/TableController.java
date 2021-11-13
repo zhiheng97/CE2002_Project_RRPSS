@@ -503,6 +503,10 @@ public class TableController {
 		}
 	}
 
+
+	/**
+	 * Updates all of the added and removed reservations to the CSV file.
+	 */
 	public boolean updateReservationFile() {
 		this.deleteExpiredReservations();
 
