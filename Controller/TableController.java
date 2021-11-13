@@ -505,7 +505,8 @@ public class TableController {
 
 
 	/**
-	 * Updates all of the added and removed reservations to the CSV file.
+	 * Updates the reseravtion.txt file
+	 * @return true if the file was successfully updated, false otherwise 
 	 */
 	public boolean updateReservationFile() {
 		this.deleteExpiredReservations();
