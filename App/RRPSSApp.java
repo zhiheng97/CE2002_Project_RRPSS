@@ -282,14 +282,17 @@ public class RRPSSApp {
 						case "3":
 							boolean backToMenu = false;
 							restaurantController.deleteExpiredReservations();
-							System.out.println("\n(type -9 to return to previous menu)");
-							System.out.println("Do you want to checkin a new table or update a current order?");
-							System.out.print("Enter 1 to checkin or 2 to update, your choice is: ");
-							option_sub = reader.readLine();
-							if (option_sub.equals(ESCAPE_STRING))
-								break;
-							System.out.println();
-							do {
+							do{
+								System.out.println("\n(type -9 to return to previous menu)");
+								System.out.println("Do you want to checkin a new table or update a current order?");
+								System.out.print("Enter 1 to checkin or 2 to update, your choice is: ");
+								option_sub = reader.readLine();
+								if (option_sub.equals(ESCAPE_STRING)){
+									backToMenu = true;
+									break;
+								}
+								System.out.println();
+
 								switch (option_sub) {
 									case "1":
 										/////////////////// CHECK IN CUSTOMER ///////////////////
@@ -320,8 +323,7 @@ public class RRPSSApp {
 														backToMenu = true;
 														break;
 													}
-												} else
-													break;
+												} else break;
 											}
 											if (backToMenu)
 												break;
@@ -423,8 +425,6 @@ public class RRPSSApp {
 										break;
 									default:
 										System.out.println("Invalid option!");
-										System.out.print("Enter 1 to update and 2 to checkin, your choice is: ");
-										option_sub = reader.readLine();
 										break;
 								}
 							} while (!(option_sub.equals("1") || option_sub.equals("2")));

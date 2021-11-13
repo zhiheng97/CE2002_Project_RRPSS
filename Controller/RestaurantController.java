@@ -9,6 +9,7 @@ package Controller;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Random;
 
@@ -182,10 +183,9 @@ public class RestaurantController {
 	 * @return the tableId and cust_id that for this reservation
 	 */
 	public int[] checkinReservation(String res_id) {
-		if (!checkReservation(res_id))
-			return new int[] { -1, -1 };
-
+		if (!checkReservation(res_id)) return new int[] { -1, -1 };
 		String[] res_id_params = res_id.split("-");
+		System.out.println(res_id_params);
 		int tableId = Integer.parseInt(res_id_params[0]);
 		Reservation res = this.tableController.findReservation(res_id);
 		int cust_id = res.getCustId();
@@ -326,9 +326,9 @@ public class RestaurantController {
 	////////////////////// RESERVATION FUNCTIONS ///////////////////
 
 	public boolean checkReservation(String res_id) {
-		if (!res_id.contains("-"))
-			return false;
+		if (!res_id.contains("-")) return false;
 		String[] res_id_params = res_id.split("-");
+		if (res_id_params.length != 2) return false;
 		int tableId = Integer.parseInt(res_id_params[0]);
 		int id = Integer.parseInt(res_id_params[1]);
 		if (tableId < 1 || tableId > 12 || id < 0 || id >= 15)
