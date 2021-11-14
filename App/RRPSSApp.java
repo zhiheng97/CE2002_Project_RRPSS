@@ -666,12 +666,13 @@ public class RRPSSApp {
 												time = time.concat(" " + reader.readLine());
 
 												String new_res_id = restaurantController.updateReservation(res_id, time);
+												System.out.println(new_res_id);
 												if (!new_res_id.equals("false 1") && !new_res_id.equals("false 2"))
-													System.out.println("Reservation has been made successfully with reservation ID: " + new_res_id);
-												else if(res_id.equals("false 1"))
-													System.out.println("There is no available table for the new time date and the current number of pax!");
+													System.out.println("Reservation has been upated successfully with reservation ID: " + new_res_id);
+												else if(new_res_id.equals("false 1"))
+													System.out.println("There is no available table for the new time date and the current number of pax.\nThis reservation is not updated.");
 												else
-													System.out.println("Reservation can only be made at least 2 hours in advance. Reservation is not updated.");
+													System.out.println("Reservation can only be made at least 2 hours in advance.\nThis reservation is not updated.");
 												// for design, use 60000 * 120 (2 hours = 120 minutes)
 												// for testing, use 60000 * 5 (5 minutes)
 												break;
@@ -693,7 +694,7 @@ public class RRPSSApp {
 												if (!res_id.equals("false 1") && !res_id.equals("false 2"))
 													System.out.println("Reservation has been made successfully with reservation ID: " + res_id);
 												else
-													System.out.println("There is no available table for the current time date and the new number of pax!");
+													System.out.println("There is no available table for the current time date and the new number of pax.\nThis reservation is not updated.");
 												break;
 											default:
 												break;

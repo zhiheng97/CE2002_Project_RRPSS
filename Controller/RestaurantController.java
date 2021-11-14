@@ -407,14 +407,14 @@ public class RestaurantController {
 	}
 
 	/**
-	 * Updates a reservation with a new date time.
+	 * Updates a reservation with a new time date.
 	 *
 	 * @param	res_id		The ID of the reservation that is needed to be updated.
-	 * @param	dateTime	The new date time to update.
+	 * @param	timeDate	The new time date to update.
 	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */
-	public String updateReservation(String res_id, String datetime) {
-		return this.tableController.updateReservation(res_id, datetime);
+	public String updateReservation(String res_id, String timeDate) {
+		return this.tableController.updateReservation(res_id, timeDate);
 	}
 
 	/**

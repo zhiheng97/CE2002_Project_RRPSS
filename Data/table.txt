@@ -3,11 +3,11 @@ table_id,is_occupied,max_pax
 2,false,2
 3,false,4
 4,false,4
-5,true,4
-6,true,6
-7,true,6
+5,false,4
+6,false,6
+7,false,6
 8,false,6
 9,false,8
-10,true,8
+10,false,8
 11,false,10
 12,false,10

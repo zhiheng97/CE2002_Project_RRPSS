@@ -481,13 +481,13 @@ public class TableController implements ISearch {
 	}
 
 	/**
-	 * Updates a reservation with a new date time.
+	 * Updates a reservation with a new time date.
 	 *
 	 * @param	res_id		The ID of the reservation to be updated.
-	 * @param	dateTime	The new date time to update.
+	 * @param	timeDate	The new time date to update.
 	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */
-	public String updateReservation(String res_id, String dateTime) {
+	public String updateReservation(String res_id, String timeDate) {
 		String[] res_id_params = res_id.split("-");
 
 		Reservation copied = ((Table) searchById(Integer.parseInt(res_id_params[0])))
@@ -497,7 +497,7 @@ public class TableController implements ISearch {
 
 		String[] new_res_params = new String[3];
 		new_res_params[0] = String.valueOf(copied.getCustId());
-		new_res_params[1] = dateTime;
+		new_res_params[1] = timeDate;
 		new_res_params[2] = String.valueOf(copied.getNoPax());
 		String new_res_id = this.reserveTable(new_res_params);
 
