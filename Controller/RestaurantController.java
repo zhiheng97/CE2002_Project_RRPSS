@@ -191,6 +191,7 @@ public class RestaurantController {
 	 * @return	The table ID and customer ID of this reservation.
 	 */
 	public int[] checkinReservation(String res_id) {
+		this.deleteExpiredReservations();
 		if (!checkReservation(res_id)) return new int[] { -1, -1 };
 		String[] res_id_params = res_id.split("-");
 		int tableId = Integer.parseInt(res_id_params[0]);
@@ -323,6 +324,7 @@ public class RestaurantController {
 	 * @return 			true if there is at least 1 occupied table, false otherwise.
 	 */
 	public boolean printUnavailableTables() {
+		this.deleteExpiredReservations();
 		return this.tableController.printUnavailableTables();
 	}
 
@@ -332,6 +334,7 @@ public class RestaurantController {
 	 * @return			true if there is at least 1 unoccupied table, false otherwise.
 	 */
 	public boolean printAvailableTables() {
+		this.deleteExpiredReservations();
 		return this.tableController.printAvailableTables();
 	}
 
@@ -341,6 +344,7 @@ public class RestaurantController {
 	 * @param 	noPax 	The number of pax.
 	 */
 	public void printAvailableTables(int noPax) {
+		this.deleteExpiredReservations();
 		this.tableController.printAvailableTables(noPax);
 	}
 
@@ -352,6 +356,7 @@ public class RestaurantController {
 	 * @return 	true if this reservation ID valid
 	 */
 	public boolean checkReservation(String res_id) {
+		this.deleteExpiredReservations();
 		if (!res_id.contains("-")) return false;
 		String[] res_id_params = res_id.split("-");
 		if (res_id_params.length != 2) return false;
@@ -393,6 +398,7 @@ public class RestaurantController {
 	 * 			or "false 2" if the time date of this reservation is in the past.
 	 */
 	public String reserveTable(String[] details) {
+		this.deleteExpiredReservations();
 		return this.tableController.reserveTable(details);
 	}
 
@@ -403,6 +409,7 @@ public class RestaurantController {
 	 * @return 	true if this reservation is removed succesfully, false otherwise.
 	 */
 	public boolean removeReservation(String res_id) {
+		this.deleteExpiredReservations();
 		return this.tableController.removeReservation(res_id);
 	}
 
@@ -414,6 +421,7 @@ public class RestaurantController {
 	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */
 	public String updateReservation(String res_id, String timeDate) {
+		this.deleteExpiredReservations();
 		return this.tableController.updateReservation(res_id, timeDate);
 	}
 
@@ -425,6 +433,7 @@ public class RestaurantController {
 	 * @return	The new reservation id or "false" if the update cannot be made.
 	 */
 	public String updateReservation(String res_id, int noPax) {
+		this.deleteExpiredReservations();
 		return this.tableController.updateReservation(res_id, noPax);
 	}
 
@@ -434,6 +443,7 @@ public class RestaurantController {
 	 * @param	tableId		The id of table that is needed to find the resevations.
 	 */
 	public void printReservations(int tableId) {
+		this.deleteExpiredReservations();
 		this.tableController.printReservations(tableId);
 	}
 
@@ -441,6 +451,7 @@ public class RestaurantController {
 	 * Prints all of the reservations in this restaurant.
 	 */
 	public void printReservations() {
+		this.deleteExpiredReservations();
 		this.tableController.printReservations();
 	}
 
@@ -455,6 +466,7 @@ public class RestaurantController {
 	 * Updates the database files of the restaurant when the app is closed.
 	 */
 	public void updateRestaurantDatabase(){
+		this.deleteExpiredReservations();
 		this.tableController.updateReservationFile();
 	}
 

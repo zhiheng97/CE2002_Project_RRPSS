@@ -281,7 +281,6 @@ public class RRPSSApp {
 						/////////////////// ORDER ///////////////////
 						case "3":
 							boolean backToMenu = false;
-							restaurantController.deleteExpiredReservations();
 							do{
 								System.out.println("\n(type -9 to return to previous menu)");
 								System.out.println("Do you want to checkin a new table or update a current order?");
@@ -296,7 +295,6 @@ public class RRPSSApp {
 								switch (option_sub) {
 									case "1":
 										/////////////////// CHECK IN CUSTOMER ///////////////////
-										restaurantController.deleteExpiredReservations();
 										System.out.print("Enter [Y] if this customer made a reservation, enter anything otherwise: ");
 										String isReserved = reader.readLine();
 
@@ -304,7 +302,6 @@ public class RRPSSApp {
 										if (isReserved.toLowerCase().equals("y")) {
 											int[] res_info = { -1, -1 };
 											while (true) {
-												restaurantController.deleteExpiredReservations();
 												restaurantController.printReservations();
 												System.out.println("\n(type -9 to return to previous menu)");
 												System.out.print("Enter the reservation ID: ");
@@ -521,7 +518,6 @@ public class RRPSSApp {
 							break;
 						/////////////////// RESERVATIONS ///////////////////
 						case "4":
-							restaurantController.deleteExpiredReservations();
 							do {
 								/////////////////// RESERVATION'S SUB-MENU ///////////////////
 								backToMenu = false;
@@ -538,7 +534,6 @@ public class RRPSSApp {
 								switch (option_sub) {
 									case "1":
 										/////////////////// ADD RESERVATION ///////////////////
-										restaurantController.deleteExpiredReservations();
 										String[] resParams = new String[3];
 										System.out.println("(type -9 to return to previous menu)");
 										System.out.print("Enter [Y] if this is a registered customer, enter anything otherwise: ");
@@ -599,7 +594,6 @@ public class RRPSSApp {
 										break;
 									case "2":
 										/////////////////// REMOVE RESERVATION ///////////////////
-										restaurantController.deleteExpiredReservations();
 										restaurantController.printReservations();
 										while (true) {
 											System.out.println("(type -9 to return to previous menu)");
@@ -627,7 +621,6 @@ public class RRPSSApp {
 									case "3":
 										/////////////////// UPDATE RESERVATION ///////////////////
 										backToMenu = false;
-										restaurantController.deleteExpiredReservations();
 										restaurantController.printReservations();
 										while (true) {
 											System.out.println("(type -9 to return to previous menu)");
@@ -703,7 +696,6 @@ public class RRPSSApp {
 										break;
 									case "4":
 										/////////////////// PRINT RESERVATIONS ///////////////////
-										restaurantController.deleteExpiredReservations();
 										restaurantController.printReservations();
 										System.out.println();
 										break;

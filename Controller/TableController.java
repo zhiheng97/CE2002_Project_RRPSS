@@ -406,6 +406,7 @@ public class TableController implements ISearch {
 	 * @return	true it is removed successfully, false if it cannot find the resevation id.
 	 */
 	public boolean removeReservation(String res_id) {
+		this.deleteExpiredReservations();
 		String[] res_id_params = res_id.split("-");
 		return ((Table) searchById(Integer.parseInt(res_id_params[0]))).removeReservation(res_id);
 	}

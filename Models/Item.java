@@ -20,7 +20,7 @@ public class Item implements IItem{
 	 * @param itemPrice The price of the object to create
 	 */
 	public Item(int itemId, String itemName, String itemDesc, double itemPrice) {
-		if(itemPrice < 0) //Checks if price is negative
+		if(itemPrice < 0 || itemId < 0) //Checks if price is negative
 			throw new IllegalArgumentException(); //Exception will be caught in main()
 		this.id = itemId;
 		this.name = itemName;
