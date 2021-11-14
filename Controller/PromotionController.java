@@ -13,7 +13,7 @@ import Models.Item;
  * @author  @ghotinggoad
  * @since 10 October 2021
  */
-public class PromotionController {
+public class PromotionController implements ISearch {
 
 	private List<Promotion> promotions = new ArrayList<Promotion>();
 	private FileController fileController = new FileController();
@@ -56,24 +56,7 @@ public class PromotionController {
 				itemParams.clear();
 				next = "PROMO";
 			}
-		}/*
-		int i = 0;
-		do{
-			promoParams.add(tokens.get(i)); 		//id
-			promoParams.add(tokens.get(i+1)); //name
-			promoParams.add(tokens.get(i+2)); //description
-			promoParams.add(tokens.get(i+3)); //price
-			i += 4;
-			do{
-				itemParams.add(tokens.get(i));
-				i++;
-			}while(i < tokens.size() && !tokens.get(i).equals("ENDLINE"));
-			itemParams.add(tokens.get(i));
-			addPromotion(promoParams, itemParams);
-			promoParams.clear();
-			itemParams.clear();
-			i++;
-		}while(i < tokens.size() && !tokens.get(i).equals("ENDFILE")); */
+		}
 	}
 
 	/**
@@ -112,7 +95,7 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean addPromotion(List<String> promoParams, List<String> items) {
-		if(this.findPromotionById(Integer.parseInt(promoParams.get(0))) != null){
+		if((Promotion) searchById(Integer.parseInt(promoParams.get(0))) != null){
 			System.out.println("Promotion is already in the system!");
 			return false;
 		}
@@ -151,22 +134,21 @@ public class PromotionController {
 	 * @param promoId, the promotion id which is used to search for a specific promotion
 	 * @return the actual promotion that is being requested
 	 */
-	public Promotion findPromotionById(int promoId) {
-		int i;
-		for(i = 0; i < promotions.size(); i++){
-			if(promotions.get(i).getId() == promoId) return promotions.get(i);
-		}
-		return null;
+	@Override
+	public Object searchById(int promoId) {
+		return promotions.stream()
+			.filter(promo -> promo.getId() == promoId)
+			.findFirst()
+			.orElse(null);
 	}
 
 	/**
 	* Prints the attributes of all the promotions and their respective items
 	*/
 	public void print() {
-		int i;
 		System.out.print("\n");
-		for(i = 0; i < promotions.size(); i++){
-			promotions.get(i).print();
+		for(Promotion promo : promotions){
+			promo.print();
 		}
 		System.out.print("\n");
 	}
@@ -177,13 +159,10 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean removePromotion(int promoId) {
-		int i;
-		for(i = 0; i < promotions.size(); i++){
-			if(promotions.get(i).getId() == promoId){
-				promotions.remove(i);
-				this.updatePromotionFile();
-				return true;
-			}
+		Promotion toRemove = (Promotion) this.searchById(promoId);
+		if(toRemove != null) {
+			promotions.remove(toRemove);
+			return this.updatePromotionFile();
 		}
 		System.out.println("Promotion " + promoId + " does not exist!");
 		return false;
@@ -196,7 +175,7 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean addItem(int promoId, List<String> itemParams) {
-		this.findPromotionById(promoId).addItem(itemParams);
+		((Promotion) searchById(promoId)).addItem(itemParams);
 		this.updatePromotionFile();
 		return true;
 	}
@@ -208,13 +187,10 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean removeItem(int promoId, int itemId) {
-		int i;
-		for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
-			if(this.findPromotionById(promoId).getItems().get(i).getId() == itemId){
-				this.findPromotionById(promoId).getItems().remove(i);
-				this.updatePromotionFile();
-				return true;
-			}
+		Promotion toRemoveFrom = (Promotion) this.searchById(promoId);
+		if(toRemoveFrom != null) {
+			if(toRemoveFrom.removeItem(itemId))
+				return this.updatePromotionFile();
 		}
 		System.out.println("Item " + itemId + " does not exist!");
 		return false;
@@ -226,15 +202,13 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean updateItem(int promoId, List<String> itemParams) {
-		int i;
-		for(i = 0; i < this.findPromotionById(promoId).getItems().size(); i++){
-			if(this.findPromotionById(promoId).getItems().get(i).getId() == Integer.parseInt(itemParams.get(0))){
-				if(!itemParams.get(1).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setName(itemParams.get(1));
-				if(!itemParams.get(2).equals(ESCAPE_STRING_1)) this.findPromotionById(promoId).getItems().get(i).setDescription(itemParams.get(2));
-				if(!itemParams.get(3).equals(ESCAPE_STRING_2)) this.findPromotionById(promoId).getItems().get(i).setPrice(Double.parseDouble(itemParams.get(3)));
-				this.updatePromotionFile();
-				return true;
-			}
+		Promotion toUpdate = (Promotion) this.searchById(promoId);
+		Item itemToUpdate = toUpdate.getItem(Integer.parseInt(itemParams.get(0)));
+		if(itemToUpdate != null){
+			if(!itemParams.get(1).equals(ESCAPE_STRING_1)) itemToUpdate.setName(itemParams.get(1));
+			if(!itemParams.get(2).equals(ESCAPE_STRING_1)) itemToUpdate.setDescription(itemParams.get(2));
+			if(!itemParams.get(3).equals(ESCAPE_STRING_2)) itemToUpdate.setPrice(Double.parseDouble(itemParams.get(3)));
+			return this.updatePromotionFile();
 		}
 		System.out.println("Item " + itemParams.get(0) + " does not exist!");
 		return false;
@@ -246,16 +220,14 @@ public class PromotionController {
 	 * @return true or false based on success/error
 	 */
 	public boolean updatePromotion(List<String> promoParams) {
-		int i;
-		for(i = 0; i < promotions.size(); i++){
-			if(promotions.get(i).getId() == Integer.parseInt(promoParams.get(0))){
-				if(!promoParams.get(1).equals(ESCAPE_STRING_1)) promotions.get(i).setName(promoParams.get(1));
-				if(!promoParams.get(2).equals(ESCAPE_STRING_1)) promotions.get(i).setDescription(promoParams.get(2));
-				if(!promoParams.get(3).equals(ESCAPE_STRING_2)) promotions.get(i).setPrice(Double.parseDouble(promoParams.get(3)));
-				this.updatePromotionFile();
-				// doesn't change items
-				return true;
-			}
+		Promotion toUpdate = (Promotion) this.searchById(Integer.parseInt(promoParams.get(0)));
+		if(toUpdate != null) {
+			if(!promoParams.get(1).equals(ESCAPE_STRING_1)) toUpdate.setName(promoParams.get(1));
+			if(!promoParams.get(2).equals(ESCAPE_STRING_1)) toUpdate.setDescription(promoParams.get(2));
+			if(!promoParams.get(3).equals(ESCAPE_STRING_2)) toUpdate.setPrice(Double.parseDouble(promoParams.get(3)));
+			this.updatePromotionFile();
+			// doesn't change items
+			return true;
 		}
 		System.out.println("Promotion " + promoParams.get(0) + " does not exist!");
 		return false;

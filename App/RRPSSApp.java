@@ -16,7 +16,7 @@ import Controller.RestaurantController;
 /**
  * A console app that performs basic restaurant operations, such as updating/removing menu/promotions,
  * creating/updating/removing reservations, placing/updating/removing orders from tables, and printing of sales reports.
- * The application uses the Model-View-Controller (MVC) system.
+ * The application uses the Model-View-Controller (MVC) Framework.
  * @author	@brianleect, @Henry-Hoang, @ghotinggoad, @zhiheng97
  * @since 	10 October 2021
  */
@@ -456,7 +456,7 @@ public class RRPSSApp {
 											break;
 										System.out.print("Enter the quantity you want: ");
 										quantity = Integer.parseInt(reader.readLine());
-										if (!restaurantController.addToOrder(tableId, itemId, quantity).equals("item"))
+										if (!restaurantController.addToOrder(tableId, itemId, quantity, false).equals("item"))
 											System.out.println("Invalid item ID!");
 										System.out.println();
 										break;
@@ -470,7 +470,7 @@ public class RRPSSApp {
 											break;
 										System.out.print("Enter the quantity you want: ");
 										quantity = Integer.parseInt(reader.readLine());
-										if (!restaurantController.addToOrder(tableId, itemId, quantity).equals("promo"))
+										if (!restaurantController.addToOrder(tableId, itemId, quantity, true).equals("promo"))
 											System.out.println("Invalid promotion ID!");
 										System.out.println();
 										break;

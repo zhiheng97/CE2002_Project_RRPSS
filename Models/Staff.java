@@ -5,10 +5,8 @@ package Models;
  * @author	@Henry-Hoang
  * @since 	10 October 2021
  */
-public class Staff {
+public class Staff extends People {
 
-	private int id;
-	private String name;
 	private String position;
 
 	/**
@@ -19,8 +17,7 @@ public class Staff {
 	 * @param position 	The position held by this staff.
 	 */
 	public Staff(int id, String name, String position) {
-		this.id = id;
-		this.name = name;
+		super(id, name);;
 		this.position = position;
 	}
 
@@ -30,7 +27,7 @@ public class Staff {
 	 * @return	The ID of this staff.
 	 */
 	public int getId() {
-		return this.id;
+		return super.getId();
 	}
 
 	/**
@@ -39,7 +36,7 @@ public class Staff {
 	 * @return	The name of this staff.
 	 */
 	public String getName() {
-		return this.name;
+		return super.getName();
 	}
 
 	/**

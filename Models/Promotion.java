@@ -51,11 +51,10 @@ public class Promotion extends Item {
 	 * @return requested item or NULL if item with requested id do not exist in this promotion
 	 */
 	public Item getItem(int itemId) {
-		int i;
-		for(i = 0; i < this.items.size(); i++){
-			if(this.items.get(i).getId() == itemId) return items.get(i);
-		}
-		return null;
+		return items.stream()
+			.filter(item -> item.getId() == itemId)
+			.findFirst()
+			.orElse(null);
 	}
 
 	/**

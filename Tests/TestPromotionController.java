@@ -17,7 +17,7 @@ public class TestPromotionController{
     System.out.println("\n");
 
     // this prints the object hash identifier to make sure they're not the same object
-    System.out.println(System.identityHashCode(promotionController.findPromotionById(400)));
+    System.out.println(System.identityHashCode(promotionController.searchById(400)));
     System.out.println(System.identityHashCode(copy));
   }
 }

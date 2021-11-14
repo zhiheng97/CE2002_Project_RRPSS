@@ -20,7 +20,7 @@ import Models.Table;
  * @author	@Henry-Hoang
  * @since 	10 October 2021
  */
-public class TableController {
+public class TableController implements ISearch {
 
 	private int noOfTables;
 	private List<Table> tables = new ArrayList<Table>();
@@ -61,8 +61,8 @@ public class TableController {
 	 * @param 	quantity	The number of Item objects to be added.
 	 */
 	public void addToOrder(int tableId, Item item, int quantity) {
-		this.findTableById(tableId).setIsOccupied(true);
-		this.findTableById(tableId).addToOrder(item, quantity);
+		((Table) searchById(tableId)).setIsOccupied(true);
+		((Table) searchById(tableId)).getInvoice().addToOrder(item, quantity);
 	}
 
 	/**
@@ -73,8 +73,8 @@ public class TableController {
 	 * @param 	quantity	The number of Promotion objects to be added.
 	 */
 	public void addToOrder(int tableId, Promotion promotion, int quantity) {
-		this.findTableById(tableId).setIsOccupied(true);
-		this.findTableById(tableId).addToOrder(promotion, quantity);
+		((Table) searchById(tableId)).setIsOccupied(true);
+		((Table) searchById(tableId)).addToOrder(promotion, quantity);
 	}
 
 	/**
@@ -91,12 +91,12 @@ public class TableController {
 	 * Finds the reservation by its id.
 	 *
 	 * @param	res_id	The id of reservation that is needed to be found.
-	 *
+	 * 
 	 * @return			The corresponding Reservation object of this id, or null if the system cannot find this id.
 	 */
-	public Reservation findReservation(String res_id) {
+	public Object searchById(String res_id) {
 		String[] res_id_params = res_id.split("-");
-		return this.findTableById(Integer.parseInt(res_id_params[0])).findReservation(res_id);
+		return ((Table) this.searchById(Integer.parseInt(res_id_params[0]))).findReservation(res_id);
 	}
 
 	/**
@@ -104,7 +104,8 @@ public class TableController {
 	 * @param	tableId	The id of the table that is needed to be search.
 	 * @return 			The corresponding Table object.
 	 */
-	public Table findTableById(int tableId) {
+	@Override
+	public Object searchById(int tableId) {
 		return tables.stream().filter(t -> t.getTableId() == tableId).findFirst().orElse(null);
 	}
 
@@ -136,7 +137,7 @@ public class TableController {
 		switch (noPax) {
 			case 1, 2: 				// search tables 1->2 (2 pax), 3->5 (4 pax)
 				for (int id=1; id<=5; id++) {
-					Table table = this.findTableById(id);
+					Table table = (Table) searchById(id);
 					if (table.getIsOccupied()) continue;
 
 					boolean isValid = true;
@@ -158,7 +159,7 @@ public class TableController {
 				break;
 			case 3, 4:				// search tables 3->5 (4 pax), 6->8 (6 pax)
 				for (int id=3; id<=8; id++) {
-					Table table = this.findTableById(id);
+					Table table = (Table) searchById(id);
 					if (table.getIsOccupied()) continue;
 
 					boolean isValid = true;
@@ -180,7 +181,7 @@ public class TableController {
 				break;
 			case 5, 6:				// search tables 6->8 (6 pax), 9->10 (8 pax)
 				for (int id=6; id<=10; id++) {
-					Table table = this.findTableById(id);
+					Table table = (Table) searchById(id);
 					if (table.getIsOccupied()) continue;
 
 					boolean isValid = true;
@@ -202,7 +203,7 @@ public class TableController {
 				break;
 			case 7, 8:				// search tables 9->10 (8 pax), 11->12 (10 pax)
 				for (int id=9; id<=12; id++) {
-					Table table = this.findTableById(id);
+					Table table = (Table) searchById(id);
 					if (table.getIsOccupied()) continue;
 
 					boolean isValid = true;
@@ -224,7 +225,7 @@ public class TableController {
 				break;
 			case 9, 10:				// search tables 11->12 (10 pax)
 				for (int id=11; id<=12; id++) {
-					Table table = this.findTableById(id);
+					Table table = (Table) searchById(id);
 					if (table.getIsOccupied()) continue;
 
 					boolean isValid = true;
@@ -299,7 +300,7 @@ public class TableController {
 	 * @param 	tableId		The ID of the table that has the order needs to be printed
 	 */
 	public void printInvoice(int tableId) {
-		Table table = this.findTableById(tableId);
+		Table table = (Table) searchById(tableId);
 		table.printInvoice();
 		table.setIsOccupied(false);
 		table.setInvoice(new Order(null, null, null));
@@ -312,7 +313,7 @@ public class TableController {
 	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
 	 */
 	public void printOrder(int tableId, boolean withPrice) {
-		this.findTableById(tableId).printOrder(withPrice);
+		((Table) searchById(tableId)).getInvoice().printOrder(withPrice);
 	}
 
 	/**
@@ -332,8 +333,8 @@ public class TableController {
 	 * @param	tableId		The id of table that is needed to find the resevations.
 	 */
 	public void printReservations(int tableId) {
-		System.out.println("Reservations for table " + this.findTableById(tableId));
-		for (Reservation reservation : this.findTableById(tableId).getReservations()) {
+		System.out.println("Reservations for table " + searchById(tableId));
+		for (Reservation reservation : ((Table) searchById(tableId)).getReservations()) {
 			reservation.print();
 			System.out.println();
 		}
@@ -370,7 +371,7 @@ public class TableController {
 	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
 	 */
 	public int removeFromOrder(int tableId, Item item, int quantity) {
-		return this.findTableById(tableId).removeFromOrder(item, quantity);
+		return ((Table) searchById(tableId)).getInvoice().removeFromOrder(item, quantity);
 	}
 
 	/**
@@ -384,7 +385,7 @@ public class TableController {
 	 * 	  		or 0 if cannot remove because there is no occurrence of this promotion in the order.
 	 */
 	public int removeFromOrder(int tableId, Promotion promotion, int quantity) {
-		return this.findTableById(tableId).removeFromOrder(promotion, quantity);
+		return ((Table) searchById(tableId)).getInvoice().removeFromOrder(promotion, quantity);
 	}
 
 	/**
@@ -396,7 +397,7 @@ public class TableController {
 	 */
 	public boolean removeReservation(String res_id) {
 		String[] res_id_params = res_id.split("-");
-		return this.findTableById(Integer.parseInt(res_id_params[0])).removeReservation(res_id);
+		return ((Table) searchById(Integer.parseInt(res_id_params[0]))).removeReservation(res_id);
 	}
 
 	/**
@@ -418,7 +419,7 @@ public class TableController {
 			if(sdf.parse(details[1]).getTime() - cur_date.getTime() < (60000 * 5)) return "false 2"; 	
 			if (details.length == 5) {
 				tableId = Integer.parseInt(details[3]);
-				this.findTableById(tableId).addReservation(
+				((Table) searchById(tableId)).addReservation(
 					new Reservation (
 						details[4],						// res_id
 						Integer.parseInt(details[0]), 	// cust_id
@@ -429,7 +430,7 @@ public class TableController {
 			} else {
 				tableId = this.findValidTable(details);
 				if (tableId == -1) return "false 1";
-				return this.findTableById(tableId).addReservation(
+				return ((Table) searchById(tableId)).addReservation(
 					Integer.parseInt(details[0]), 		// cust_id
 					sdf.parse(details[1]), 				// date
 					Integer.parseInt(details[2]) 		// pax
@@ -453,7 +454,7 @@ public class TableController {
 	public String updateReservation(String res_id, int noPax) {
 		String[] res_id_params = res_id.split("-");
 
-		Reservation copied = this.findTableById(Integer.parseInt(res_id_params[0]))
+		Reservation copied = ((Table) searchById(Integer.parseInt(res_id_params[0])))
 								.getReservations()
 								.get(Integer.parseInt(res_id_params[1]));
 		this.removeReservation(res_id);
@@ -465,7 +466,7 @@ public class TableController {
 		String new_res_id = this.reserveTable(new_res_params);
 
 		if(new_res_id.equals("false 1") || new_res_id.equals("false 2")) 
-			this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
+			((Table) searchById(Integer.parseInt(res_id_params[0]))).addReservation(copied);
 		return new_res_id;
 	}
 
@@ -479,7 +480,7 @@ public class TableController {
 	public String updateReservation(String res_id, String dateTime) {
 		String[] res_id_params = res_id.split("-");
 
-		Reservation copied = this.findTableById(Integer.parseInt(res_id_params[0]))
+		Reservation copied = ((Table) searchById(Integer.parseInt(res_id_params[0])))
 								.getReservations()
 								.get(Integer.parseInt(res_id_params[1]));
 		this.removeReservation(res_id);
@@ -491,7 +492,7 @@ public class TableController {
 		String new_res_id = this.reserveTable(new_res_params);
 
 		if(new_res_id.equals("false 1") || new_res_id.equals("false 2")) 
-			this.findTableById(Integer.parseInt(res_id_params[0])).addReservation(copied);
+			((Table) searchById(Integer.parseInt(res_id_params[0]))).addReservation(copied);
 		return new_res_id;
 	}
 
@@ -519,5 +520,6 @@ public class TableController {
 		}
 		return fileController.writeFile(updatedRes.toArray(new String[updatedRes.size()]), PATH_TO_RESERVATIONS_FILE);
 	}
+
 
 }

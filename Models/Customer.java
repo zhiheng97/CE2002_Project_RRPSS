@@ -6,7 +6,7 @@ package Models;
  * @author  @Henry-Hoang
  * @since 10 October 2021
  */
-public class Customer {
+public class Customer extends People {
 
 	private int id;
 	private String name;
@@ -22,6 +22,7 @@ public class Customer {
 	 * @param 	contact 	The mobile number of this customer.
 	 */
 	public Customer(int cust_id, String name, boolean isMember, int contact) {
+		super(cust_id, name);
 		this.id = cust_id;
 		this.name = name;
 		this.isMember = isMember;

@@ -14,7 +14,7 @@ import Models.Item;
  * @author @zhiheng97
  * @since 10 October 2021
  */
-public class CategoryController {
+public class CategoryController implements ISearch {
 
 	private List<Category> categories = new ArrayList<Category>();
 	private FileController fileController = new FileController();
@@ -70,7 +70,7 @@ public class CategoryController {
 	 * @return Copy of the item that has been searched for
 	 */
 	public Item copyItem(int id) {
-		Item toCopy = searchForItem(id); //Search for item based on id
+		Item toCopy = (Item) searchById(id); //Search for item based on id
 		return toCopy.copyOf();
 	}
 
@@ -126,7 +126,7 @@ public class CategoryController {
 	 * @return True if item was removed, false otherwise
 	 */
 	public boolean removeItem(int itemId) {
-		Item toRemove = searchForItem(itemId); //Search for item based on id
+		Item toRemove = (Item) searchById(itemId); //Search for item based on id
 		Category toRemoveFrom = categories.stream() //Searches categories for a match of the item to remove
 			.filter(category -> category.getItems().contains(toRemove))
 			.findFirst() //Returns first
@@ -143,7 +143,8 @@ public class CategoryController {
 	 * @param itemId ItemId to be searched for
 	 * @return Item object that matches the specified itemId, otherwise null
 	 */
-	public Item searchForItem(int itemId) {
+	@Override
+	public Object searchById(int itemId) {
 		return categories.stream() //For each category in categories, get the items and find a match in item Id
 		.flatMap(category -> category.getItems().stream())
 		.filter(item -> item.getId() == itemId)
@@ -180,7 +181,7 @@ public class CategoryController {
 	 * @return True if item was updated, false otherwise
 	 */
 	public boolean updateItem(String[] itemParams) {
-		Item toUpdate = searchForItem(Integer.parseInt(itemParams[1])); //Searches for item based on itemParams[1]
+		Item toUpdate = (Item) searchById(Integer.parseInt(itemParams[1])); //Searches for item based on itemParams[1]
 		if(toUpdate != null) { //If item found
 			//Performs check on each itemParam[index] for the ESCAPE_STRING defined, if match skip the update, else update the attribute
 			if(!itemParams[0].equals(ESCAPE_STRING_1))
