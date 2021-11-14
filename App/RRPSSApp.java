@@ -304,6 +304,7 @@ public class RRPSSApp {
 										if (isReserved.toLowerCase().equals("y")) {
 											int[] res_info = { -1, -1 };
 											while (true) {
+												restaurantController.deleteExpiredReservations();
 												restaurantController.printReservations();
 												System.out.println("\n(type -9 to return to previous menu)");
 												System.out.print("Enter the reservation ID: ");
@@ -582,7 +583,6 @@ public class RRPSSApp {
 										System.out.print("Enter the time of reservation [HH:mm]: ");
 										time = time.concat(" " + reader.readLine());
 										resParams[1] = sdf.format(sdf.parse(time));
-										System.out.println(resParams[1]);
 										System.out.print("Enter the number of pax: ");
 										resParams[2] = reader.readLine();
 
@@ -592,7 +592,7 @@ public class RRPSSApp {
 										else if (res_id.equals("false 1"))
 											System.out.println("There is no available table for this time, date and number of pax!");
 										else
-											System.out.println("Reservation can only be made at least 5 minutes in advance.");
+											System.out.println("Reservation can only be made at least 2 hours in advance.");
 										// for design, use 60000 * 120 (2 hours = 120 minutes)
 										// for testing, use 60000 * 5 (5 minutes)
 										System.out.println();
@@ -671,7 +671,7 @@ public class RRPSSApp {
 												else if(res_id.equals("false 1"))
 													System.out.println("There is no available table for the new time date and the current number of pax!");
 												else
-													System.out.println("Reservation can only be made at least 5 minutes in advance. Reservation is not updated.");
+													System.out.println("Reservation can only be made at least 2 hours in advance. Reservation is not updated.");
 												// for design, use 60000 * 120 (2 hours = 120 minutes)
 												// for testing, use 60000 * 5 (5 minutes)
 												break;

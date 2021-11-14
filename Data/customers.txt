@@ -1,9 +1,9 @@
 customer_id,member_name,membership,member_mobile
 0,test1,true,12345678
-1,test2,false,23456781
+1,test2,true,23456781
 2,test3,true,34567812
-3,test4,false,45678123
+3,test4,true,45678123
 4,test5,true,56781234
-5,test6,false,67812345
+5,test6,true,67812345
 6,test7,true,78123456
-7,test8,false,81234567
+7,test8,true,81234567

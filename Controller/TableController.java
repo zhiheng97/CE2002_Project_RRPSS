@@ -143,12 +143,14 @@ public class TableController implements ISearch {
 					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
 						Date res_date = res.getDate();
+						// if after cur_date -> after at least 2 hours -> reservation query
+						// else it is walk in dining
 						if (check_date.after(cur_date)) {
 							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
-							if (time_diff < 60000 * 5) isValid = false;			
+							if (time_diff < 60000 * 120) isValid = false;			
 						} else {
 							long time_diff = res_date.getTime() - check_date.getTime();
-							if (time_diff < 60000) isValid = false;
+							if (time_diff < 60000 * 15) isValid = false;
 						}
 					}
 					if (isValid) {
@@ -165,12 +167,14 @@ public class TableController implements ISearch {
 					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
 						Date res_date = res.getDate();
+						// if after cur_date -> after at least 2 hours -> reservation query
+						// else it is walk in dining
 						if (check_date.after(cur_date)) {
 							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
-							if (time_diff < 60000 * 5) isValid = false;			
+							if (time_diff < 60000 * 120) isValid = false;			
 						} else {
 							long time_diff = res_date.getTime() - check_date.getTime();
-							if (time_diff < 60000) isValid = false;
+							if (time_diff < 60000 * 15) isValid = false;
 						}
 					}
 					if (isValid) {
@@ -187,12 +191,14 @@ public class TableController implements ISearch {
 					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
 						Date res_date = res.getDate();
+						// if after cur_date -> after at least 2 hours -> reservation query
+						// else it is walk in dining
 						if (check_date.after(cur_date)) {
 							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
-							if (time_diff < 60000 * 5) isValid = false;			
+							if (time_diff < 60000 * 120) isValid = false;			
 						} else {
 							long time_diff = res_date.getTime() - check_date.getTime();
-							if (time_diff < 60000) isValid = false;
+							if (time_diff < 60000 * 15) isValid = false;
 						}
 					}
 					if (isValid) {
@@ -209,12 +215,14 @@ public class TableController implements ISearch {
 					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
 						Date res_date = res.getDate();
+						// if after cur_date -> after at least 2 hours -> reservation query
+						// else it is walk in dining
 						if (check_date.after(cur_date)) {
 							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
-							if (time_diff < 60000 * 5) isValid = false;			
+							if (time_diff < 60000 * 120) isValid = false;			
 						} else {
 							long time_diff = res_date.getTime() - check_date.getTime();
-							if (time_diff < 60000) isValid = false;
+							if (time_diff < 60000 * 15) isValid = false;
 						}
 					}
 					if (isValid) {
@@ -231,12 +239,14 @@ public class TableController implements ISearch {
 					boolean isValid = true;
 					for (Reservation res : table.getReservations()) {
 						Date res_date = res.getDate();
+						// if after cur_date -> after at least 2 hours -> reservation query
+						// else it is walk in dining
 						if (check_date.after(cur_date)) {
 							long time_diff = Math.abs(check_date.getTime() - res_date.getTime());
-							if (time_diff < 60000 * 5) isValid = false;			
+							if (time_diff < 60000 * 120) isValid = false;			
 						} else {
 							long time_diff = res_date.getTime() - check_date.getTime();
-							if (time_diff < 60000) isValid = false;
+							if (time_diff < 60000 * 15) isValid = false;
 						}
 					}
 					if (isValid) {
@@ -265,7 +275,7 @@ public class TableController implements ISearch {
 	public boolean printAvailableTables() {
 		int num_avail = 0;
 		for (Table table : tables) {
-			if (!table.getIsOccupied()) {
+			if (!table.getIsOccupied() && !table.isReserved()) {
 				System.out.printf("Table %d (max %d pax)\n", table.getTableId(), table.getSeats());
 				num_avail++;
 			}
@@ -416,7 +426,6 @@ public class TableController implements ISearch {
 		try {
 			// for design, can only reserve at least 2 hours (60000 * 120) in advance
 			// for testing, can only reserve at least 5 minutes (60000 * 5) in advance
-			if(sdf.parse(details[1]).getTime() - cur_date.getTime() < (60000 * 5)) return "false 2"; 	
 			if (details.length == 5) {
 				tableId = Integer.parseInt(details[3]);
 				((Table) searchById(tableId)).addReservation(
@@ -428,6 +437,7 @@ public class TableController implements ISearch {
 					)
 				);
 			} else {
+				if(sdf.parse(details[1]).getTime() - cur_date.getTime() < (60000 * 120)) return "false 2"; 	
 				tableId = this.findValidTable(details);
 				if (tableId == -1) return "false 1";
 				return ((Table) searchById(tableId)).addReservation(
@@ -512,8 +522,8 @@ public class TableController implements ISearch {
 			for (Reservation r : t.getReservations()) {
 				updatedRes.add(String.valueOf(r.getCustId()).concat(DELIMITER));
 				updatedRes.add(r.getTime().toString().concat(DELIMITER));
-				updatedRes.add(String.valueOf(t.getTableId()).concat(DELIMITER));
 				updatedRes.add(String.valueOf(r.getNoPax()).concat(DELIMITER));
+				updatedRes.add(String.valueOf(t.getTableId()).concat(DELIMITER));
 				updatedRes.add(String.valueOf(r.getResId()));
 				updatedRes.add(System.getProperty("line.separator"));
 			}

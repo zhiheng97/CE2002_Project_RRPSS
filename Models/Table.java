@@ -99,7 +99,7 @@ public class Table {
 		List<Reservation> toClear = new ArrayList<Reservation>();
 		for (Reservation res : this.reservations) {
 			long time_diff = date.getTime() - res.getDate().getTime();
-			if (time_diff > 60000) toClear.add(res); 
+			if (time_diff >= 60000 * 15) toClear.add(res); 
 		}
 		for (Reservation res : toClear) {
 			this.reservations.remove(res);
@@ -138,6 +138,20 @@ public class Table {
 	 */
 	public boolean getIsOccupied() {
 		return this.isOccupied;
+	}
+
+	/**
+	 * Returns true if this table is reserved in the next 15 minutes.
+	 * 
+	 * @return
+	 */
+	public boolean isReserved() {
+		Date cur_date = new Date();
+		for (Reservation res : this.reservations) {
+			long time_diff = res.getDate().getTime() - cur_date.getTime();
+			if (time_diff <= 60000 * 15) return true;
+		}
+		return false;
 	}
 
 	/**
