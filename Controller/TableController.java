@@ -101,7 +101,7 @@ public class TableController implements ISearch {
 
 	/**
 	 * Finds the table by its id.
-	 * @param	tableId	The id of the table that is needed to be search.
+	 * @param	tableId	The id of the table to be searched.
 	 * @return 			The corresponding Table object.
 	 */
 	@Override
@@ -330,7 +330,7 @@ public class TableController implements ISearch {
 	/**
 	 * Prints all of the reservations that are reserved with table tableId.
 	 *
-	 * @param	tableId		The id of table that is needed to find the resevations.
+	 * @param	tableId		The id of table to find the resevations.
 	 */
 	public void printReservations(int tableId) {
 		System.out.println("Reservations for table " + searchById(tableId));
@@ -391,7 +391,7 @@ public class TableController implements ISearch {
 	/**
 	 * Removes a reservation by its id.
 	 *
-	 * @param	res_id	The id of the reservation that is needed to be removed (e.g. 5-6 -> table 5, id 6).
+	 * @param	res_id	The id of the reservation to be removed (e.g. 5-6 -> table 5, id 6).
 	 *
 	 * @return	true it is removed successfully, false if it cannot find the resevation id.
 	 */
@@ -447,7 +447,7 @@ public class TableController implements ISearch {
 	/**
 	 * Updates a reservation with a new number of pax.
 	 *
-	 * @param	res_id		The ID of the reservation that is needed to be updated.
+	 * @param	res_id		The ID of the reservation to be updated.
 	 * @param	noPax		The new number of pax.
 	 * @return	The new reservation id or "false" if the update cannot be made.
 	 */
@@ -473,7 +473,7 @@ public class TableController implements ISearch {
 	/**
 	 * Updates a reservation with a new date time.
 	 *
-	 * @param	res_id		The ID of the reservation that is needed to be updated.
+	 * @param	res_id		The ID of the reservation to be updated.
 	 * @param	dateTime	The new date time to update.
 	 * @return 	The new reservation id or "false" if the update cannot be made.
 	 */

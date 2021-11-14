@@ -58,7 +58,7 @@ public class CustomerController {
 
     /**
      * Searches for a customer by their contact number.
-     * @param   contactNo   The contact number of the customer that is needed to be searched.
+     * @param   contactNo   The contact number of the customer to be searched.
      * @return  A Customer object if found, null otherwise.
      */
     private Customer searchByContact(int contactNo) {
@@ -71,7 +71,7 @@ public class CustomerController {
      /**
      * Searches for a customer by their name.
      * 
-     * @param   contactNo   The name of the customer that is needed to be searched.
+     * @param   contactNo   The name of the customer to be searched.
      * @return  A Customer object if found, null otherwise.
      */
     private Customer searchByCustName(String cust_name) {

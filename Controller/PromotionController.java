@@ -23,9 +23,9 @@ public class PromotionController implements ISearch {
 	private final static String DELIMITER = ",";
 
 	/**
-	 * Constructor of the PromotionController Class
-	 * It will read the previously created promotions which have been saved to promotion.txt
-	 * then instantiate the promotions and their respective items ony by one
+	 * Constructs the PromotionController object.
+	 * It will read the existed promotions that are saved in the promotion.txt, and 
+	 * then instantiate the promotions and their respective items ony by one.
 	 */
 	public PromotionController() {
 		List<String> tokens = fileController.readFile(PATH_TO_PROMOTIONS_FILE);
@@ -60,8 +60,9 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	* Convert all promotions into a string and overwrite promotion.txt
-	* @return true or false based on success/error
+	* Converts all current promotions into Strings and overwrite the promotion.txt to update it.
+	*
+	* @return 	true if the file was successfully updated, false otherwise.
 	*/
 	private boolean updatePromotionFile() {
 		boolean res = false;
@@ -89,10 +90,13 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	 * Adds a new promotion to promotions[]
-	 * @param promoParams, the promotion id; name; description and price in string list
-	 * @param items, the items' parameters in the order, id; name; description and price in string list
-	 * @return true or false based on success/error
+	 * Adds a new promotion to the menu.
+	 * 
+	 * @param	promoParams		A list of String objects that includes the information of this promotion
+	 * 							(promotion id, promotion name, promotion description, and promotion price).
+	 * @param 	items 			A list of String objects that includes the information of all Item objects
+	 * 							in this promotion (item id, item name, item description, and item price).
+	 * @return 	true if this promotion is added successfully, false otherwise.
 	 */
 	public boolean addPromotion(List<String> promoParams, List<String> items) {
 		if((Promotion) searchById(Integer.parseInt(promoParams.get(0))) != null){
@@ -107,9 +111,10 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	* Returns a copy of promotion (different hash identity)
-	* @promoId, the promotion id which is used to search for a specific promotion
-	* @return copy, copy of the promotion that is being requested
+	* Returns a Promotion object which is a copy version of another promotion (different hash identity).
+	*
+	* @param	promoId		The id of the promotion to be copied.
+	* @return 	A Promotion object if this id is existed, null otherwise.
 	*/
 
 	public Promotion copyPromotion(int promoId){
@@ -130,9 +135,10 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	 * Returns the actual promotion (same hash identity)
-	 * @param promoId, the promotion id which is used to search for a specific promotion
-	 * @return the actual promotion that is being requested
+	 * Returns the actual Promotion object in the list (same hash identity).
+	 * 
+	 * @param	promoId		The id of the promotion to be search.
+	 * @return 	The actual Promotion object in the list.
 	 */
 	@Override
 	public Object searchById(int promoId) {
@@ -143,7 +149,7 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	* Prints the attributes of all the promotions and their respective items
+	* Prints the attributes of all the promotions and their respective items.
 	*/
 	public void print() {
 		System.out.print("\n");
@@ -154,9 +160,10 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	 * Removes a specific promotion from promotions[]
-	 * @param promoId, the promotion id which is used to search for a specific promotion
-	 * @return true or false based on success/error
+	 * Removes a specific promotion from the list.
+	 * 
+	 * @param	promoId		The id of the promotion to be removed.
+	 * @return 	true if the promotion is removed successfully, false otherwise.
 	 */
 	public boolean removePromotion(int promoId) {
 		Promotion toRemove = (Promotion) this.searchById(promoId);
@@ -169,10 +176,12 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	 * Adds an item to an existing promotion
-	 * @param promoId, the promotion id which is used to search for a specific promotion
-	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
-	 * @return true or false based on success/error
+	 * Adds an item to an existing promotion.
+	 * 
+	 * @param	promoId		The id of the promotion to be updated.
+	 * @param 	itemParams	A list of String objects that includes the information
+	 * 						of the item (item id, item name, item description, and item price).
+	 * @return 	true if this item is added successfully, false otherwise.
 	 */
 	public boolean addItem(int promoId, List<String> itemParams) {
 		((Promotion) searchById(promoId)).addItem(itemParams);
@@ -181,10 +190,12 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	 * Removes an item from an existing promotion
-	 * @param promoId, the promotion id which is used to search for a specific promotion
-	 * @param itemId, the item id which is used to search for a specific item in the promotion
-	 * @return true or false based on success/error
+	 * Removes an item from an existing promotion.
+	 * 
+	 * @param	promoId		The id of the promotion to be updated.
+	 * @param 	itemParams	A list of String objects that includes the information
+	 * 						of the item (item id, item name, item description, and item price).
+	 * @return 	true if this item is added successfully, false otherwise.
 	 */
 	public boolean removeItem(int promoId, int itemId) {
 		Promotion toRemoveFrom = (Promotion) this.searchById(promoId);
@@ -197,9 +208,11 @@ public class PromotionController implements ISearch {
 	}
 
 	/**
-	 * Updates the attributes of items in a promotion that have the same itemId
-	 * @param itemParams, the item's parameters in the order, id; name; description and price in string array
-	 * @return true or false based on success/error
+	 * Updates the attributes of items in a promotion that have the same item id.
+	 * 
+	 * @param 	itemParams	A list of String objects that includes the information
+	 * 						of the item (item id, item name, item description, and item price).
+	 * @return 	true it is updated successfully, false otherwise.
 	 */
 	public boolean updateItem(int promoId, List<String> itemParams) {
 		Promotion toUpdate = (Promotion) this.searchById(promoId);
@@ -214,10 +227,12 @@ public class PromotionController implements ISearch {
 		return false;
 	}
 
-	/**
-	 * Updates the promotion's attributes, id; name; description and price
-	 * @param promoParams, the promotion's parameters in the order, id; name; description and price in string array
-	 * @return true or false based on success/error
+	/** 
+	 * Updates the information of a promotion.
+	 * 
+	 * @param 	promoParams		A list of String objects that includes the new information of the promotion 
+	 * 							(promotion id, promotion name, promotion description, and promotion price).
+	 * @return 	true it is updated successfully, false otherwise.
 	 */
 	public boolean updatePromotion(List<String> promoParams) {
 		Promotion toUpdate = (Promotion) this.searchById(Integer.parseInt(promoParams.get(0)));

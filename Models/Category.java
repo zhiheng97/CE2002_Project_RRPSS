@@ -25,6 +25,7 @@ public class Category {
 
 	/**
 	 * Adds an item to the category. Performs a search in the category for duplicate items
+	 * 
 	 * @param itemParams New item parameters
 	 * @return True if item is added, false otherwise
 	 */

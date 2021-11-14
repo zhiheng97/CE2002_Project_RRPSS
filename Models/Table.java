@@ -17,7 +17,7 @@ public class Table {
 	private int tableId;
 	private boolean isOccupied;
 	private List<Reservation> reservations;
-	private int noOfReseravtions = 0;
+	private int noOfReservations = 0;
 	private int seats = 2;
 	private Order invoice;
 	
@@ -41,7 +41,7 @@ public class Table {
 	 * @param	reservation	Reservation object that is needed to be add.
 	 */
 	public void addReservation(Reservation reservation) {
-		this.noOfReseravtions++;
+		this.noOfReservations++;
 		this.reservations.add(reservation);
 	}
 
@@ -55,9 +55,9 @@ public class Table {
 	 * 			or "false 1" if there is no available table to reserve.
 	 */
 	public String addReservation(int cust_id, Date date, int pax) {
-		if(this.noOfReseravtions == 15) return "false 1";
+		if(this.noOfReservations == 15) return "false 1";
 		
-		this.noOfReseravtions++;
+		this.noOfReservations++;
 		int id=0;
 		for (Reservation reservation : this.reservations) {
 			String[] temp_id = reservation.getResId().split("-");
@@ -103,7 +103,7 @@ public class Table {
 		}
 		for (Reservation res : toClear) {
 			this.reservations.remove(res);
-			this.noOfReseravtions--;
+			this.noOfReservations--;
 		}
 		toClear.clear();
 	}
@@ -146,7 +146,7 @@ public class Table {
 	 * @return	The current number of reservations for this table.
 	 */
 	public int getNoOfReseravtions() {
-		return this.noOfReseravtions;
+		return this.noOfReservations;
 	}
 
 	/**
@@ -176,6 +176,11 @@ public class Table {
 		return this.tableId; 
 	}
 
+	/**
+	 * Prints the final bill of this order that includes 
+	 * the quantity of each Item object, the quantity of each Promotion object, 
+	 * the total amount, the date and the staff who placed this order.
+	 */
 	public void printInvoice() {
 		System.out.println("The bill of table number: " + this.tableId);
 		this.invoice.printInvoice(this.tableId);
@@ -224,10 +229,10 @@ public class Table {
 	 * @return	true it is removed successfully, false if it cannot find the resevation id.
 	 */
 	public boolean removeReservation(String res_id) {
-		noOfReseravtions--;
 		for (Reservation res : this.reservations) {
 			if (res.getResId().equals(res_id)) {
 				this.reservations.remove(res);
+				this.noOfReservations--;
 				return true;
 			}
 		}

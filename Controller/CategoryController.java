@@ -11,6 +11,7 @@ import Models.Item;
 
 /**
  * A controller that is responsible for managing the menu of the restaurant.
+ * 
  * @author @zhiheng97
  * @since 10 October 2021
  */
@@ -24,16 +25,17 @@ public class CategoryController implements ISearch {
 	private final static String DELIMITER = ",";
 
 	/**
-	 * Constructor of the CategoryController Class
+	 * Constructs the CategoryController object.
 	 */
 	public CategoryController() {
 		initializeMenuItems();
 	}
 
 	/**
-	 * Adds a new category to the list of categories, does a search for any duplicate categories
-	 * @param categoryType Category type to be added to the list.
-	 * @return True the category type is added, false otherwise.
+	 * Adds a new category to the list of categories, it returns false if the category is duplicated.
+	 * 
+	 * @param 	categoryType	The Category type that is needed to be added to the list.
+	 * @return 	true the category type is added, false otherwise.
 	 */
 	public boolean addCategory(Categories categoryType) {
 		if(findCatByType(categoryType.toString()) == null) { //Searches for category type
@@ -43,9 +45,10 @@ public class CategoryController implements ISearch {
 	}
 
 	/**
-	 * Adds an item to the category specified in the parameter[0]
-	 * @param itemParams Parameter of the item to be added
-	 * @return True if item is added, false otherwise
+	 * Adds an item to the category specified in the parameter[0].
+	 * 
+	 * @param 	itemParams	The parameter of the item to be added.
+	 * @return	true if the item is added, false otherwise.
 	 */
 	public boolean addItem(String[] itemParams) {
 		Category toAddto;
@@ -66,6 +69,7 @@ public class CategoryController implements ISearch {
 
 	/**
 	 * Searches List<Item> which is nested in List<Category> for the item with the specified itemId.
+	 * 
 	 * @param id Is the itemId to be copied
 	 * @return Copy of the item that has been searched for
 	 */

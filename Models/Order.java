@@ -27,10 +27,10 @@ public class Order {
 	SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
 	
 	/**
-	 * Constructor for Order Object
+	 * Constructs the Order object.
 	 * 
-	 * @param createdBy Indicates staff which created order, Staff Object
-	 * @param date  Indicates time which order is created, Date Object
+	 * @param 	createdBy 	The Staff object that indicates which staff created this order.
+	 * @param 	date  		The Date object that indicates the time date when order is created.
 	 */
 	public Order(Staff createdBy, Customer cust, Date date) {
 		this.dateTime = date;
@@ -43,10 +43,10 @@ public class Order {
 	}
 
 	/**
-	 * Adds an item and indicated quantities of it to Order
+	 * Adds a quantity of Item objects to the order of this table.
 	 * 
-	 * @param item     Item to be added
-	 * @param quantity Quantity of item to be added
+	 * @param	item		The Item object to be added.
+	 * @param	quantity	The number of Item objects to be added.
 	 */
 	public void addToOrder(Item item, int quantity) {
 		// update price
@@ -63,10 +63,10 @@ public class Order {
 	}
 
 	/**
-	 * Adds a promo and indicated quantities of it to Order
+	 * Adds a quantity of Promotion objects to the order of this table.
 	 * 
-	 * @param promotion Promotion to be added
-	 * @param quantity  Quantity of promotion to be added
+	 * @param 	promotion	The Promotion object to be added.
+	 * @param 	quantity	The number of Promotion objects to be added.
 	 */
 	public void addToOrder(Promotion promotion, int quantity) {
 		// update price
@@ -83,79 +83,81 @@ public class Order {
 	}
 
 	/**
-	 * Gets Date object
-	 * @return
-	 */
-	public Date getDatetime() {
-		return this.dateTime;
-	}
-
-	/**
-	 * Item list getter, contains list of items for the order
+	 * Gets the list of all Item objects in this order.
 	 * 
-	 * @return List of items
+	 * @return	A list of Item objects in this order.
 	 */
 	public List<Item> getItems() {
 		return this.items;
 	}
 
 	/**
-	 * Item Map getter (Key: item_id, Value: Quantity of item)
+	 * Gets the list of all Promotion objects in this order.
 	 * 
-	 * @return Map of (item_id,quantity)
-	 */
-	public Map<Integer, Integer> getOrderItems() {
-		return this.item2quantity;
-	}
-
-	/**
-	 * Promo Map getter (Key: promo_id, Value: Quantity of promo)
-	 * 
-	 * @return Map of (promo_name,quantity)
-	 */
-	public Map<Integer, Integer> getOrderPromos() {
-		return this.promo2quantity;
-	}
-
-	/**
-	 * Gets name of staff which placed the order
-	 * 
-	 * @return Name of Staff
-	 */
-	public String getPlacedBy() {
-		return this.placedBy.getName();
-	}
-
-	/**
-	 * Promotion List getter
-	 * 
-	 * @return List of promotions
+	 * @return	A list of Promotion objects in this order.
 	 */
 	public List<Promotion> getPromo() {
 		return this.promotions;
 	}
 
 	/**
-	 * Gets String timestamp of order creation
+	 * Gets the map (Key: item id, Value: quantity of the item) in this report.
 	 * 
-	 * @return Timestamp of order
+	 * @return	The map (Key: item id, Value: quantity of the item) in this report.
+	 */
+	public Map<Integer, Integer> getOrderItems() {
+		return this.item2quantity;
+	}
+
+	/**
+	 * Gets the map (Key: promotion id, Value: quantity of the promotion) in this report.
+	 * 
+	 * @return	The map (Key: promotion id, Value: quantity of the promotion) in this report.
+	 */
+	public Map<Integer, Integer> getOrderPromos() {
+		return this.promo2quantity;
+	}
+
+	/**
+	 * Gets the name of staff who placed this order.
+	 * 
+	 * @return 	A String object that indicates the staff who placed this order.
+	 */
+	public String getPlacedBy() {
+		return this.placedBy.getName();
+	}
+
+	/**
+	 * Gets a Date object that indicates when this Order is created.
+	 * 
+	 * @return	A Date object that indicates when this order is created.
+	 */
+	public Date getDatetime() {
+		return this.dateTime;
+	}
+
+	/**
+	 * Gets a String object that indicates when this order is created.
+	 * 
+	 * @return 	A String object that indicates when this order is created.
 	 */
 	public String getTimeStamp() {
 		return sdf.format(this.dateTime);
 	}
 
 	/**
-	 * Order total getter
+	 * Gets the total price of all items and promotions in this order.
 	 * 
-	 * @return Total price of order
+	 * @return 	Total price of all items and promotions in this order.
 	 */
 	public double getTotal() {
 		return this.total;
 	}
 
 	/**
-	 * Prints quantity of each item, quantity of each promo, total amount, date and
-	 * staff which placed order
+	 * Prints the final bill of this order that includes 
+	 * the quantity of each Item object, the quantity of each Promotion object, 
+	 * the total amount, the date and the staff who placed this order.
 	 */
 	public void printInvoice(int table_id) {
 		int quantity;
@@ -189,7 +191,9 @@ public class Order {
 	}
 
 	/**
-	 * Prints the current order of the table
+	 * Prints the current status of the order of this table.
+	 * 
+	 * @param	withPrice	true to print the order's price when the customer checks out, false otherwise.
 	 */
 	public void printOrder(boolean withPrice) {
 		System.out.println("The current order:");
@@ -204,16 +208,15 @@ public class Order {
 		
 		if (withPrice) System.out.printf("Total amount:  %.2f SGD%n", this.getTotal());
 	}
-
 	
 	/**
-	 * remove Item objects from the order of table tableId
+	 * Removes a quantity of Item objects from the order of this table.
 	 * 
-	 * @param item Item to be removed
-	 * @param quantity number of Item object to remove
-	 * @return 2 if they are removed normally
-	 * @return 1 if quantity >= current quantity in order (remove all anw)
-	 * @return 0 if there is no Item in this order
+	 * @param 	item 		The Item object to be removed.
+	 * @param 	quantity 	The number of Item objects to be removed.
+	 * @return 	2 if a quantity of item is removed from the order,<br>
+	 * 			or 1 if all the occurrences of this item are removed from the order,<br>
+	 * 			or 0 if cannot remove because there is no occurrence of this item in the order.
 	 */
 	public int removeFromOrder(Item item, int quantity) {
 		int id = item.getId();
@@ -239,13 +242,13 @@ public class Order {
 	}
 
 	/**
-	 * remove Promotion objects from the order of table tableId
+	 * Removes a quantity of Promotion objects from the order of this table.
 	 * 
-	 * @param promotion 	Promotion to be removed
-	 * @param quantity 		number of Promotion object to remove
-	 * @return 2 if they are removed normally
-	 * @return 1 if quantity is more than current quantity in order (remove all anw)
-	 * @return 0 if there is no Promotion in this order
+	 * @param	promotion 	The Promotion object to be removed.
+	 * @param 	quantity 	The number of Promotion objects to be removed.
+	 * @return 	2 if a quantity of promotion is removed from the order,<br>
+	 * 			or 1 if all the occurrences of this promotion are removed from the order,<br>
+	 * 	  		or 0 if cannot remove because there is no occurrence of this promotion in the order.
 	 */
 	public int removeFromOrder(Promotion promotion, int quantity) {
 		int id = promotion.getId();

@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * A model that represents the sales reports.
  * @author  @brianleect
- * @since 10 October 2021
+ * @since 	10 October 2021
  */
 public class Report {
 
@@ -30,10 +30,10 @@ public class Report {
 	}
 
 	/**
-	 * Adds Invoice to report list
+	 * Adds a new invoice to the report list.
 	 * 
-	 * @param invoice // Invoice to be added to report list
-	 * @return True if invoice added, False if otherwise
+	 * @param	invoice		The Order object to be added to report list.
+	 * @return	true if the invoice is added succssfully, false otherwise.
 	 */
 	public boolean addInvoice(Order invoice) {
 		String[] timestamp = invoice.getDatetime().toString().split(" "); // .split(" ")[0]; // Get new date from order
@@ -89,8 +89,7 @@ public class Report {
 	}
 
 	/**
-	 * Prints daily information regarding, individual sales item (ala carte/promo) &
-	 * total revenue
+	 * Prints the daily information regarding, individual sales item (ala carte/promotion) and the total revenue.
 	 */
 	public void print() {
 		int quantity;
@@ -114,63 +113,63 @@ public class Report {
 	}
 
 	/**
-	 * Orders (order list) getter
+	 * Gets the list of all Order objects in this report.
 	 * 
-	 * @return list of all orders in this report
+	 * @return	The list of all Order objects in this report.
 	 */
 	public List<Order> getInvoices() {
 		return this.invoices;
 	}
 
 	/**
-	 * Item list getter, contains list of items for the order
+	 * Gets the list of all Item objects in this report.
 	 * 
-	 * @return List of items
+	 * @return	The list of all Item objects in this report.
 	 */
 	public List<Item> getItems() {
 		return this.items;
 	}
 
 	/**
-	 * Promotion List getter
+	 * Gets the list of all Promotion objects in this report.
 	 * 
-	 * @return List of promotions
+	 * @return	The list of all Promotion objects in this report.
 	 */
 	public List<Promotion> getPromo() {
 		return this.promotions;
 	}
 
 	/**
-	 * Item Map getter (Key: item_id, Value: Quantity of item)
+	 * Gets the map (Key: item id, Value: quantity of the item) in this report.
 	 * 
-	 * @return Map of (item_id,quantity)
+	 * @return	The map (Key: item id, Value: quantity of the item) in this report.
 	 */
 	public Map<Integer, Integer> getReportItems() {
 		return this.item2quantity;
 	}
 
 	/**
-	 * Promo Map getter (Key: promo_id, Value: Quantity of promo)
+	 * Gets the map (Key: promotion id, Value: quantity of the promotion) in this report.
 	 * 
-	 * @return Map of (promo_name,quantity)
+	 * @return	The map (Key: promotion id, Value: quantity of the promotion) in this report.
 	 */
 	public Map<Integer, Integer> getReportPromos() {
 		return this.promo2quantity;
 	}
 
 	/**
-	 * Date getter
+	 * Gets the time date of this report as a String object.
 	 * 
-	 * @return Date of current report as a string
+	 * @return	The time date of this report as a String object.
 	 */
 	public String getDateTime() {
 		return this.date;
 	}
 
 	/**
-	 * Sales Revenue getter
+	 * Gets the total sales revenue of this report.
 	 * 
-	 * @return the sales revenue of this report
+	 * @return	The total sales revenue of this report.
 	 */
 	public double getSalesRevenue() {
 		return this.salesRevenue;
