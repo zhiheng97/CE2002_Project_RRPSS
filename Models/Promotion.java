@@ -5,7 +5,7 @@ import java.util.List;
 
 /**
  * A model that represents the promotion packages which extends the class Item.
- * 
+ *
  * @author  @ghotinggoad
  * @since 	10 October 2021
  */
@@ -14,7 +14,7 @@ public class Promotion extends Item {
 
 	/**
 	 * Constructs the Promotion object.
-	 * 
+	 *
 	 * @param	id			The id of the promotion.
 	 * @param 	name		The name of the promotion.
 	 * @param 	desc 		The description of the promotion.
@@ -49,7 +49,7 @@ public class Promotion extends Item {
 
 	/**
 	 * Item (singular) getter
-	 * @param itemId, id of the item to get
+	 * @param itemId 	id of the item to get
 	 * @return requested item or NULL if item with requested id do not exist in this promotion
 	 */
 	public Item getItem(int itemId) {
@@ -61,7 +61,7 @@ public class Promotion extends Item {
 
 	/**
 	* Adds an item to this promotion
-	* @param itemParams, the items' parameters in the order, id; name; description and price in string list
+	* @param itemParams 	the items' parameters in the order, id; name; description and price in string list
 	*/
 	public boolean addItem(List<String> itemParams){
 		items.add(new Item(Integer.parseInt(itemParams.get(0)), itemParams.get(1), itemParams.get(2), Double.parseDouble(itemParams.get(3))));
@@ -70,7 +70,7 @@ public class Promotion extends Item {
 
 	/**
 	* Removes an item from this promotion
-	* @param itemId, id of the item to remove
+	* @param itemId 	id of the item to remove
 	* @return true or false based on success/error
 	*/
 	public boolean removeItem(int itemId){
@@ -116,7 +116,7 @@ public class Promotion extends Item {
 
 	/**
 	 * Updates the description of this promotion
-	 * @param desc, new description string
+	 * @param desc 	new description string
 	 */
 	@Override
 	public void setDescription(String desc) {
@@ -125,7 +125,7 @@ public class Promotion extends Item {
 
 	/**
 	 * Updates the price of this promotion
-	 * @param cost, new price
+	 * @param cost 	new price
 	 */
 	@Override
 	public void setPrice(double cost) {
