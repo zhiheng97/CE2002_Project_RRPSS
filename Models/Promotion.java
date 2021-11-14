@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * A model that represents the promotion packages which extends the class Item.
+ * 
  * @author  @ghotinggoad
  * @since 	10 October 2021
  */
@@ -12,12 +13,13 @@ public class Promotion extends Item {
 	private List<Item> items = new ArrayList<Item>();
 
 	/**
-	 * Constructor for Promotion Class
-	 * @param id, id of the promotion
-	 * @param name, name of the promotion
-	 * @param desc, description of the promotion
-	 * @param cost, price of the promotion
-	 * @param itemsInc, the items' parameters in the order, id; name; description and price in string list
+	 * Constructs the Promotion object.
+	 * 
+	 * @param	id			The id of the promotion.
+	 * @param 	name		The name of the promotion.
+	 * @param 	desc 		The description of the promotion.
+	 * @param 	cost		The price of the promotion.
+	 * @param 	itemsInc	The items' parameters in the order, id; name; description and price in string list
 	 */
 	public Promotion(int id, String name, String desc, double cost, List<String> itemsInc) {
 		super(id, name, desc, cost);

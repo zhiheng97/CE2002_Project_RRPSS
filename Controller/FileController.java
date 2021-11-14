@@ -21,10 +21,10 @@ public class FileController {
     public FileController() {}
     
     /**
-     * CSV File reader. Reads the contents of a file and returns the contents as a List<String> object.
+     * A CSV File reader that reads the contents of a file and returns them as a List of String objects.
      * 
-     * @param path Path to file
-     * @return List<String> if the file is valid and has contents, null otherwise
+     * @param   path    The path to the file to be read.
+     * @return  A List<String> if the file is valid and has contents, null otherwise.
      */
     public List<String> readFile(String path) {
         try{
@@ -44,10 +44,11 @@ public class FileController {
     }
   
     /**
-     * CSV file writer. Writes to the file path specified.
-     * @param params Content to be written to the file
-     * @param path Path to file
-     * @return True if modification to the file was made, false otherwise
+     * A CSV file writer that writes to the file path specified.
+     * 
+     * @param   params  The content that will be written to the file.
+     * @param   path    The path to the file to be written into.
+     * @return  true if the modification to the file was made, false otherwise.
      */
     public boolean writeFile(String[] params, String path) {
         boolean res = false;

@@ -21,15 +21,15 @@ public class ReportController {
 	private List<Report> reports = new ArrayList<Report>();
 
 	/**
-	 * Constructs the ReportController object
+	 * Constructs the ReportController object.
 	 */
 	public ReportController() {
 	}
 
 	/**
-	 * Adds an order to the relevant report
+	 * Adds an order to the relevant report.
 	 *
-	 * @param invoice // Order to be added to update Report
+	 * @param 	invoice		The Order object to be added to the Report.
 	 */
 	public void addInvoice(Order invoice) {
 		Report currentReport;
@@ -67,11 +67,11 @@ public class ReportController {
 	}
 
 	/**
-	 * Prints report (monthly or daily) based on byMonth param, consists of start
-	 * date , end date, Total price, Quantity of each item / Promo
+	 * Prints the report (monthly or daily) based on a boolean byMonth parameter. 
+	 * The report includes the start date, the end date, the total price, and the quantity of each Item or Promotion.
 	 *
-	 * @param byMonth Indicates whether report to be generated is latest month or
-	 *                latest day
+	 * @param	byMonth		A boolean that indicates whether report to be generated is 
+	 * 						latest month or latest day.
 	 */
 	public void print(boolean byMonth, String timeNow) {
 
